@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/user"
 	"github.com/hahaha3w/3w3_Ai_Server/user/internal/domain"
+	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/count"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/email"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/encrypt"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/log"
@@ -66,38 +68,81 @@ func (u *ConcreteUserUsecase) SendCode(ctx context.Context, sendTo string) (err 
 	return nil
 }
 
-func (u *ConcreteUserUsecase) RegisterUser(ctx context.Context, email, password string) (userID int32, err error) {
+func (u *ConcreteUserUsecase) RegisterUser(ctx context.Context, email, code, password string) (resp *user.RegisterResp, err error) {
 	var (
 		userExist *domain.User
-		user      *domain.User
+		userModel *domain.User
 	)
 
-	// check if user email already exist
-	userExist, err = u.repo.FindUserByEmail(ctx, email)
-	if userExist != nil {
-		log.Log().Info(errUserAlreadyExist)
-		return 0, fmt.Errorf("usecase.reg:%w", errUserAlreadyExist)
+	// 校验邮箱和密码格式
+	err = regex.VerifyUser(email, password)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
 	}
 
+	// 检查用户邮箱是否已存在
+	userExist, err = u.repo.FindUserByEmail(ctx, email)
+	if userExist.UserID != 0 {
+		log.Log().Info(errUserAlreadyExist)
+		return nil, errors.New("user already exist")
+	}
+
+	// 校验验证码
+	OriginCode := u.cache.Get(ctx, "email_code:"+email).Val()
+	if code == "" || OriginCode != code {
+		log.Log().Error(err)
+		return nil, errors.New("verification code is incorrect, please check again")
+	}
+
+	// 哈希密码
 	passwordHash, err := encrypt.HashPassword(password)
 	if err != nil {
 		log.Log().Error(err)
-		return 0, fmt.Errorf("usecase.reg.encrypt:%w", err)
+		return nil, errors.New("internal error: " + err.Error())
 	}
-	user = &domain.User{
-		Email:          email,
-		PasswordHashed: passwordHash,
+
+	// 构建新用户
+	userModel = &domain.User{
+		Username:     "默认用户",
+		Bio:          "该用户还没有没有填写个人简介",
+		AvatarUrl:    "https://avatars.githubusercontent.com/u/204012462?s=48&v=4",
+		Theme:        "light",
+		RegisterDate: time.Now(),
+		Email:        email,
+		Password:     passwordHash,
 	}
-	err = u.repo.CreateUser(ctx, user)
+
+	// 创建用户
+	err = u.repo.CreateUser(ctx, userModel)
 	if err != nil {
 		log.Log().Error(err)
-		return 0, fmt.Errorf("usecase.reg.create:%w", err)
+		return nil, errors.New("internal error: " + err.Error())
 	}
-	return user.UserID, nil
+
+	// 使用哈希封装用户次数统计
+	err = count.InitUserCount(userModel.UserID, u.cache)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, errors.New("internal error: " + err.Error())
+	}
+
+	// 返回用户信息
+	return &user.RegisterResp{
+		UserId:      userModel.UserID,
+		Username:    userModel.Username,
+		Email:       userModel.Email,
+		Bio:         userModel.Bio,
+		Avatar:      userModel.AvatarUrl,
+		Theme:       userModel.Theme,
+		ChatCount:   0,
+		MemoirCount: 0,
+		UseDay:      1,
+	}, nil
 }
 
 func (u *ConcreteUserUsecase) LoginUser(ctx context.Context, email, password string) (UserID int32, err error) {
-	user, err := u.repo.FindUserByEmail(ctx, email)
+	userModel, err := u.repo.FindUserByEmail(ctx, email)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		log.Log().Info(err)
 		return 0, fmt.Errorf("usecase.login:%w", err)
@@ -106,9 +151,9 @@ func (u *ConcreteUserUsecase) LoginUser(ctx context.Context, email, password str
 		log.Log().Error(err)
 		return 0, fmt.Errorf("usecase.login:%w", err)
 	}
-	if encrypt.ComparePasswords(user.PasswordHashed, password) {
+	if encrypt.ComparePasswords(userModel.Password, password) {
 		log.Log().Info(errPasswordNotMatch)
 		return 0, fmt.Errorf("usecase.login:%w", errPasswordNotMatch)
 	}
-	return user.UserID, nil
+	return userModel.UserID, nil
 }

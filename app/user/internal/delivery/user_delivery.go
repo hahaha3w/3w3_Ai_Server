@@ -41,22 +41,20 @@ func (d *UserDelivery) SendCode(ctx context.Context, req *user.SendCodeReq) (res
 
 // Register implements the UserServiceImpl interface.
 func (d *UserDelivery) Register(ctx context.Context, req *user.RegisterReq) (resp *user.RegisterResp, err error) {
-	var (
-		uid int32
-	)
-
+	// 重复校验密码
 	if req.Password != req.ConfirmPassword {
 		log.Log().Error(errPasswordNotMatch)
-		return nil, fmt.Errorf("delivery:%w", errPasswordNotMatch)
+		return nil, fmt.Errorf("password does not match")
 	}
-	uid, err = d.userUsecase.RegisterUser(ctx, req.Email, req.Password)
+
+	// 执行注册用户逻辑
+	registerUser, err := d.userUsecase.RegisterUser(ctx, req.Email, req.Code, req.Password)
 	if err != nil {
 		log.Log().Error(err)
 		return nil, fmt.Errorf("delivery:%w", err)
 	}
-	return &user.RegisterResp{
-		UserId: uid,
-	}, nil
+
+	return registerUser, nil
 }
 
 // Login implements the UserServiceImpl interface.
