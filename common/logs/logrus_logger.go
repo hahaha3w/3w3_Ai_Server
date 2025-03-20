@@ -68,7 +68,7 @@ func (h *hook) Levels() []logrus.Level {
 	return logrus.AllLevels
 }
 func (h *hook) Fire(entry *logrus.Entry) (err error) {
-	timer := entry.Time.Format("2006-01-02_15-04")
+	timer := entry.Time.Format("2006-01-02_15")
 	line, _ := entry.String()
 	// 时间不等
 	defer func() { _ = h.file.Close() }()
