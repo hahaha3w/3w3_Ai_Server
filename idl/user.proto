@@ -15,12 +15,22 @@ message SendCodeResp {
 
 message RegisterReq {
   string email = 1;
-  string password = 2;
-  string confirm_password = 3;
+  string code = 2;
+  string password = 3;
+  string confirm_password = 4;
 }
 
 message RegisterResp {
   int32 user_id = 1;
+  string username = 2;
+  string email = 3;
+  string avatar = 4;
+  string bio = 5;
+  string register_date = 6;
+  string theme = 7;
+  int32 chat_count = 8;
+  int32 memoir_count = 9;
+  int32 use_day = 10;
 }
 
 message LoginReq {
@@ -30,6 +40,15 @@ message LoginReq {
 
 message LoginResp {
   int32 user_id = 1;
+  string username = 2;
+  string email = 3;
+  string avatar = 4;
+  string bio = 5;
+  string register_date = 6;
+  string theme = 7;
+  int32 chat_count = 8;
+  int32 memoir_count = 9;
+  int32 use_day = 10;
 }
 
 // 新增请求和响应消息
@@ -46,8 +65,8 @@ message ChangePasswordReq{
   int32 user_id = 1;
   string old_password = 2;
   string new_password = 3;
-
 }
+
 message UpdateUserInfoResp {
   bool success = 1;
   string message = 2;
@@ -64,12 +83,15 @@ message GetUserInfoReq {
 
 message GetUserInfoResp {
   int32 user_id = 1;
-  string email = 2;
-  string username = 3;
+  string username = 2;
+  string email = 3;
   string avatar = 4;
   string bio = 5;
   string register_date = 6;
   string theme = 7;
+  int32 chat_count = 8;
+  int32 memoir_count = 9;
+  int32 use_day = 10;
 }
 
 message DeleteUserReq {

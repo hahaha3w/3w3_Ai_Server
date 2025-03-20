@@ -1,6 +1,7 @@
 package regex
 
 import (
+	"errors"
 	"regexp"
 	"strings"
 )
@@ -47,4 +48,18 @@ func isValid(re *regexp.Regexp, str string) bool {
 		return false // 或者根据需求返回 true 表示空字符串无效
 	}
 	return re.MatchString(str)
+}
+
+func VerifyUser(email, password string) error {
+	// 校验邮箱
+	if IsEmailInvalid(email) {
+		return errors.New("invalid email")
+	}
+
+	// 校验密码
+	if IsPasswordInvalid(password) {
+		return errors.New("invalid password")
+	}
+
+	return nil
 }

@@ -89,6 +89,11 @@ func (x *RegisterReq) FastRead(buf []byte, _type int8, number int32) (offset int
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -108,11 +113,16 @@ func (x *RegisterReq) fastReadField1(buf []byte, _type int8) (offset int, err er
 }
 
 func (x *RegisterReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Password, offset, err = fastpb.ReadString(buf, _type)
+	x.Code, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *RegisterReq) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Password, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterReq) fastReadField4(buf []byte, _type int8) (offset int, err error) {
 	x.ConfirmPassword, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
@@ -121,6 +131,51 @@ func (x *RegisterResp) FastRead(buf []byte, _type int8, number int32) (offset in
 	switch number {
 	case 1:
 		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 7:
+		offset, err = x.fastReadField7(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 8:
+		offset, err = x.fastReadField8(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 9:
+		offset, err = x.fastReadField9(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 10:
+		offset, err = x.fastReadField10(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -139,6 +194,51 @@ ReadFieldError:
 
 func (x *RegisterResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
 	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Username, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Email, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Avatar, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Bio, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.RegisterDate, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField7(buf []byte, _type int8) (offset int, err error) {
+	x.Theme, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+	x.ChatCount, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField9(buf []byte, _type int8) (offset int, err error) {
+	x.MemoirCount, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField10(buf []byte, _type int8) (offset int, err error) {
+	x.UseDay, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -184,6 +284,51 @@ func (x *LoginResp) FastRead(buf []byte, _type int8, number int32) (offset int, 
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 7:
+		offset, err = x.fastReadField7(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 8:
+		offset, err = x.fastReadField8(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 9:
+		offset, err = x.fastReadField9(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 10:
+		offset, err = x.fastReadField10(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -199,6 +344,51 @@ ReadFieldError:
 
 func (x *LoginResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
 	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Username, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Email, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Avatar, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Bio, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.RegisterDate, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField7(buf []byte, _type int8) (offset int, err error) {
+	x.Theme, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+	x.ChatCount, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField9(buf []byte, _type int8) (offset int, err error) {
+	x.MemoirCount, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField10(buf []byte, _type int8) (offset int, err error) {
+	x.UseDay, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -454,6 +644,21 @@ func (x *GetUserInfoResp) FastRead(buf []byte, _type int8, number int32) (offset
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 8:
+		offset, err = x.fastReadField8(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 9:
+		offset, err = x.fastReadField9(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 10:
+		offset, err = x.fastReadField10(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -473,12 +678,12 @@ func (x *GetUserInfoResp) fastReadField1(buf []byte, _type int8) (offset int, er
 }
 
 func (x *GetUserInfoResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Email, offset, err = fastpb.ReadString(buf, _type)
+	x.Username, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *GetUserInfoResp) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.Username, offset, err = fastpb.ReadString(buf, _type)
+	x.Email, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -499,6 +704,21 @@ func (x *GetUserInfoResp) fastReadField6(buf []byte, _type int8) (offset int, er
 
 func (x *GetUserInfoResp) fastReadField7(buf []byte, _type int8) (offset int, err error) {
 	x.Theme, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserInfoResp) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+	x.ChatCount, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserInfoResp) fastReadField9(buf []byte, _type int8) (offset int, err error) {
+	x.MemoirCount, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserInfoResp) fastReadField10(buf []byte, _type int8) (offset int, err error) {
+	x.UseDay, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -610,6 +830,7 @@ func (x *RegisterReq) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
 	return offset
 }
 
@@ -622,18 +843,26 @@ func (x *RegisterReq) fastWriteField1(buf []byte) (offset int) {
 }
 
 func (x *RegisterReq) fastWriteField2(buf []byte) (offset int) {
-	if x.Password == "" {
+	if x.Code == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetPassword())
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetCode())
 	return offset
 }
 
 func (x *RegisterReq) fastWriteField3(buf []byte) (offset int) {
+	if x.Password == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetPassword())
+	return offset
+}
+
+func (x *RegisterReq) fastWriteField4(buf []byte) (offset int) {
 	if x.ConfirmPassword == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetConfirmPassword())
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetConfirmPassword())
 	return offset
 }
 
@@ -642,6 +871,15 @@ func (x *RegisterResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
+	offset += x.fastWriteField7(buf[offset:])
+	offset += x.fastWriteField8(buf[offset:])
+	offset += x.fastWriteField9(buf[offset:])
+	offset += x.fastWriteField10(buf[offset:])
 	return offset
 }
 
@@ -650,6 +888,78 @@ func (x *RegisterResp) fastWriteField1(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetUserId())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField2(buf []byte) (offset int) {
+	if x.Username == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetUsername())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField3(buf []byte) (offset int) {
+	if x.Email == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetEmail())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField4(buf []byte) (offset int) {
+	if x.Avatar == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetAvatar())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField5(buf []byte) (offset int) {
+	if x.Bio == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetBio())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField6(buf []byte) (offset int) {
+	if x.RegisterDate == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetRegisterDate())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField7(buf []byte) (offset int) {
+	if x.Theme == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 7, x.GetTheme())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField8(buf []byte) (offset int) {
+	if x.ChatCount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 8, x.GetChatCount())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField9(buf []byte) (offset int) {
+	if x.MemoirCount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 9, x.GetMemoirCount())
+	return offset
+}
+
+func (x *RegisterResp) fastWriteField10(buf []byte) (offset int) {
+	if x.UseDay == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 10, x.GetUseDay())
 	return offset
 }
 
@@ -683,6 +993,15 @@ func (x *LoginResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
+	offset += x.fastWriteField7(buf[offset:])
+	offset += x.fastWriteField8(buf[offset:])
+	offset += x.fastWriteField9(buf[offset:])
+	offset += x.fastWriteField10(buf[offset:])
 	return offset
 }
 
@@ -691,6 +1010,78 @@ func (x *LoginResp) fastWriteField1(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetUserId())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField2(buf []byte) (offset int) {
+	if x.Username == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetUsername())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField3(buf []byte) (offset int) {
+	if x.Email == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetEmail())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField4(buf []byte) (offset int) {
+	if x.Avatar == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetAvatar())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField5(buf []byte) (offset int) {
+	if x.Bio == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetBio())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField6(buf []byte) (offset int) {
+	if x.RegisterDate == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetRegisterDate())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField7(buf []byte) (offset int) {
+	if x.Theme == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 7, x.GetTheme())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField8(buf []byte) (offset int) {
+	if x.ChatCount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 8, x.GetChatCount())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField9(buf []byte) (offset int) {
+	if x.MemoirCount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 9, x.GetMemoirCount())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField10(buf []byte) (offset int) {
+	if x.UseDay == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 10, x.GetUseDay())
 	return offset
 }
 
@@ -866,6 +1257,9 @@ func (x *GetUserInfoResp) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField5(buf[offset:])
 	offset += x.fastWriteField6(buf[offset:])
 	offset += x.fastWriteField7(buf[offset:])
+	offset += x.fastWriteField8(buf[offset:])
+	offset += x.fastWriteField9(buf[offset:])
+	offset += x.fastWriteField10(buf[offset:])
 	return offset
 }
 
@@ -878,18 +1272,18 @@ func (x *GetUserInfoResp) fastWriteField1(buf []byte) (offset int) {
 }
 
 func (x *GetUserInfoResp) fastWriteField2(buf []byte) (offset int) {
-	if x.Email == "" {
+	if x.Username == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetEmail())
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetUsername())
 	return offset
 }
 
 func (x *GetUserInfoResp) fastWriteField3(buf []byte) (offset int) {
-	if x.Username == "" {
+	if x.Email == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetUsername())
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetEmail())
 	return offset
 }
 
@@ -922,6 +1316,30 @@ func (x *GetUserInfoResp) fastWriteField7(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 7, x.GetTheme())
+	return offset
+}
+
+func (x *GetUserInfoResp) fastWriteField8(buf []byte) (offset int) {
+	if x.ChatCount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 8, x.GetChatCount())
+	return offset
+}
+
+func (x *GetUserInfoResp) fastWriteField9(buf []byte) (offset int) {
+	if x.MemoirCount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 9, x.GetMemoirCount())
+	return offset
+}
+
+func (x *GetUserInfoResp) fastWriteField10(buf []byte) (offset int) {
+	if x.UseDay == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 10, x.GetUseDay())
 	return offset
 }
 
@@ -1014,6 +1432,7 @@ func (x *RegisterReq) Size() (n int) {
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
 	return n
 }
 
@@ -1026,18 +1445,26 @@ func (x *RegisterReq) sizeField1() (n int) {
 }
 
 func (x *RegisterReq) sizeField2() (n int) {
-	if x.Password == "" {
+	if x.Code == "" {
 		return n
 	}
-	n += fastpb.SizeString(2, x.GetPassword())
+	n += fastpb.SizeString(2, x.GetCode())
 	return n
 }
 
 func (x *RegisterReq) sizeField3() (n int) {
+	if x.Password == "" {
+		return n
+	}
+	n += fastpb.SizeString(3, x.GetPassword())
+	return n
+}
+
+func (x *RegisterReq) sizeField4() (n int) {
 	if x.ConfirmPassword == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetConfirmPassword())
+	n += fastpb.SizeString(4, x.GetConfirmPassword())
 	return n
 }
 
@@ -1046,6 +1473,15 @@ func (x *RegisterResp) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
+	n += x.sizeField3()
+	n += x.sizeField4()
+	n += x.sizeField5()
+	n += x.sizeField6()
+	n += x.sizeField7()
+	n += x.sizeField8()
+	n += x.sizeField9()
+	n += x.sizeField10()
 	return n
 }
 
@@ -1054,6 +1490,78 @@ func (x *RegisterResp) sizeField1() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt32(1, x.GetUserId())
+	return n
+}
+
+func (x *RegisterResp) sizeField2() (n int) {
+	if x.Username == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetUsername())
+	return n
+}
+
+func (x *RegisterResp) sizeField3() (n int) {
+	if x.Email == "" {
+		return n
+	}
+	n += fastpb.SizeString(3, x.GetEmail())
+	return n
+}
+
+func (x *RegisterResp) sizeField4() (n int) {
+	if x.Avatar == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetAvatar())
+	return n
+}
+
+func (x *RegisterResp) sizeField5() (n int) {
+	if x.Bio == "" {
+		return n
+	}
+	n += fastpb.SizeString(5, x.GetBio())
+	return n
+}
+
+func (x *RegisterResp) sizeField6() (n int) {
+	if x.RegisterDate == "" {
+		return n
+	}
+	n += fastpb.SizeString(6, x.GetRegisterDate())
+	return n
+}
+
+func (x *RegisterResp) sizeField7() (n int) {
+	if x.Theme == "" {
+		return n
+	}
+	n += fastpb.SizeString(7, x.GetTheme())
+	return n
+}
+
+func (x *RegisterResp) sizeField8() (n int) {
+	if x.ChatCount == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(8, x.GetChatCount())
+	return n
+}
+
+func (x *RegisterResp) sizeField9() (n int) {
+	if x.MemoirCount == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(9, x.GetMemoirCount())
+	return n
+}
+
+func (x *RegisterResp) sizeField10() (n int) {
+	if x.UseDay == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(10, x.GetUseDay())
 	return n
 }
 
@@ -1087,6 +1595,15 @@ func (x *LoginResp) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
+	n += x.sizeField3()
+	n += x.sizeField4()
+	n += x.sizeField5()
+	n += x.sizeField6()
+	n += x.sizeField7()
+	n += x.sizeField8()
+	n += x.sizeField9()
+	n += x.sizeField10()
 	return n
 }
 
@@ -1095,6 +1612,78 @@ func (x *LoginResp) sizeField1() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt32(1, x.GetUserId())
+	return n
+}
+
+func (x *LoginResp) sizeField2() (n int) {
+	if x.Username == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetUsername())
+	return n
+}
+
+func (x *LoginResp) sizeField3() (n int) {
+	if x.Email == "" {
+		return n
+	}
+	n += fastpb.SizeString(3, x.GetEmail())
+	return n
+}
+
+func (x *LoginResp) sizeField4() (n int) {
+	if x.Avatar == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetAvatar())
+	return n
+}
+
+func (x *LoginResp) sizeField5() (n int) {
+	if x.Bio == "" {
+		return n
+	}
+	n += fastpb.SizeString(5, x.GetBio())
+	return n
+}
+
+func (x *LoginResp) sizeField6() (n int) {
+	if x.RegisterDate == "" {
+		return n
+	}
+	n += fastpb.SizeString(6, x.GetRegisterDate())
+	return n
+}
+
+func (x *LoginResp) sizeField7() (n int) {
+	if x.Theme == "" {
+		return n
+	}
+	n += fastpb.SizeString(7, x.GetTheme())
+	return n
+}
+
+func (x *LoginResp) sizeField8() (n int) {
+	if x.ChatCount == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(8, x.GetChatCount())
+	return n
+}
+
+func (x *LoginResp) sizeField9() (n int) {
+	if x.MemoirCount == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(9, x.GetMemoirCount())
+	return n
+}
+
+func (x *LoginResp) sizeField10() (n int) {
+	if x.UseDay == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(10, x.GetUseDay())
 	return n
 }
 
@@ -1270,6 +1859,9 @@ func (x *GetUserInfoResp) Size() (n int) {
 	n += x.sizeField5()
 	n += x.sizeField6()
 	n += x.sizeField7()
+	n += x.sizeField8()
+	n += x.sizeField9()
+	n += x.sizeField10()
 	return n
 }
 
@@ -1282,18 +1874,18 @@ func (x *GetUserInfoResp) sizeField1() (n int) {
 }
 
 func (x *GetUserInfoResp) sizeField2() (n int) {
-	if x.Email == "" {
+	if x.Username == "" {
 		return n
 	}
-	n += fastpb.SizeString(2, x.GetEmail())
+	n += fastpb.SizeString(2, x.GetUsername())
 	return n
 }
 
 func (x *GetUserInfoResp) sizeField3() (n int) {
-	if x.Username == "" {
+	if x.Email == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetUsername())
+	n += fastpb.SizeString(3, x.GetEmail())
 	return n
 }
 
@@ -1326,6 +1918,30 @@ func (x *GetUserInfoResp) sizeField7() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(7, x.GetTheme())
+	return n
+}
+
+func (x *GetUserInfoResp) sizeField8() (n int) {
+	if x.ChatCount == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(8, x.GetChatCount())
+	return n
+}
+
+func (x *GetUserInfoResp) sizeField9() (n int) {
+	if x.MemoirCount == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(9, x.GetMemoirCount())
+	return n
+}
+
+func (x *GetUserInfoResp) sizeField10() (n int) {
+	if x.UseDay == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(10, x.GetUseDay())
 	return n
 }
 
@@ -1381,12 +1997,22 @@ var fieldIDToName_SendCodeResp = map[int32]string{
 
 var fieldIDToName_RegisterReq = map[int32]string{
 	1: "Email",
-	2: "Password",
-	3: "ConfirmPassword",
+	2: "Code",
+	3: "Password",
+	4: "ConfirmPassword",
 }
 
 var fieldIDToName_RegisterResp = map[int32]string{
-	1: "UserId",
+	1:  "UserId",
+	2:  "Username",
+	3:  "Email",
+	4:  "Avatar",
+	5:  "Bio",
+	6:  "RegisterDate",
+	7:  "Theme",
+	8:  "ChatCount",
+	9:  "MemoirCount",
+	10: "UseDay",
 }
 
 var fieldIDToName_LoginReq = map[int32]string{
@@ -1395,7 +2021,16 @@ var fieldIDToName_LoginReq = map[int32]string{
 }
 
 var fieldIDToName_LoginResp = map[int32]string{
-	1: "UserId",
+	1:  "UserId",
+	2:  "Username",
+	3:  "Email",
+	4:  "Avatar",
+	5:  "Bio",
+	6:  "RegisterDate",
+	7:  "Theme",
+	8:  "ChatCount",
+	9:  "MemoirCount",
+	10: "UseDay",
 }
 
 var fieldIDToName_UpdateUserInfoReq = map[int32]string{
@@ -1428,13 +2063,16 @@ var fieldIDToName_GetUserInfoReq = map[int32]string{
 }
 
 var fieldIDToName_GetUserInfoResp = map[int32]string{
-	1: "UserId",
-	2: "Email",
-	3: "Username",
-	4: "Avatar",
-	5: "Bio",
-	6: "RegisterDate",
-	7: "Theme",
+	1:  "UserId",
+	2:  "Username",
+	3:  "Email",
+	4:  "Avatar",
+	5:  "Bio",
+	6:  "RegisterDate",
+	7:  "Theme",
+	8:  "ChatCount",
+	9:  "MemoirCount",
+	10: "UseDay",
 }
 
 var fieldIDToName_DeleteUserReq = map[int32]string{
