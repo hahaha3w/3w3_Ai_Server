@@ -4,6 +4,14 @@ package user;
 
 option go_package = "/user";
 
+message SendCodeReq {
+  string email = 1;
+}
+
+message SendCodeResp {
+  bool success = 1;
+  string message = 2;
+}
 
 message RegisterReq {
   string email = 1;
@@ -30,8 +38,8 @@ message UpdateUserInfoReq {
   string username = 2;
   string avatar = 3;
   string theme = 4;
-  string bio =5;
-  string email =6;
+  string bio = 5;
+  string email = 6;
 }
 
 message ChangePasswordReq{
@@ -44,10 +52,12 @@ message UpdateUserInfoResp {
   bool success = 1;
   string message = 2;
 }
+
 message ChangePasswordResp{
-  bool success =1;
-  string message =2;
+  bool success = 1;
+  string message = 2;
 }
+
 message GetUserInfoReq {
   int32 user_id = 1;
 }
@@ -72,6 +82,7 @@ message DeleteUserResp {
 }
 
 service UserService {
+  rpc SendCode (SendCodeReq) returns (SendCodeResp) {}
   rpc Register (RegisterReq) returns (RegisterResp) {}
   rpc Login (LoginReq) returns (LoginResp) {}
   rpc ChangePassword (ChangePasswordReq)returns(ChangePasswordResp){}
