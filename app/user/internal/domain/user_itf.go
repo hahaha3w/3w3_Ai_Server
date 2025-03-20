@@ -13,5 +13,5 @@ type UserRepo interface {
 type UserUsecase interface {
 	SendCode(ctx context.Context, email string) (err error)
 	RegisterUser(ctx context.Context, email, code, password string) (resp *user.RegisterResp, err error)
-	LoginUser(ctx context.Context, email, password string) (UserID int32, err error)
+	LoginUser(ctx context.Context, email, password string) (resp *user.LoginResp, err error)
 }

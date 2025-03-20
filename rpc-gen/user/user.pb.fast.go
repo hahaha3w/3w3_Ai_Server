@@ -179,6 +179,11 @@ func (x *RegisterResp) FastRead(buf []byte, _type int8, number int32) (offset in
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 11:
+		offset, err = x.fastReadField11(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -239,6 +244,11 @@ func (x *RegisterResp) fastReadField9(buf []byte, _type int8) (offset int, err e
 
 func (x *RegisterResp) fastReadField10(buf []byte, _type int8) (offset int, err error) {
 	x.UseDay, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterResp) fastReadField11(buf []byte, _type int8) (offset int, err error) {
+	x.Token, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -329,6 +339,11 @@ func (x *LoginResp) FastRead(buf []byte, _type int8, number int32) (offset int, 
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 11:
+		offset, err = x.fastReadField11(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -389,6 +404,11 @@ func (x *LoginResp) fastReadField9(buf []byte, _type int8) (offset int, err erro
 
 func (x *LoginResp) fastReadField10(buf []byte, _type int8) (offset int, err error) {
 	x.UseDay, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField11(buf []byte, _type int8) (offset int, err error) {
+	x.Token, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -880,6 +900,7 @@ func (x *RegisterResp) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField8(buf[offset:])
 	offset += x.fastWriteField9(buf[offset:])
 	offset += x.fastWriteField10(buf[offset:])
+	offset += x.fastWriteField11(buf[offset:])
 	return offset
 }
 
@@ -963,6 +984,14 @@ func (x *RegisterResp) fastWriteField10(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *RegisterResp) fastWriteField11(buf []byte) (offset int) {
+	if x.Token == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 11, x.GetToken())
+	return offset
+}
+
 func (x *LoginReq) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -1002,6 +1031,7 @@ func (x *LoginResp) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField8(buf[offset:])
 	offset += x.fastWriteField9(buf[offset:])
 	offset += x.fastWriteField10(buf[offset:])
+	offset += x.fastWriteField11(buf[offset:])
 	return offset
 }
 
@@ -1082,6 +1112,14 @@ func (x *LoginResp) fastWriteField10(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt32(buf[offset:], 10, x.GetUseDay())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField11(buf []byte) (offset int) {
+	if x.Token == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 11, x.GetToken())
 	return offset
 }
 
@@ -1482,6 +1520,7 @@ func (x *RegisterResp) Size() (n int) {
 	n += x.sizeField8()
 	n += x.sizeField9()
 	n += x.sizeField10()
+	n += x.sizeField11()
 	return n
 }
 
@@ -1565,6 +1604,14 @@ func (x *RegisterResp) sizeField10() (n int) {
 	return n
 }
 
+func (x *RegisterResp) sizeField11() (n int) {
+	if x.Token == "" {
+		return n
+	}
+	n += fastpb.SizeString(11, x.GetToken())
+	return n
+}
+
 func (x *LoginReq) Size() (n int) {
 	if x == nil {
 		return n
@@ -1604,6 +1651,7 @@ func (x *LoginResp) Size() (n int) {
 	n += x.sizeField8()
 	n += x.sizeField9()
 	n += x.sizeField10()
+	n += x.sizeField11()
 	return n
 }
 
@@ -1684,6 +1732,14 @@ func (x *LoginResp) sizeField10() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt32(10, x.GetUseDay())
+	return n
+}
+
+func (x *LoginResp) sizeField11() (n int) {
+	if x.Token == "" {
+		return n
+	}
+	n += fastpb.SizeString(11, x.GetToken())
 	return n
 }
 
@@ -2013,6 +2069,7 @@ var fieldIDToName_RegisterResp = map[int32]string{
 	8:  "ChatCount",
 	9:  "MemoirCount",
 	10: "UseDay",
+	11: "Token",
 }
 
 var fieldIDToName_LoginReq = map[int32]string{
@@ -2031,6 +2088,7 @@ var fieldIDToName_LoginResp = map[int32]string{
 	8:  "ChatCount",
 	9:  "MemoirCount",
 	10: "UseDay",
+	11: "Token",
 }
 
 var fieldIDToName_UpdateUserInfoReq = map[int32]string{

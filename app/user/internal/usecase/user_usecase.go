@@ -10,6 +10,7 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/count"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/email"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/encrypt"
+	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/jwt"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/log"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/regex"
 	"time"
@@ -138,22 +139,58 @@ func (u *ConcreteUserUsecase) RegisterUser(ctx context.Context, email, code, pas
 		ChatCount:   0,
 		MemoirCount: 0,
 		UseDay:      1,
+		Token:       jwt.GenerateJWT(userModel.UserID),
 	}, nil
 }
 
-func (u *ConcreteUserUsecase) LoginUser(ctx context.Context, email, password string) (UserID int32, err error) {
+func (u *ConcreteUserUsecase) LoginUser(ctx context.Context, email, password string) (resp *user.LoginResp, err error) {
+	// 校验邮箱和密码格式
+	err = regex.VerifyUser(email, password)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
+
+	// 根据邮箱查找用户
 	userModel, err := u.repo.FindUserByEmail(ctx, email)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		log.Log().Info(err)
-		return 0, fmt.Errorf("usecase.login:%w", err)
+		return nil, fmt.Errorf("user not found")
+	} else if err != nil {
+		log.Log().Error(err)
+		return nil, fmt.Errorf("internal error: %w", err)
 	}
+
+	// 校验密码
+	if !encrypt.ComparePasswords(userModel.Password, password) {
+		log.Log().Info(errPasswordNotMatch)
+		return nil, fmt.Errorf("password not match")
+	}
+
+	// 更新用户计数统计
+	userCount := &domain.UpdateUserCount{
+		UserId:          userModel.UserID,
+		ChatCountIncr:   0,
+		MemoirCountIncr: 0,
+		UseDaysIncr:     1,
+	}
+	updateUserCount, err := count.UpdateUserCount(userCount, u.cache)
 	if err != nil {
 		log.Log().Error(err)
-		return 0, fmt.Errorf("usecase.login:%w", err)
+		return nil, fmt.Errorf("internal error: %w", err)
 	}
-	if encrypt.ComparePasswords(userModel.Password, password) {
-		log.Log().Info(errPasswordNotMatch)
-		return 0, fmt.Errorf("usecase.login:%w", errPasswordNotMatch)
-	}
-	return userModel.UserID, nil
+
+	// 返回用户信息
+	return &user.LoginResp{
+		UserId:      userModel.UserID,
+		Username:    userModel.Username,
+		Email:       userModel.Email,
+		Bio:         userModel.Bio,
+		Avatar:      userModel.AvatarUrl,
+		Theme:       userModel.Theme,
+		ChatCount:   int32(updateUserCount.ChatCount),
+		MemoirCount: int32(updateUserCount.MemoirCount),
+		UseDay:      int32(updateUserCount.UseDays),
+		Token:       jwt.GenerateJWT(userModel.UserID),
+	}, nil
 }

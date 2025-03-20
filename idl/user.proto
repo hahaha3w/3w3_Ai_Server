@@ -31,6 +31,7 @@ message RegisterResp {
   int32 chat_count = 8;
   int32 memoir_count = 9;
   int32 use_day = 10;
+  string token = 11;
 }
 
 message LoginReq {
@@ -49,6 +50,7 @@ message LoginResp {
   int32 chat_count = 8;
   int32 memoir_count = 9;
   int32 use_day = 10;
+  string token = 11;
 }
 
 // 新增请求和响应消息

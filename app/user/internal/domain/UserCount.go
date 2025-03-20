@@ -10,7 +10,7 @@ type UserCount struct {
 }
 
 type UpdateUserCount struct {
-	UserId          int64     `json:"user_id"`
+	UserId          int32     `json:"user_id"`
 	ChatCountIncr   int64     `json:"chat_count_incr"`
 	MemoirCountIncr int64     `json:"memoir_count_incr"`
 	UseDaysIncr     int64     `json:"use_days_incr"`
