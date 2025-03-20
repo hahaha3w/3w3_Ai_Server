@@ -1,0 +1,17 @@
+syntax = "proto3";
+package chat;
+option go_package = "/chat";
+
+message ChatReq {
+  int64  user_id =1;
+  string message = 2;
+  int64 conversation_id =3;
+}
+
+message ChatResp {
+  string message = 1;
+}
+
+service Echo {
+  rpc Chat (ChatReq) returns (stream ChatResp) {}
+}
