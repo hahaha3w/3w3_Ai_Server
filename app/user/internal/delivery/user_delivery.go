@@ -59,19 +59,13 @@ func (d *UserDelivery) Register(ctx context.Context, req *user.RegisterReq) (res
 
 // Login implements the UserServiceImpl interface.
 func (d *UserDelivery) Login(ctx context.Context, req *user.LoginReq) (resp *user.LoginResp, err error) {
-	var (
-		uid int32
-	)
-
-	uid, err = d.userUsecase.LoginUser(ctx, req.Email, req.Password)
+	loginUser, err := d.userUsecase.LoginUser(ctx, req.Email, req.Password)
 	if err != nil {
 		log.Log().Error(err)
 		return nil, fmt.Errorf("delivery:%w", err)
 	}
 
-	return &user.LoginResp{
-		UserId: uid,
-	}, err
+	return loginUser, err
 }
 
 // UpdateUserInfo implements the UserServiceImpl interface.
