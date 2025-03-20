@@ -27,10 +27,11 @@ message LoginResp {
 // 新增请求和响应消息
 message UpdateUserInfoReq {
   int32 user_id = 1;
-  string nickname = 2;
+  string username = 2;
   string avatar = 3;
-  string phone = 4;
-  string address = 5;
+  string theme = 4;
+  string bio =5;
+  string email =6;
 }
 
 message ChangePasswordReq{
@@ -54,11 +55,11 @@ message GetUserInfoReq {
 message GetUserInfoResp {
   int32 user_id = 1;
   string email = 2;
-  string nickname = 3;
+  string username = 3;
   string avatar = 4;
-  string phone = 5;
-  string address = 6;
-  string create_time = 7;
+  string bio = 5;
+  string register_date = 6;
+  string theme = 7;
 }
 
 message DeleteUserReq {
