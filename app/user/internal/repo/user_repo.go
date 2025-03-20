@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"github.com/hahaha3w/3w3_Ai_Server/user/internal/domain"
 	"gorm.io/gorm"
 )
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/user"
 	"github.com/hahaha3w/3w3_Ai_Server/user/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/log"
 )
@@ -58,13 +59,23 @@ func (d *UserDelivery) Login(ctx context.Context, req *user.LoginReq) (resp *use
 		UserId: uid,
 	}, err
 }
+
+// UpdateUserInfo implements the UserServiceImpl interface.
 func (d *UserDelivery) UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoReq) (res *user.UpdateUserInfoResp, err error) {
 	return nil, err
 }
+
+// GetUserInfo implements the UserServiceImpl interface.
 func (d *UserDelivery) GetUserInfo(ctx context.Context, req *user.GetUserInfoReq) (res *user.GetUserInfoResp, err error) {
 	return nil, err
 }
 
+// DeleteUser implements the UserServiceImpl interface.
 func (d *UserDelivery) DeleteUser(ctx context.Context, req *user.DeleteUserReq) (res *user.DeleteUserResp, err error) {
+	return nil, err
+}
+
+// ChangePassword implements the UserServiceImpl interface.
+func (d *UserDelivery) ChangePassword(ctx context.Context, req *user.ChangePasswordReq) (res *user.ChangePasswordResp, err error) {
 	return nil, err
 }

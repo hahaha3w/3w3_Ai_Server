@@ -10,7 +10,7 @@ import (
 
 const (
 	DefaultConfigFileType = "toml"
-	DefaultConfigFilePath = "conf/%s/conf.toml.template.template.template"
+	DefaultConfigFilePath = "conf/%s/conf.toml"
 )
 
 var ProviderSet = wire.NewSet(NewDB, NewContext)

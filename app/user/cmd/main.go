@@ -1,9 +1,12 @@
 package main
 
 import (
-	"net"
-
+	"github.com/cloudwego/kitex/server"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/user/userservice"
+	"github.com/hahaha3w/3w3_Ai_Server/user/internal/core"
 	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
+	"net"
 )
 
 func main() {
@@ -20,21 +23,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func kitexInit() (opts []server.Option) {
 	// address
-	addr, err := net.ResolveTCPAddr("tcp", viper.GetString("service.address"))
+	_, err := net.ResolveTCPAddr("tcp", viper.GetString("service.address"))
 	if err != nil {
 		panic(err)
 	}
 
-	opts = append(opts,
-		server.WithServiceAddr(addr),
-		server.WithSuite(
-			serversuite.CommonServerSuite{
-				CurrentServiceName: viper.GetString("service.name"),
-				RegistryAddr:       viper.GetString("consul.address")}))
+	//opts = append(opts,
+	//	server.WithServiceAddr(addr),
+	//	server.WithSuite(
+	//		serversuite.CommonServerSuite{
+	//			CurrentServiceName: viper.GetString("service.name"),
+	//			RegistryAddr:       viper.GetString("consul.address")}))
 	return
 }
