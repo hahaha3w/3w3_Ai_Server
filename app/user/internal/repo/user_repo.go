@@ -17,9 +17,11 @@ func NewMysqlUserRepo(db *gorm.DB) *MysqlUserRepo {
 		db: db,
 	}
 }
+
 func (r *MysqlUserRepo) CreateUser(ctx context.Context, user *domain.User) (err error) {
 	return r.db.WithContext(ctx).Model(&domain.User{}).Create(user).Error
 }
+
 func (r *MysqlUserRepo) FindUserByEmail(ctx context.Context, email string) (user *domain.User, err error) {
 	user = &domain.User{}
 	if err = r.db.
