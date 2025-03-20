@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	core.LoadLogger()
 	godotenv.Load()
 	err := core.LoadConfig()
 	if err != nil {
@@ -27,13 +28,12 @@ func main() {
 
 func kitexInit() (opts []server.Option) {
 	// address
-	_, err := net.ResolveTCPAddr("tcp", viper.GetString("service.address"))
+	addr, err := net.ResolveTCPAddr("tcp", viper.GetString("service.address"))
 	if err != nil {
 		panic(err)
 	}
 
-	//opts = append(opts,
-	//	server.WithServiceAddr(addr),
+	opts = append(opts, server.WithServiceAddr(addr))
 	//	server.WithSuite(
 	//		serversuite.CommonServerSuite{
 	//			CurrentServiceName: viper.GetString("service.name"),

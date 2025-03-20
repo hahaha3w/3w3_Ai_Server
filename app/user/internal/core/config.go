@@ -13,7 +13,7 @@ const (
 	DefaultConfigFilePath = "conf/%s/conf.toml"
 )
 
-var ProviderSet = wire.NewSet(NewDB, NewContext)
+var ProviderSet = wire.NewSet(NewDB, NewContext, NewRedis)
 
 func NewContext() context.Context {
 	return context.Background()
@@ -56,7 +56,6 @@ func LoadConfig(opts ...Option) (err error) {
 	var mode string
 	for _, opt := range opts {
 		opt.apply(&o)
-
 	}
 	viper.AutomaticEnv()
 	if mode = viper.GetString("MODE"); mode == "" {

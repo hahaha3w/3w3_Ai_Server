@@ -23,6 +23,22 @@ func NewUserDelivery(userUsecase domain.UserUsecase) *UserDelivery {
 	}
 }
 
+// SendCode implements the UserServiceImpl interface.
+func (d *UserDelivery) SendCode(ctx context.Context, req *user.SendCodeReq) (resp *user.SendCodeResp, err error) {
+	err = d.userUsecase.SendCode(ctx, req.Email)
+	if err != nil {
+		return &user.SendCodeResp{
+			Success: false,
+			Message: err.Error(),
+		}, err
+	}
+
+	return &user.SendCodeResp{
+		Success: true,
+		Message: "send code success",
+	}, nil
+}
+
 // Register implements the UserServiceImpl interface.
 func (d *UserDelivery) Register(ctx context.Context, req *user.RegisterReq) (resp *user.RegisterResp, err error) {
 	var (
