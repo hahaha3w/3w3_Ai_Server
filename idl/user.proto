@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "/user";
+
+
+message RegisterReq {
+  string email = 1;
+  string password = 2;
+  string confirm_password = 3;
+}
+
+message RegisterResp {
+  int32 user_id = 1;
+}
+
+message LoginReq {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResp {
+  int32 user_id = 1;
+}
+
+// 新增请求和响应消息
+message UpdateUserInfoReq {
+  int32 user_id = 1;
+  string username = 2;
+  string avatar = 3;
+  string theme = 4;
+  string bio =5;
+  string email =6;
+}
+
+message ChangePasswordReq{
+  int32 user_id = 1;
+  string old_password = 2;
+  string new_password = 3;
+
+}
+message UpdateUserInfoResp {
+  bool success = 1;
+  string message = 2;
+}
+message ChangePasswordResp{
+  bool success =1;
+  string message =2;
+}
+message GetUserInfoReq {
+  int32 user_id = 1;
+}
+
+message GetUserInfoResp {
+  int32 user_id = 1;
+  string email = 2;
+  string username = 3;
+  string avatar = 4;
+  string bio = 5;
+  string register_date = 6;
+  string theme = 7;
+}
+
+message DeleteUserReq {
+  int32 user_id = 1;
+}
+
+message DeleteUserResp {
+  bool success = 1;
+  string message = 2;
+}
+
+service UserService {
+  rpc Register (RegisterReq) returns (RegisterResp) {}
+  rpc Login (LoginReq) returns (LoginResp) {}
+  rpc ChangePassword (ChangePasswordReq)returns(ChangePasswordResp){}
+  rpc UpdateUserInfo (UpdateUserInfoReq) returns (UpdateUserInfoResp) {}
+  rpc GetUserInfo (GetUserInfoReq) returns (GetUserInfoResp) {}
+  rpc DeleteUser (DeleteUserReq) returns (DeleteUserResp) {}
+}
