@@ -1,0 +1,81 @@
+syntax = "proto3";
+package memoir;
+option go_package = "/memoir";
+
+service MemoirService {
+  // 生成每日回忆录
+  rpc GenerateDailyMemoir(GenerateDailyMemoirRequest) returns (GenerateMemoirResponse);
+  // 生成周回忆录
+  rpc GenerateWeeklyMemoir(GenerateWeeklyMemoirRequest) returns (GenerateMemoirResponse);
+  // 生成月回忆录
+  rpc GenerateMonthlyMemoir(GenerateMonthlyMemoirRequest) returns (GenerateMemoirResponse);
+  // 获取已生成的回忆录列表
+  rpc GetMemoirList(GetMemoirListRequest) returns (GetMemoirListResponse);
+  // 获取回忆录详情
+  rpc GetMemoirDetail(GetMemoirDetailRequest) returns (GetMemoirDetailResponse);
+}
+
+message Memoir {
+  string id = 1;
+  string user_id = 2;
+  string title = 3;
+  string content = 4;
+  string character_id = 5;
+  enum Type {
+    DAILY = 0;
+    WEEKLY = 1;
+    MONTHLY = 2;
+    CUSTOM = 3;
+  }
+  Type type = 6;
+  string start_date = 7;
+  string end_date = 8;
+  string created_at = 9;
+}
+
+message GenerateDailyMemoirRequest {
+  string user_id = 1;
+  string character_id = 2;
+  string date = 3; // 指定日期，格式YYYY-MM-DD
+}
+
+message GenerateWeeklyMemoirRequest {
+  string user_id = 1;
+  string character_id = 2;
+  string start_date = 3; // 周起始日期，格式YYYY-MM-DD
+}
+
+message GenerateMonthlyMemoirRequest {
+  string user_id = 1;
+  string character_id = 2;
+  string year_month = 3; // 月份，格式YYYY-MM
+}
+
+message GenerateMemoirResponse {
+  bool success = 1;
+  Memoir memoir = 2;
+  string error_msg = 3;
+}
+
+message GetMemoirListRequest {
+  string user_id = 1;
+  Memoir.Type type = 2; // 可选过滤条件
+  string start_date = 3; // 可选，开始日期
+  string end_date = 4; // 可选，结束日期
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message GetMemoirListResponse {
+  repeated Memoir memoirs = 1;
+  int32 total = 2;
+}
+
+message GetMemoirDetailRequest {
+  string memoir_id = 1;
+  string user_id = 2;
+}
+
+message GetMemoirDetailResponse {
+  Memoir memoir = 1;
+}
