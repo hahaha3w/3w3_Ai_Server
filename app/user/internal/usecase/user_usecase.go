@@ -261,3 +261,38 @@ func (u *ConcreteUserUsecase) UpdatePassword(ctx context.Context, id int32, oldP
 
 	return nil
 }
+
+// UpdateUserInfo 更新用户信息
+func (u *ConcreteUserUsecase) UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoReq) (err error) {
+	// 根据id查找用户
+	userModel, err := u.repo.FindUserByID(ctx, int64(req.UserId))
+	if err != nil {
+		log.Log().Error(err)
+		return err
+	}
+
+	if userModel.UserID == 0 {
+		return errors.New("user not found")
+	}
+
+	if req.Username != "" {
+		userModel.Username = req.Username
+	}
+	if req.Bio != "" {
+		userModel.Bio = req.Bio
+	}
+	if req.Avatar != "" {
+		userModel.AvatarUrl = req.Avatar
+	}
+	if req.Theme != "" {
+		userModel.Theme = req.Theme
+	}
+
+	// 更新用户信息
+	if err := u.repo.UpdateUser(ctx, userModel); err != nil {
+		log.Log().Error(err)
+		return err
+	}
+
+	return nil
+}

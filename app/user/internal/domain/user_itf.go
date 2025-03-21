@@ -18,4 +18,5 @@ type UserUsecase interface {
 	LoginUser(ctx context.Context, email, password string) (resp *user.LoginResp, err error)
 	GetUser(ctx context.Context, id int64) (resp *user.GetUserInfoResp, err error)
 	UpdatePassword(ctx context.Context, id int32, oldPassword, newPassword string) (err error)
+	UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoReq) (err error)
 }

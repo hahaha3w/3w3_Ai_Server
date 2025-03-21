@@ -70,7 +70,19 @@ func (d *UserDelivery) Login(ctx context.Context, req *user.LoginReq) (resp *use
 
 // UpdateUserInfo implements the UserServiceImpl interface.
 func (d *UserDelivery) UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoReq) (res *user.UpdateUserInfoResp, err error) {
-	return nil, err
+	err = d.userUsecase.UpdateUserInfo(ctx, req)
+	if err != nil {
+		log.Log().Error(err)
+		return &user.UpdateUserInfoResp{
+			Success: false,
+			Message: err.Error(),
+		}, fmt.Errorf("update user info:%w", err)
+	}
+
+	return &user.UpdateUserInfoResp{
+		Success: true,
+		Message: "update user info success",
+	}, nil
 }
 
 // GetUserInfo implements the UserServiceImpl interface.
