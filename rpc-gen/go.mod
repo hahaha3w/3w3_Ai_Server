@@ -2,12 +2,10 @@ module github.com/hahaha3w/3w3_Ai_Server/rpc-gen
 
 go 1.23.3
 
-replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
-
 require (
 	github.com/cloudwego/fastpb v0.0.5
 	github.com/cloudwego/kitex v0.12.3
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/protobuf v1.36.5
 )
 
 require (
@@ -46,5 +44,7 @@ require (
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/genproto v0.0.0-20210513213006-bf773b8c8384 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

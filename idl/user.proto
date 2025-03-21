@@ -4,15 +4,34 @@ package user;
 
 option go_package = "/user";
 
+message SendCodeReq {
+  string email = 1;
+}
+
+message SendCodeResp {
+  bool success = 1;
+  string message = 2;
+}
 
 message RegisterReq {
   string email = 1;
-  string password = 2;
-  string confirm_password = 3;
+  string code = 2;
+  string password = 3;
+  string confirm_password = 4;
 }
 
 message RegisterResp {
   int32 user_id = 1;
+  string username = 2;
+  string email = 3;
+  string avatar = 4;
+  string bio = 5;
+  string register_date = 6;
+  string theme = 7;
+  int32 chat_count = 8;
+  int32 memoir_count = 9;
+  int32 use_day = 10;
+  string token = 11;
 }
 
 message LoginReq {
@@ -22,6 +41,16 @@ message LoginReq {
 
 message LoginResp {
   int32 user_id = 1;
+  string username = 2;
+  string email = 3;
+  string avatar = 4;
+  string bio = 5;
+  string register_date = 6;
+  string theme = 7;
+  int32 chat_count = 8;
+  int32 memoir_count = 9;
+  int32 use_day = 10;
+  string token = 11;
 }
 
 // 新增请求和响应消息
@@ -30,36 +59,40 @@ message UpdateUserInfoReq {
   string username = 2;
   string avatar = 3;
   string theme = 4;
-  string bio =5;
-  string email =6;
+  string bio = 5;
 }
 
 message ChangePasswordReq{
   int32 user_id = 1;
   string old_password = 2;
   string new_password = 3;
-
 }
+
 message UpdateUserInfoResp {
   bool success = 1;
   string message = 2;
 }
+
 message ChangePasswordResp{
-  bool success =1;
-  string message =2;
+  bool success = 1;
+  string message = 2;
 }
+
 message GetUserInfoReq {
   int32 user_id = 1;
 }
 
 message GetUserInfoResp {
   int32 user_id = 1;
-  string email = 2;
-  string username = 3;
+  string username = 2;
+  string email = 3;
   string avatar = 4;
   string bio = 5;
   string register_date = 6;
   string theme = 7;
+  int32 chat_count = 8;
+  int32 memoir_count = 9;
+  int32 use_day = 10;
 }
 
 message DeleteUserReq {
@@ -72,6 +105,7 @@ message DeleteUserResp {
 }
 
 service UserService {
+  rpc SendCode (SendCodeReq) returns (SendCodeResp) {}
   rpc Register (RegisterReq) returns (RegisterResp) {}
   rpc Login (LoginReq) returns (LoginResp) {}
   rpc ChangePassword (ChangePasswordReq)returns(ChangePasswordResp){}
