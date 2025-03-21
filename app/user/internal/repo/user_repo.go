@@ -46,6 +46,6 @@ func (r *MysqlUserRepo) FindUserByID(ctx context.Context, id int64) (user *domai
 	return user, nil
 }
 
-func (r *MysqlUserRepo) UpdateUser(ctx context.Context, user *domain.User) (err error) {
-	return r.db.WithContext(ctx).Model(&domain.User{}).Save(user).Error
+func (r *MysqlUserRepo) UpdateUser(ctx context.Context, user *domain.User) error {
+	return r.db.WithContext(ctx).Model(user).Updates(user).Error
 }

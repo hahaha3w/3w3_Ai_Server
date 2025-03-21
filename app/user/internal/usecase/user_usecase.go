@@ -224,16 +224,15 @@ func (u *ConcreteUserUsecase) GetUser(ctx context.Context, id int64) (resp *user
 	}, nil
 }
 
-func (u *ConcreteUserUsecase) UpdatePassword(ctx context.Context, id int64, oldPassword, newPassword string) (err error) {
-	// 校验邮箱和密码格式
-
-	if invalid := regex.IsPasswordInvalid(newPassword); invalid {
+func (u *ConcreteUserUsecase) UpdatePassword(ctx context.Context, id int32, oldPassword, newPassword string) (err error) {
+	// 校验密码格式
+	if regex.IsPasswordInvalid(newPassword) {
 		log.Log().Error(err)
-		return err
+		return errors.New("password invalid")
 	}
 
 	// 根据id查找用户
-	userModel, err := u.repo.FindUserByID(ctx, id)
+	userModel, err := u.repo.FindUserByID(ctx, int64(id))
 	if err != nil {
 		log.Log().Error(err)
 		return err
@@ -255,7 +254,6 @@ func (u *ConcreteUserUsecase) UpdatePassword(ctx context.Context, id int64, oldP
 		return err
 	}
 	userModel.Password = password
-
 	if err := u.repo.UpdateUser(ctx, userModel); err != nil {
 		log.Log().Error(err)
 		return err

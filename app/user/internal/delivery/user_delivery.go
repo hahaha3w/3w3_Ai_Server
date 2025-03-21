@@ -90,5 +90,17 @@ func (d *UserDelivery) DeleteUser(ctx context.Context, req *user.DeleteUserReq) 
 
 // ChangePassword implements the UserServiceImpl interface.
 func (d *UserDelivery) ChangePassword(ctx context.Context, req *user.ChangePasswordReq) (res *user.ChangePasswordResp, err error) {
-	return nil, err
+	err = d.userUsecase.UpdatePassword(ctx, req.UserId, req.OldPassword, req.NewPassword)
+	if err != nil {
+		log.Log().Error(err)
+		return &user.ChangePasswordResp{
+			Success: false,
+			Message: err.Error(),
+		}, fmt.Errorf("change password:%w", err)
+	}
+
+	return &user.ChangePasswordResp{
+		Success: true,
+		Message: "change password success",
+	}, nil
 }
