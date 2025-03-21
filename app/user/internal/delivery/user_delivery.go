@@ -51,7 +51,7 @@ func (d *UserDelivery) Register(ctx context.Context, req *user.RegisterReq) (res
 	registerUser, err := d.userUsecase.RegisterUser(ctx, req.Email, req.Code, req.Password)
 	if err != nil {
 		log.Log().Error(err)
-		return nil, fmt.Errorf("delivery:%w", err)
+		return nil, fmt.Errorf("register:%w", err)
 	}
 
 	return registerUser, nil
@@ -62,7 +62,7 @@ func (d *UserDelivery) Login(ctx context.Context, req *user.LoginReq) (resp *use
 	loginUser, err := d.userUsecase.LoginUser(ctx, req.Email, req.Password)
 	if err != nil {
 		log.Log().Error(err)
-		return nil, fmt.Errorf("delivery:%w", err)
+		return nil, fmt.Errorf("login:%w", err)
 	}
 
 	return loginUser, err
@@ -75,7 +75,12 @@ func (d *UserDelivery) UpdateUserInfo(ctx context.Context, req *user.UpdateUserI
 
 // GetUserInfo implements the UserServiceImpl interface.
 func (d *UserDelivery) GetUserInfo(ctx context.Context, req *user.GetUserInfoReq) (res *user.GetUserInfoResp, err error) {
-	return nil, err
+	resp, err := d.userUsecase.GetUser(ctx, int64(req.UserId))
+	if err != nil {
+		log.Log().Error(err)
+		return nil, fmt.Errorf("get user info:%w", err)
+	}
+	return resp, nil
 }
 
 // DeleteUser implements the UserServiceImpl interface.

@@ -194,3 +194,72 @@ func (u *ConcreteUserUsecase) LoginUser(ctx context.Context, email, password str
 		Token:       jwt.GenerateJWT(userModel.UserID),
 	}, nil
 }
+
+func (u *ConcreteUserUsecase) GetUser(ctx context.Context, id int64) (resp *user.GetUserInfoResp, err error) {
+	userModel, err := u.repo.FindUserByID(ctx, id)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
+	if userModel.UserID == 0 {
+		return nil, errors.New("user not found")
+	}
+
+	userCount, err := count.GetUserCount(userModel.UserID, u.cache)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
+
+	return &user.GetUserInfoResp{
+		UserId:      userModel.UserID,
+		Username:    userModel.Username,
+		Email:       userModel.Email,
+		Bio:         userModel.Bio,
+		Avatar:      userModel.AvatarUrl,
+		Theme:       userModel.Theme,
+		ChatCount:   int32(userCount.ChatCount),
+		MemoirCount: int32(userCount.MemoirCount),
+		UseDay:      int32(userCount.UseDays),
+	}, nil
+}
+
+func (u *ConcreteUserUsecase) UpdatePassword(ctx context.Context, id int64, oldPassword, newPassword string) (err error) {
+	// 校验邮箱和密码格式
+
+	if invalid := regex.IsPasswordInvalid(newPassword); invalid {
+		log.Log().Error(err)
+		return err
+	}
+
+	// 根据id查找用户
+	userModel, err := u.repo.FindUserByID(ctx, id)
+	if err != nil {
+		log.Log().Error(err)
+		return err
+	}
+	if userModel.UserID == 0 {
+		return errors.New("user not found")
+	}
+
+	// 校验密码
+	if !encrypt.ComparePasswords(userModel.Password, oldPassword) {
+		log.Log().Info(errPasswordNotMatch)
+		return fmt.Errorf("password not match")
+	}
+
+	// 更新密码
+	password, err := encrypt.HashPassword(newPassword)
+	if err != nil {
+		log.Log().Error(err)
+		return err
+	}
+	userModel.Password = password
+
+	if err := u.repo.UpdateUser(ctx, userModel); err != nil {
+		log.Log().Error(err)
+		return err
+	}
+
+	return nil
+}

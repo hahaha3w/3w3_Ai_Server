@@ -33,3 +33,19 @@ func (r *MysqlUserRepo) FindUserByEmail(ctx context.Context, email string) (user
 	}
 	return user, nil
 }
+
+func (r *MysqlUserRepo) FindUserByID(ctx context.Context, id int64) (user *domain.User, err error) {
+	user = &domain.User{}
+	if err = r.db.
+		WithContext(ctx).
+		Model(&domain.User{}).
+		Find(user, "user_id = ?", id).
+		Error; err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (r *MysqlUserRepo) UpdateUser(ctx context.Context, user *domain.User) (err error) {
+	return r.db.WithContext(ctx).Model(&domain.User{}).Save(user).Error
+}
