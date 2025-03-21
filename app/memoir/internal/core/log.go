@@ -1,6 +1,6 @@
 package core
 
-import "github.com/hahaha3w/3w3_Ai_Server/memory/pkg/log"
+import "github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
 
 const (
 	logPath   = "logs"
