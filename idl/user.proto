@@ -60,7 +60,6 @@ message UpdateUserInfoReq {
   string avatar = 3;
   string theme = 4;
   string bio = 5;
-  string email = 6;
 }
 
 message ChangePasswordReq{

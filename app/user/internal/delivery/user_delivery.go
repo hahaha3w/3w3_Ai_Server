@@ -51,7 +51,7 @@ func (d *UserDelivery) Register(ctx context.Context, req *user.RegisterReq) (res
 	registerUser, err := d.userUsecase.RegisterUser(ctx, req.Email, req.Code, req.Password)
 	if err != nil {
 		log.Log().Error(err)
-		return nil, fmt.Errorf("delivery:%w", err)
+		return nil, fmt.Errorf("register:%w", err)
 	}
 
 	return registerUser, nil
@@ -62,7 +62,7 @@ func (d *UserDelivery) Login(ctx context.Context, req *user.LoginReq) (resp *use
 	loginUser, err := d.userUsecase.LoginUser(ctx, req.Email, req.Password)
 	if err != nil {
 		log.Log().Error(err)
-		return nil, fmt.Errorf("delivery:%w", err)
+		return nil, fmt.Errorf("login:%w", err)
 	}
 
 	return loginUser, err
@@ -70,20 +70,61 @@ func (d *UserDelivery) Login(ctx context.Context, req *user.LoginReq) (resp *use
 
 // UpdateUserInfo implements the UserServiceImpl interface.
 func (d *UserDelivery) UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoReq) (res *user.UpdateUserInfoResp, err error) {
-	return nil, err
+	err = d.userUsecase.UpdateUserInfo(ctx, req)
+	if err != nil {
+		log.Log().Error(err)
+		return &user.UpdateUserInfoResp{
+			Success: false,
+			Message: err.Error(),
+		}, fmt.Errorf("update user info:%w", err)
+	}
+
+	return &user.UpdateUserInfoResp{
+		Success: true,
+		Message: "update user info success",
+	}, nil
 }
 
 // GetUserInfo implements the UserServiceImpl interface.
 func (d *UserDelivery) GetUserInfo(ctx context.Context, req *user.GetUserInfoReq) (res *user.GetUserInfoResp, err error) {
-	return nil, err
+	resp, err := d.userUsecase.GetUser(ctx, int64(req.UserId))
+	if err != nil {
+		log.Log().Error(err)
+		return nil, fmt.Errorf("get user info:%w", err)
+	}
+	return resp, nil
 }
 
 // DeleteUser implements the UserServiceImpl interface.
 func (d *UserDelivery) DeleteUser(ctx context.Context, req *user.DeleteUserReq) (res *user.DeleteUserResp, err error) {
-	return nil, err
+	err = d.userUsecase.DeleteUser(ctx, int64(req.UserId))
+	if err != nil {
+		log.Log().Error(err)
+		return &user.DeleteUserResp{
+			Success: false,
+			Message: err.Error(),
+		}, fmt.Errorf("delete user:%w", err)
+	}
+
+	return &user.DeleteUserResp{
+		Success: true,
+		Message: "delete user success",
+	}, nil
 }
 
 // ChangePassword implements the UserServiceImpl interface.
 func (d *UserDelivery) ChangePassword(ctx context.Context, req *user.ChangePasswordReq) (res *user.ChangePasswordResp, err error) {
-	return nil, err
+	err = d.userUsecase.UpdatePassword(ctx, req.UserId, req.OldPassword, req.NewPassword)
+	if err != nil {
+		log.Log().Error(err)
+		return &user.ChangePasswordResp{
+			Success: false,
+			Message: err.Error(),
+		}, fmt.Errorf("change password:%w", err)
+	}
+
+	return &user.ChangePasswordResp{
+		Success: true,
+		Message: "change password success",
+	}, nil
 }

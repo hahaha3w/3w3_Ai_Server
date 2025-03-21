@@ -439,11 +439,6 @@ func (x *UpdateUserInfoReq) FastRead(buf []byte, _type int8, number int32) (offs
 		if err != nil {
 			goto ReadFieldError
 		}
-	case 6:
-		offset, err = x.fastReadField6(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -479,11 +474,6 @@ func (x *UpdateUserInfoReq) fastReadField4(buf []byte, _type int8) (offset int, 
 
 func (x *UpdateUserInfoReq) fastReadField5(buf []byte, _type int8) (offset int, err error) {
 	x.Bio, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
-}
-
-func (x *UpdateUserInfoReq) fastReadField6(buf []byte, _type int8) (offset int, err error) {
-	x.Email, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -1132,7 +1122,6 @@ func (x *UpdateUserInfoReq) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
 	offset += x.fastWriteField5(buf[offset:])
-	offset += x.fastWriteField6(buf[offset:])
 	return offset
 }
 
@@ -1173,14 +1162,6 @@ func (x *UpdateUserInfoReq) fastWriteField5(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 5, x.GetBio())
-	return offset
-}
-
-func (x *UpdateUserInfoReq) fastWriteField6(buf []byte) (offset int) {
-	if x.Email == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 6, x.GetEmail())
 	return offset
 }
 
@@ -1752,7 +1733,6 @@ func (x *UpdateUserInfoReq) Size() (n int) {
 	n += x.sizeField3()
 	n += x.sizeField4()
 	n += x.sizeField5()
-	n += x.sizeField6()
 	return n
 }
 
@@ -1793,14 +1773,6 @@ func (x *UpdateUserInfoReq) sizeField5() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(5, x.GetBio())
-	return n
-}
-
-func (x *UpdateUserInfoReq) sizeField6() (n int) {
-	if x.Email == "" {
-		return n
-	}
-	n += fastpb.SizeString(6, x.GetEmail())
 	return n
 }
 
@@ -2097,7 +2069,6 @@ var fieldIDToName_UpdateUserInfoReq = map[int32]string{
 	3: "Avatar",
 	4: "Theme",
 	5: "Bio",
-	6: "Email",
 }
 
 var fieldIDToName_ChangePasswordReq = map[int32]string{

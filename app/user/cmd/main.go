@@ -11,17 +11,18 @@ import (
 
 func main() {
 	core.LoadLogger()
-	godotenv.Load()
-	err := core.LoadConfig()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		panic(err)
 	}
+	if err := core.LoadConfig(); err != nil {
+		panic(err)
+	}
+
 	core.StartMtl()
 	opts := kitexInit()
 	userDelivery := wireApp()
 	srv := userservice.NewServer(userDelivery, opts...)
-	err = srv.Run()
-	if err != nil {
+	if err := srv.Run(); err != nil {
 		panic(err)
 	}
 }

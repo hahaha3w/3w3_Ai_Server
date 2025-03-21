@@ -12,15 +12,60 @@ import (
 )
 
 // GetUserCount 获取用户统计数据
-func GetUserCount(userId int32, cache *redis.Client) (userCount *domain.UserCount, err error) {
+func GetUserCount(userId int32, cache *redis.Client) (*domain.UserCount, error) {
 	key := fmt.Sprintf("user:count:%d", userId)
 
 	// 从 Redis 哈希中获取数据
-	userCount = &domain.UserCount{}
-	err = cache.HGetAll(context.Background(), key).Scan(userCount)
+	result, err := cache.HGetAll(context.Background(), key).Result()
 	if err != nil {
 		log.Log().Error(err)
 		return nil, errors.New("failed to get user count from Redis")
+	}
+
+	// 解析 map 到 UserCount 结构体
+	userCount := &domain.UserCount{}
+	if chatCount, ok := result["chat_count"]; ok {
+		userCount.ChatCount, _ = strconv.ParseInt(chatCount, 10, 64)
+	}
+	if memoirCount, ok := result["memoir_count"]; ok {
+		userCount.MemoirCount, _ = strconv.ParseInt(memoirCount, 10, 64)
+	}
+	if useDays, ok := result["use_days"]; ok {
+		userCount.UseDays, _ = strconv.ParseInt(useDays, 10, 64)
+	}
+
+	// 获取并更新上次更新时间
+	lastUpdated, err := cache.HGet(context.Background(), key, "last_updated").Result()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get last updated time from Redis: %w", err)
+	}
+
+	// 更新上次更新时间
+	now := time.Now()
+	err = cache.HSet(context.Background(), key, "last_updated", now.Format(time.RFC3339)).Err()
+	if err != nil {
+		return nil, fmt.Errorf("failed to update last updated time in Redis: %w", err)
+	}
+
+	// 判断是否同一天登录
+	if lastUpdated != "" {
+		lastTime, err := time.Parse(time.RFC3339, lastUpdated)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse last updated time: %w", err)
+		}
+
+		// 判断是否跨自然天（考虑时区）
+		lastDate := lastTime.UTC().Truncate(24 * time.Hour)
+		todayDate := now.UTC().Truncate(24 * time.Hour)
+
+		if lastDate.Before(todayDate) {
+			// 自然天数增加（每天首次触发）
+			incrBy := cache.HIncrBy(context.Background(), key, "use_days", 1)
+			if incrBy.Err() != nil {
+				return nil, errors.New("failed to update use days in Redis")
+			}
+			userCount.UseDays = incrBy.Val()
+		}
 	}
 
 	return userCount, nil
