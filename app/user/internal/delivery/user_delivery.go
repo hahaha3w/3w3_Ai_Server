@@ -97,7 +97,19 @@ func (d *UserDelivery) GetUserInfo(ctx context.Context, req *user.GetUserInfoReq
 
 // DeleteUser implements the UserServiceImpl interface.
 func (d *UserDelivery) DeleteUser(ctx context.Context, req *user.DeleteUserReq) (res *user.DeleteUserResp, err error) {
-	return nil, err
+	err = d.userUsecase.DeleteUser(ctx, int64(req.UserId))
+	if err != nil {
+		log.Log().Error(err)
+		return &user.DeleteUserResp{
+			Success: false,
+			Message: err.Error(),
+		}, fmt.Errorf("delete user:%w", err)
+	}
+
+	return &user.DeleteUserResp{
+		Success: true,
+		Message: "delete user success",
+	}, nil
 }
 
 // ChangePassword implements the UserServiceImpl interface.

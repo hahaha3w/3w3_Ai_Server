@@ -10,6 +10,7 @@ type UserRepo interface {
 	FindUserByEmail(ctx context.Context, email string) (user *User, err error)
 	FindUserByID(ctx context.Context, id int64) (user *User, err error)
 	UpdateUser(ctx context.Context, user *User) (err error)
+	DeleteUser(ctx context.Context, id int64) (err error)
 }
 
 type UserUsecase interface {
@@ -19,4 +20,5 @@ type UserUsecase interface {
 	GetUser(ctx context.Context, id int64) (resp *user.GetUserInfoResp, err error)
 	UpdatePassword(ctx context.Context, id int32, oldPassword, newPassword string) (err error)
 	UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoReq) (err error)
+	DeleteUser(ctx context.Context, id int64) (err error)
 }

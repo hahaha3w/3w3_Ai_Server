@@ -49,3 +49,7 @@ func (r *MysqlUserRepo) FindUserByID(ctx context.Context, id int64) (user *domai
 func (r *MysqlUserRepo) UpdateUser(ctx context.Context, user *domain.User) error {
 	return r.db.WithContext(ctx).Model(user).Updates(user).Error
 }
+
+func (r *MysqlUserRepo) DeleteUser(ctx context.Context, id int64) error {
+	return r.db.WithContext(ctx).Model(&domain.User{}).Delete(&domain.User{}, id).Error
+}
