@@ -13,7 +13,7 @@ const (
 	DefaultConfigFilePath = "conf/%s/conf.toml"
 )
 
-var ProviderSet = wire.NewSet(NewDB, NewContext)
+var ProviderSet = wire.NewSet(NewDB, NewContext, NewMQ)
 
 func NewContext() context.Context {
 	return context.Background()

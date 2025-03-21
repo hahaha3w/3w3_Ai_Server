@@ -5,7 +5,6 @@ import (
 	"log"
 )
 
-// StreamResponseEcho implements the Echo interface.
 func (d *ChatDelivery) Chat(req *chat.ChatReq, stream chat.Echo_ChatServer) (err error) {
 	err = d.usecase.Chat(req.Message, stream)
 	if err != nil {
@@ -13,4 +12,10 @@ func (d *ChatDelivery) Chat(req *chat.ChatReq, stream chat.Echo_ChatServer) (err
 		return err
 	}
 	return nil
+}
+func (d *ChatDelivery) InitSubscribe() {
+	err := d.mq.Subscribe()
+	if err != nil {
+		log.Println(err)
+	}
 }

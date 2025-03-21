@@ -11,10 +11,12 @@ var ProviderSet = wire.NewSet(NewChatDelivery)
 
 type ChatDelivery struct {
 	usecase domain.Usecase
+	mq      domain.MessageQueue
 }
 
-func NewChatDelivery(usecase domain.Usecase) *ChatDelivery {
+func NewChatDelivery(usecase domain.Usecase, mq domain.MessageQueue) *ChatDelivery {
 	return &ChatDelivery{
 		usecase: usecase,
+		mq:      mq,
 	}
 }
