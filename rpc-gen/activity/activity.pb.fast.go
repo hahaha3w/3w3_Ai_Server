@@ -39,6 +39,11 @@ func (x *Activity) FastRead(buf []byte, _type int8, number int32) (offset int, e
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -77,10 +82,25 @@ func (x *Activity) fastReadField5(buf []byte, _type int8) (offset int, err error
 	return offset, err
 }
 
+func (x *Activity) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.CreatedAt, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
 func (x *GetUserActivityReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
 		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -99,6 +119,16 @@ ReadFieldError:
 
 func (x *GetUserActivityReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
 	x.UserId, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserActivityReq) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Page, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserActivityReq) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.PageSize, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -276,6 +306,7 @@ func (x *Activity) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
 	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
 	return offset
 }
 
@@ -319,11 +350,21 @@ func (x *Activity) fastWriteField5(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *Activity) fastWriteField6(buf []byte) (offset int) {
+	if x.CreatedAt == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetCreatedAt())
+	return offset
+}
+
 func (x *GetUserActivityReq) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
 	return offset
 }
 
@@ -332,6 +373,22 @@ func (x *GetUserActivityReq) fastWriteField1(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetUserId())
+	return offset
+}
+
+func (x *GetUserActivityReq) fastWriteField5(buf []byte) (offset int) {
+	if x.Page == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 5, x.GetPage())
+	return offset
+}
+
+func (x *GetUserActivityReq) fastWriteField6(buf []byte) (offset int) {
+	if x.PageSize == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 6, x.GetPageSize())
 	return offset
 }
 
@@ -466,6 +523,7 @@ func (x *Activity) Size() (n int) {
 	n += x.sizeField3()
 	n += x.sizeField4()
 	n += x.sizeField5()
+	n += x.sizeField6()
 	return n
 }
 
@@ -509,11 +567,21 @@ func (x *Activity) sizeField5() (n int) {
 	return n
 }
 
+func (x *Activity) sizeField6() (n int) {
+	if x.CreatedAt == "" {
+		return n
+	}
+	n += fastpb.SizeString(6, x.GetCreatedAt())
+	return n
+}
+
 func (x *GetUserActivityReq) Size() (n int) {
 	if x == nil {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField5()
+	n += x.sizeField6()
 	return n
 }
 
@@ -522,6 +590,22 @@ func (x *GetUserActivityReq) sizeField1() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt64(1, x.GetUserId())
+	return n
+}
+
+func (x *GetUserActivityReq) sizeField5() (n int) {
+	if x.Page == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(5, x.GetPage())
+	return n
+}
+
+func (x *GetUserActivityReq) sizeField6() (n int) {
+	if x.PageSize == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(6, x.GetPageSize())
 	return n
 }
 
@@ -653,10 +737,13 @@ var fieldIDToName_Activity = map[int32]string{
 	3: "RelationId",
 	4: "Type",
 	5: "Description",
+	6: "CreatedAt",
 }
 
 var fieldIDToName_GetUserActivityReq = map[int32]string{
 	1: "UserId",
+	5: "Page",
+	6: "PageSize",
 }
 
 var fieldIDToName_GetUserActivityResp = map[int32]string{

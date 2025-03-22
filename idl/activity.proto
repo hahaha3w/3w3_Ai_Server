@@ -13,10 +13,13 @@ message Activity {
   int64  relation_id = 3;
   string type = 4;
   string description = 5;
+  string created_at = 6;
 }
 
 message GetUserActivityReq {
   int64 user_id = 1;
+  int32 page = 5;
+  int32 page_size = 6;
 }
 
 message GetUserActivityResp {
