@@ -11,7 +11,7 @@ type MysqlMemoirRepo struct {
 	db *gorm.DB
 }
 
-func NewMysqlUserRepo(db *gorm.DB) *MysqlMemoirRepo {
+func NewMysqlMemoirRepo(db *gorm.DB) *MysqlMemoirRepo {
 	return &MysqlMemoirRepo{
 		db: db,
 	}

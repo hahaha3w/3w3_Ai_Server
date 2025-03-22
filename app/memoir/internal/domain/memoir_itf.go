@@ -1,6 +1,6 @@
 package domain
 
-type Repo interface {
+type MemoirRepo interface {
 }
 type Usecase interface {
 }
