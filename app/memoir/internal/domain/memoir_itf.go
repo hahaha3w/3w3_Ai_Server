@@ -8,7 +8,7 @@ type MemoirRepo interface {
 	CreateMemoir(ctx context.Context, memoir *Memoir) (err error)
 	GetMemoirsByUserID(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) (memoirs []*Memoir, total int32, err error)
 	GetMemoirByID(ctx context.Context, memoirID, userID int) (memoir *Memoir, err error)
-	DeleteMemoir(ctx context.Context, memoirID, userID int) (err error)
+	DeleteMemoir(ctx context.Context, memoirID, userID int) (rows int64, err error)
 }
 
 type MemoirUsecase interface {

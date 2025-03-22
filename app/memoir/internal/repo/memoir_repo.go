@@ -66,8 +66,10 @@ func (r MysqlMemoirRepo) GetMemoirByID(ctx context.Context, memoirID, userID int
 	return memoir, err
 }
 
-func (r MysqlMemoirRepo) DeleteMemoir(ctx context.Context, memoirID, userID int) (err error) {
-	return r.db.WithContext(ctx).Model(&domain.Memoir{}).
+func (r MysqlMemoirRepo) DeleteMemoir(ctx context.Context, memoirID, userID int) (rows int64, err error) {
+	result := r.db.WithContext(ctx).Model(&domain.Memoir{}).
 		Where("memoir_id = ? AND user_id = ?", memoirID, userID).
-		Delete(&domain.Memoir{}).Error
+		Delete(&domain.Memoir{})
+
+	return result.RowsAffected, result.Error
 }
