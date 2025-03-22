@@ -8,7 +8,8 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/domain"
-	"log"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/count"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
 	"time"
 )
 
@@ -90,9 +91,22 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 		}
 		if len(keys) > 0 {
 			if err := c.cache.Del(ctx, keys...).Err(); err != nil {
-				log.Printf("Failed to delete %s caches: %v", pattern, err)
+				log.Log().Error("Failed to delete %s caches: %v", pattern, err)
 			}
 		}
+	}
+
+	// 修改用户次数统计
+	userCount := &domain.UpdateUserCount{
+		UserId:          int32(userID),
+		ChatCountIncr:   0,
+		MemoirCountIncr: 1,
+		UseDaysIncr:     0,
+	}
+	_, err = count.UpdateUserCount(userCount, c.cache)
+	if err != nil {
+		log.Log().Error("Failed to update user count: %v", err)
+		return nil, fmt.Errorf("internal error: %w", err)
 	}
 
 	return memoir, nil
@@ -152,10 +166,10 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 	// 统一存储缓存
 	cacheData, err := json.Marshal(cacheObj)
 	if err != nil {
-		log.Printf("Failed to marshal cache data: %v", err)
+		log.Log().Error("Failed to marshal cache data: %v", err)
 	} else {
 		if err := c.cache.Set(ctx, cacheKey, cacheData, expiration).Err(); err != nil {
-			log.Printf("Failed to cache memoir list: %v", err)
+			log.Log().Error("Failed to cache memoir list: %v", err)
 		}
 	}
 
@@ -184,10 +198,10 @@ func (c ConcreteMemoirUsecase) GetMemoirDetail(ctx context.Context, memoirID, us
 	// 将回忆录详情缓存起来
 	cacheData, err := json.Marshal(memoirPtr)
 	if err != nil {
-		log.Printf("Failed to marshal cache data: %v", err)
+		log.Log().Error("Failed to marshal cache data: %v", err)
 	} else {
 		if err := c.cache.Set(ctx, cacheKey, cacheData, CacheExpiration).Err(); err != nil {
-			log.Printf("Failed to cache memoir detail: %v", err)
+			log.Log().Error("Failed to cache memoir detail: %v", err)
 		}
 	}
 
@@ -197,15 +211,19 @@ func (c ConcreteMemoirUsecase) GetMemoirDetail(ctx context.Context, memoirID, us
 // DeleteMemoir 删除回忆录
 func (c ConcreteMemoirUsecase) DeleteMemoir(ctx context.Context, memoirID, userID int) error {
 	// 删除回忆录
-	err := c.repo.DeleteMemoir(ctx, memoirID, userID)
+	affected, err := c.repo.DeleteMemoir(ctx, memoirID, userID)
 	if err != nil {
 		return err
+	}
+
+	if affected == 0 {
+		return errors.New("memoir not found")
 	}
 
 	// 删除回忆录详情缓存
 	cacheKey := fmt.Sprintf(CacheKeyMemoirDetailPrefix, memoirID)
 	if err := c.cache.Del(ctx, cacheKey).Err(); err != nil {
-		log.Printf("Failed to delete memoir detail cache: %v", err)
+		log.Log().Error("Failed to delete memoir detail cache: %v", err)
 	}
 
 	// 删除回忆录列表缓存
@@ -213,8 +231,21 @@ func (c ConcreteMemoirUsecase) DeleteMemoir(ctx context.Context, memoirID, userI
 	keys, err := c.cache.Keys(ctx, pattern).Result()
 	if err == nil && len(keys) > 0 {
 		if err := c.cache.Del(ctx, keys...).Err(); err != nil {
-			log.Printf("Failed to delete memoir list caches: %v", err)
+			log.Log().Error("Failed to delete memoir list caches: %v", err)
 		}
+	}
+
+	// 修改用户次数统计
+	userCount := &domain.UpdateUserCount{
+		UserId:          int32(userID),
+		ChatCountIncr:   0,
+		MemoirCountIncr: -1,
+		UseDaysIncr:     0,
+	}
+	_, err = count.UpdateUserCount(userCount, c.cache)
+	if err != nil {
+		log.Log().Error("Failed to update user count: %v", err)
+		return err
 	}
 
 	return nil
