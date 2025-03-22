@@ -54,11 +54,6 @@ func (x *Memoir) FastRead(buf []byte, _type int8, number int32) (offset int, err
 		if err != nil {
 			goto ReadFieldError
 		}
-	case 9:
-		offset, err = x.fastReadField9(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -73,12 +68,12 @@ ReadFieldError:
 }
 
 func (x *Memoir) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Id, offset, err = fastpb.ReadString(buf, _type)
+	x.Id, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
 func (x *Memoir) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
+	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -93,36 +88,26 @@ func (x *Memoir) fastReadField4(buf []byte, _type int8) (offset int, err error) 
 }
 
 func (x *Memoir) fastReadField5(buf []byte, _type int8) (offset int, err error) {
-	x.CharacterId, offset, err = fastpb.ReadString(buf, _type)
+	x.Type, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *Memoir) fastReadField6(buf []byte, _type int8) (offset int, err error) {
-	var v int32
-	v, offset, err = fastpb.ReadInt32(buf, _type)
-	if err != nil {
-		return offset, err
-	}
-	x.Type = Memoir_Type(v)
-	return offset, nil
-}
-
-func (x *Memoir) fastReadField7(buf []byte, _type int8) (offset int, err error) {
 	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *Memoir) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+func (x *Memoir) fastReadField7(buf []byte, _type int8) (offset int, err error) {
 	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *Memoir) fastReadField9(buf []byte, _type int8) (offset int, err error) {
+func (x *Memoir) fastReadField8(buf []byte, _type int8) (offset int, err error) {
 	x.CreatedAt, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *GenerateDailyMemoirRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+func (x *GenerateMemoirRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
 		offset, err = x.fastReadField1(buf, _type)
@@ -139,48 +124,18 @@ func (x *GenerateDailyMemoirRequest) FastRead(buf []byte, _type int8, number int
 		if err != nil {
 			goto ReadFieldError
 		}
-	default:
-		offset, err = fastpb.Skip(buf, _type, number)
-		if err != nil {
-			goto SkipFieldError
-		}
-	}
-	return offset, nil
-SkipFieldError:
-	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
-ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GenerateDailyMemoirRequest[number], err)
-}
-
-func (x *GenerateDailyMemoirRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
-}
-
-func (x *GenerateDailyMemoirRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.CharacterId, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
-}
-
-func (x *GenerateDailyMemoirRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.Date, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
-}
-
-func (x *GenerateWeeklyMemoirRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
-	switch number {
-	case 1:
-		offset, err = x.fastReadField1(buf, _type)
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
-	case 2:
-		offset, err = x.fastReadField2(buf, _type)
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
-	case 3:
-		offset, err = x.fastReadField3(buf, _type)
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -194,66 +149,36 @@ func (x *GenerateWeeklyMemoirRequest) FastRead(buf []byte, _type int8, number in
 SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GenerateWeeklyMemoirRequest[number], err)
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GenerateMemoirRequest[number], err)
 }
 
-func (x *GenerateWeeklyMemoirRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
+func (x *GenerateMemoirRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
-func (x *GenerateWeeklyMemoirRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.CharacterId, offset, err = fastpb.ReadString(buf, _type)
+func (x *GenerateMemoirRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Title, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *GenerateWeeklyMemoirRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+func (x *GenerateMemoirRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Content, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *GenerateMemoirRequest) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Type, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *GenerateMemoirRequest) fastReadField5(buf []byte, _type int8) (offset int, err error) {
 	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *GenerateMonthlyMemoirRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
-	switch number {
-	case 1:
-		offset, err = x.fastReadField1(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
-	case 2:
-		offset, err = x.fastReadField2(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
-	case 3:
-		offset, err = x.fastReadField3(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
-	default:
-		offset, err = fastpb.Skip(buf, _type, number)
-		if err != nil {
-			goto SkipFieldError
-		}
-	}
-	return offset, nil
-SkipFieldError:
-	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
-ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GenerateMonthlyMemoirRequest[number], err)
-}
-
-func (x *GenerateMonthlyMemoirRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
-}
-
-func (x *GenerateMonthlyMemoirRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.CharacterId, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
-}
-
-func (x *GenerateMonthlyMemoirRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.YearMonth, offset, err = fastpb.ReadString(buf, _type)
+func (x *GenerateMemoirRequest) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -353,18 +278,13 @@ ReadFieldError:
 }
 
 func (x *GetMemoirListRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
+	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
 func (x *GetMemoirListRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	var v int32
-	v, offset, err = fastpb.ReadInt32(buf, _type)
-	if err != nil {
-		return offset, err
-	}
-	x.Type = Memoir_Type(v)
-	return offset, nil
+	x.Type, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
 }
 
 func (x *GetMemoirListRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
@@ -453,12 +373,12 @@ ReadFieldError:
 }
 
 func (x *GetMemoirDetailRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.MemoirId, offset, err = fastpb.ReadString(buf, _type)
+	x.MemoirId, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
 func (x *GetMemoirDetailRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
+	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -492,6 +412,76 @@ func (x *GetMemoirDetailResponse) fastReadField1(buf []byte, _type int8) (offset
 	return offset, nil
 }
 
+func (x *DeleteMemoirRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_DeleteMemoirRequest[number], err)
+}
+
+func (x *DeleteMemoirRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.MemoirId, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *DeleteMemoirRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.UserId, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *DeleteMemoirResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_DeleteMemoirResponse[number], err)
+}
+
+func (x *DeleteMemoirResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Success, offset, err = fastpb.ReadBool(buf, _type)
+	return offset, err
+}
+
+func (x *DeleteMemoirResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.ErrorMsg, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
 func (x *Memoir) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -504,23 +494,22 @@ func (x *Memoir) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField6(buf[offset:])
 	offset += x.fastWriteField7(buf[offset:])
 	offset += x.fastWriteField8(buf[offset:])
-	offset += x.fastWriteField9(buf[offset:])
 	return offset
 }
 
 func (x *Memoir) fastWriteField1(buf []byte) (offset int) {
-	if x.Id == "" {
+	if x.Id == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetId())
+	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetId())
 	return offset
 }
 
 func (x *Memoir) fastWriteField2(buf []byte) (offset int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetUserId())
+	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetUserId())
 	return offset
 }
 
@@ -541,144 +530,95 @@ func (x *Memoir) fastWriteField4(buf []byte) (offset int) {
 }
 
 func (x *Memoir) fastWriteField5(buf []byte) (offset int) {
-	if x.CharacterId == "" {
+	if x.Type == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 5, x.GetCharacterId())
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetType())
 	return offset
 }
 
 func (x *Memoir) fastWriteField6(buf []byte) (offset int) {
-	if x.Type == 0 {
+	if x.StartDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 6, int32(x.GetType()))
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetStartDate())
 	return offset
 }
 
 func (x *Memoir) fastWriteField7(buf []byte) (offset int) {
-	if x.StartDate == "" {
+	if x.EndDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 7, x.GetStartDate())
+	offset += fastpb.WriteString(buf[offset:], 7, x.GetEndDate())
 	return offset
 }
 
 func (x *Memoir) fastWriteField8(buf []byte) (offset int) {
-	if x.EndDate == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 8, x.GetEndDate())
-	return offset
-}
-
-func (x *Memoir) fastWriteField9(buf []byte) (offset int) {
 	if x.CreatedAt == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 9, x.GetCreatedAt())
+	offset += fastpb.WriteString(buf[offset:], 8, x.GetCreatedAt())
 	return offset
 }
 
-func (x *GenerateDailyMemoirRequest) FastWrite(buf []byte) (offset int) {
+func (x *GenerateMemoirRequest) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
 	return offset
 }
 
-func (x *GenerateDailyMemoirRequest) fastWriteField1(buf []byte) (offset int) {
-	if x.UserId == "" {
+func (x *GenerateMemoirRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.UserId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetUserId())
+	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetUserId())
 	return offset
 }
 
-func (x *GenerateDailyMemoirRequest) fastWriteField2(buf []byte) (offset int) {
-	if x.CharacterId == "" {
+func (x *GenerateMemoirRequest) fastWriteField2(buf []byte) (offset int) {
+	if x.Title == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetCharacterId())
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetTitle())
 	return offset
 }
 
-func (x *GenerateDailyMemoirRequest) fastWriteField3(buf []byte) (offset int) {
-	if x.Date == "" {
+func (x *GenerateMemoirRequest) fastWriteField3(buf []byte) (offset int) {
+	if x.Content == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetDate())
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetContent())
 	return offset
 }
 
-func (x *GenerateWeeklyMemoirRequest) FastWrite(buf []byte) (offset int) {
-	if x == nil {
+func (x *GenerateMemoirRequest) fastWriteField4(buf []byte) (offset int) {
+	if x.Type == "" {
 		return offset
 	}
-	offset += x.fastWriteField1(buf[offset:])
-	offset += x.fastWriteField2(buf[offset:])
-	offset += x.fastWriteField3(buf[offset:])
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetType())
 	return offset
 }
 
-func (x *GenerateWeeklyMemoirRequest) fastWriteField1(buf []byte) (offset int) {
-	if x.UserId == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetUserId())
-	return offset
-}
-
-func (x *GenerateWeeklyMemoirRequest) fastWriteField2(buf []byte) (offset int) {
-	if x.CharacterId == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetCharacterId())
-	return offset
-}
-
-func (x *GenerateWeeklyMemoirRequest) fastWriteField3(buf []byte) (offset int) {
+func (x *GenerateMemoirRequest) fastWriteField5(buf []byte) (offset int) {
 	if x.StartDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetStartDate())
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetStartDate())
 	return offset
 }
 
-func (x *GenerateMonthlyMemoirRequest) FastWrite(buf []byte) (offset int) {
-	if x == nil {
+func (x *GenerateMemoirRequest) fastWriteField6(buf []byte) (offset int) {
+	if x.EndDate == "" {
 		return offset
 	}
-	offset += x.fastWriteField1(buf[offset:])
-	offset += x.fastWriteField2(buf[offset:])
-	offset += x.fastWriteField3(buf[offset:])
-	return offset
-}
-
-func (x *GenerateMonthlyMemoirRequest) fastWriteField1(buf []byte) (offset int) {
-	if x.UserId == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetUserId())
-	return offset
-}
-
-func (x *GenerateMonthlyMemoirRequest) fastWriteField2(buf []byte) (offset int) {
-	if x.CharacterId == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetCharacterId())
-	return offset
-}
-
-func (x *GenerateMonthlyMemoirRequest) fastWriteField3(buf []byte) (offset int) {
-	if x.YearMonth == "" {
-		return offset
-	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetYearMonth())
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetEndDate())
 	return offset
 }
 
@@ -730,18 +670,18 @@ func (x *GetMemoirListRequest) FastWrite(buf []byte) (offset int) {
 }
 
 func (x *GetMemoirListRequest) fastWriteField1(buf []byte) (offset int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetUserId())
+	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetUserId())
 	return offset
 }
 
 func (x *GetMemoirListRequest) fastWriteField2(buf []byte) (offset int) {
-	if x.Type == 0 {
+	if x.Type == "" {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 2, int32(x.GetType()))
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetType())
 	return offset
 }
 
@@ -814,18 +754,18 @@ func (x *GetMemoirDetailRequest) FastWrite(buf []byte) (offset int) {
 }
 
 func (x *GetMemoirDetailRequest) fastWriteField1(buf []byte) (offset int) {
-	if x.MemoirId == "" {
+	if x.MemoirId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetMemoirId())
+	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetMemoirId())
 	return offset
 }
 
 func (x *GetMemoirDetailRequest) fastWriteField2(buf []byte) (offset int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetUserId())
+	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetUserId())
 	return offset
 }
 
@@ -845,6 +785,56 @@ func (x *GetMemoirDetailResponse) fastWriteField1(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *DeleteMemoirRequest) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *DeleteMemoirRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.MemoirId == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetMemoirId())
+	return offset
+}
+
+func (x *DeleteMemoirRequest) fastWriteField2(buf []byte) (offset int) {
+	if x.UserId == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetUserId())
+	return offset
+}
+
+func (x *DeleteMemoirResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *DeleteMemoirResponse) fastWriteField1(buf []byte) (offset int) {
+	if !x.Success {
+		return offset
+	}
+	offset += fastpb.WriteBool(buf[offset:], 1, x.GetSuccess())
+	return offset
+}
+
+func (x *DeleteMemoirResponse) fastWriteField2(buf []byte) (offset int) {
+	if x.ErrorMsg == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetErrorMsg())
+	return offset
+}
+
 func (x *Memoir) Size() (n int) {
 	if x == nil {
 		return n
@@ -857,23 +847,22 @@ func (x *Memoir) Size() (n int) {
 	n += x.sizeField6()
 	n += x.sizeField7()
 	n += x.sizeField8()
-	n += x.sizeField9()
 	return n
 }
 
 func (x *Memoir) sizeField1() (n int) {
-	if x.Id == "" {
+	if x.Id == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetId())
+	n += fastpb.SizeInt32(1, x.GetId())
 	return n
 }
 
 func (x *Memoir) sizeField2() (n int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return n
 	}
-	n += fastpb.SizeString(2, x.GetUserId())
+	n += fastpb.SizeInt32(2, x.GetUserId())
 	return n
 }
 
@@ -894,144 +883,95 @@ func (x *Memoir) sizeField4() (n int) {
 }
 
 func (x *Memoir) sizeField5() (n int) {
-	if x.CharacterId == "" {
+	if x.Type == "" {
 		return n
 	}
-	n += fastpb.SizeString(5, x.GetCharacterId())
+	n += fastpb.SizeString(5, x.GetType())
 	return n
 }
 
 func (x *Memoir) sizeField6() (n int) {
-	if x.Type == 0 {
+	if x.StartDate == "" {
 		return n
 	}
-	n += fastpb.SizeInt32(6, int32(x.GetType()))
+	n += fastpb.SizeString(6, x.GetStartDate())
 	return n
 }
 
 func (x *Memoir) sizeField7() (n int) {
-	if x.StartDate == "" {
+	if x.EndDate == "" {
 		return n
 	}
-	n += fastpb.SizeString(7, x.GetStartDate())
+	n += fastpb.SizeString(7, x.GetEndDate())
 	return n
 }
 
 func (x *Memoir) sizeField8() (n int) {
-	if x.EndDate == "" {
-		return n
-	}
-	n += fastpb.SizeString(8, x.GetEndDate())
-	return n
-}
-
-func (x *Memoir) sizeField9() (n int) {
 	if x.CreatedAt == "" {
 		return n
 	}
-	n += fastpb.SizeString(9, x.GetCreatedAt())
+	n += fastpb.SizeString(8, x.GetCreatedAt())
 	return n
 }
 
-func (x *GenerateDailyMemoirRequest) Size() (n int) {
+func (x *GenerateMemoirRequest) Size() (n int) {
 	if x == nil {
 		return n
 	}
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
+	n += x.sizeField5()
+	n += x.sizeField6()
 	return n
 }
 
-func (x *GenerateDailyMemoirRequest) sizeField1() (n int) {
-	if x.UserId == "" {
+func (x *GenerateMemoirRequest) sizeField1() (n int) {
+	if x.UserId == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetUserId())
+	n += fastpb.SizeInt32(1, x.GetUserId())
 	return n
 }
 
-func (x *GenerateDailyMemoirRequest) sizeField2() (n int) {
-	if x.CharacterId == "" {
+func (x *GenerateMemoirRequest) sizeField2() (n int) {
+	if x.Title == "" {
 		return n
 	}
-	n += fastpb.SizeString(2, x.GetCharacterId())
+	n += fastpb.SizeString(2, x.GetTitle())
 	return n
 }
 
-func (x *GenerateDailyMemoirRequest) sizeField3() (n int) {
-	if x.Date == "" {
+func (x *GenerateMemoirRequest) sizeField3() (n int) {
+	if x.Content == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetDate())
+	n += fastpb.SizeString(3, x.GetContent())
 	return n
 }
 
-func (x *GenerateWeeklyMemoirRequest) Size() (n int) {
-	if x == nil {
+func (x *GenerateMemoirRequest) sizeField4() (n int) {
+	if x.Type == "" {
 		return n
 	}
-	n += x.sizeField1()
-	n += x.sizeField2()
-	n += x.sizeField3()
+	n += fastpb.SizeString(4, x.GetType())
 	return n
 }
 
-func (x *GenerateWeeklyMemoirRequest) sizeField1() (n int) {
-	if x.UserId == "" {
-		return n
-	}
-	n += fastpb.SizeString(1, x.GetUserId())
-	return n
-}
-
-func (x *GenerateWeeklyMemoirRequest) sizeField2() (n int) {
-	if x.CharacterId == "" {
-		return n
-	}
-	n += fastpb.SizeString(2, x.GetCharacterId())
-	return n
-}
-
-func (x *GenerateWeeklyMemoirRequest) sizeField3() (n int) {
+func (x *GenerateMemoirRequest) sizeField5() (n int) {
 	if x.StartDate == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetStartDate())
+	n += fastpb.SizeString(5, x.GetStartDate())
 	return n
 }
 
-func (x *GenerateMonthlyMemoirRequest) Size() (n int) {
-	if x == nil {
+func (x *GenerateMemoirRequest) sizeField6() (n int) {
+	if x.EndDate == "" {
 		return n
 	}
-	n += x.sizeField1()
-	n += x.sizeField2()
-	n += x.sizeField3()
-	return n
-}
-
-func (x *GenerateMonthlyMemoirRequest) sizeField1() (n int) {
-	if x.UserId == "" {
-		return n
-	}
-	n += fastpb.SizeString(1, x.GetUserId())
-	return n
-}
-
-func (x *GenerateMonthlyMemoirRequest) sizeField2() (n int) {
-	if x.CharacterId == "" {
-		return n
-	}
-	n += fastpb.SizeString(2, x.GetCharacterId())
-	return n
-}
-
-func (x *GenerateMonthlyMemoirRequest) sizeField3() (n int) {
-	if x.YearMonth == "" {
-		return n
-	}
-	n += fastpb.SizeString(3, x.GetYearMonth())
+	n += fastpb.SizeString(6, x.GetEndDate())
 	return n
 }
 
@@ -1083,18 +1023,18 @@ func (x *GetMemoirListRequest) Size() (n int) {
 }
 
 func (x *GetMemoirListRequest) sizeField1() (n int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetUserId())
+	n += fastpb.SizeInt32(1, x.GetUserId())
 	return n
 }
 
 func (x *GetMemoirListRequest) sizeField2() (n int) {
-	if x.Type == 0 {
+	if x.Type == "" {
 		return n
 	}
-	n += fastpb.SizeInt32(2, int32(x.GetType()))
+	n += fastpb.SizeString(2, x.GetType())
 	return n
 }
 
@@ -1167,18 +1107,18 @@ func (x *GetMemoirDetailRequest) Size() (n int) {
 }
 
 func (x *GetMemoirDetailRequest) sizeField1() (n int) {
-	if x.MemoirId == "" {
+	if x.MemoirId == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetMemoirId())
+	n += fastpb.SizeInt32(1, x.GetMemoirId())
 	return n
 }
 
 func (x *GetMemoirDetailRequest) sizeField2() (n int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return n
 	}
-	n += fastpb.SizeString(2, x.GetUserId())
+	n += fastpb.SizeInt32(2, x.GetUserId())
 	return n
 }
 
@@ -1198,34 +1138,74 @@ func (x *GetMemoirDetailResponse) sizeField1() (n int) {
 	return n
 }
 
+func (x *DeleteMemoirRequest) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *DeleteMemoirRequest) sizeField1() (n int) {
+	if x.MemoirId == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(1, x.GetMemoirId())
+	return n
+}
+
+func (x *DeleteMemoirRequest) sizeField2() (n int) {
+	if x.UserId == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(2, x.GetUserId())
+	return n
+}
+
+func (x *DeleteMemoirResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *DeleteMemoirResponse) sizeField1() (n int) {
+	if !x.Success {
+		return n
+	}
+	n += fastpb.SizeBool(1, x.GetSuccess())
+	return n
+}
+
+func (x *DeleteMemoirResponse) sizeField2() (n int) {
+	if x.ErrorMsg == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetErrorMsg())
+	return n
+}
+
 var fieldIDToName_Memoir = map[int32]string{
 	1: "Id",
 	2: "UserId",
 	3: "Title",
 	4: "Content",
-	5: "CharacterId",
-	6: "Type",
-	7: "StartDate",
-	8: "EndDate",
-	9: "CreatedAt",
+	5: "Type",
+	6: "StartDate",
+	7: "EndDate",
+	8: "CreatedAt",
 }
 
-var fieldIDToName_GenerateDailyMemoirRequest = map[int32]string{
+var fieldIDToName_GenerateMemoirRequest = map[int32]string{
 	1: "UserId",
-	2: "CharacterId",
-	3: "Date",
-}
-
-var fieldIDToName_GenerateWeeklyMemoirRequest = map[int32]string{
-	1: "UserId",
-	2: "CharacterId",
-	3: "StartDate",
-}
-
-var fieldIDToName_GenerateMonthlyMemoirRequest = map[int32]string{
-	1: "UserId",
-	2: "CharacterId",
-	3: "YearMonth",
+	2: "Title",
+	3: "Content",
+	4: "Type",
+	5: "StartDate",
+	6: "EndDate",
 }
 
 var fieldIDToName_GenerateMemoirResponse = map[int32]string{
@@ -1255,4 +1235,14 @@ var fieldIDToName_GetMemoirDetailRequest = map[int32]string{
 
 var fieldIDToName_GetMemoirDetailResponse = map[int32]string{
 	1: "Memoir",
+}
+
+var fieldIDToName_DeleteMemoirRequest = map[int32]string{
+	1: "MemoirId",
+	2: "UserId",
+}
+
+var fieldIDToName_DeleteMemoirResponse = map[int32]string{
+	1: "Success",
+	2: "ErrorMsg",
 }
