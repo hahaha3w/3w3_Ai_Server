@@ -8,8 +8,10 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/domain"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/infra/rpc"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/count"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/activity"
 	"time"
 )
 
@@ -108,6 +110,14 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 		log.Log().Error("Failed to update user count: %v", err)
 		return nil, fmt.Errorf("internal error: %w", err)
 	}
+
+	// 调用 rpc
+	_, err = rpc.ActivityClient().CreateUserActivity(ctx, &activity.CreateUserActivityReq{
+		UserId:      int64(userID),
+		RelationId:  int64(memoir.MemoirID),
+		Type:        "memoir",
+		Description: "AI为你创建了\"" + memoir.Title + "\"日记",
+	})
 
 	return memoir, nil
 }
