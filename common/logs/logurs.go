@@ -16,7 +16,7 @@ const (
 )
 
 type LogrusLogger struct {
-	logger *logrus.Logger
+	*logrus.Logger
 }
 type formatter struct {
 	prefix string
