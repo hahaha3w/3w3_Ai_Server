@@ -3,7 +3,7 @@ package memoirservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	memoir "github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
 )
 
 // NewServer creates a server.Server with the given handler and options.
