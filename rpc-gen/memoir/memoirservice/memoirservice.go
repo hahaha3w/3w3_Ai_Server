@@ -8,31 +8,17 @@ import (
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
-	memoir "github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
 	proto "google.golang.org/protobuf/proto"
 )
 
 var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
-	"GenerateDailyMemoir": kitex.NewMethodInfo(
-		generateDailyMemoirHandler,
-		newGenerateDailyMemoirArgs,
-		newGenerateDailyMemoirResult,
-		false,
-		kitex.WithStreamingMode(kitex.StreamingUnary),
-	),
-	"GenerateWeeklyMemoir": kitex.NewMethodInfo(
-		generateWeeklyMemoirHandler,
-		newGenerateWeeklyMemoirArgs,
-		newGenerateWeeklyMemoirResult,
-		false,
-		kitex.WithStreamingMode(kitex.StreamingUnary),
-	),
-	"GenerateMonthlyMemoir": kitex.NewMethodInfo(
-		generateMonthlyMemoirHandler,
-		newGenerateMonthlyMemoirArgs,
-		newGenerateMonthlyMemoirResult,
+	"GenerateMemoir": kitex.NewMethodInfo(
+		generateMemoirHandler,
+		newGenerateMemoirArgs,
+		newGenerateMemoirResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
@@ -116,7 +102,7 @@ func newServiceInfo(hasStreaming bool, keepStreamingMethods bool, keepNonStreami
 	return svcInfo
 }
 
-func generateDailyMemoirHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+func generateMemoirHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
@@ -124,64 +110,64 @@ func generateDailyMemoirHandler(ctx context.Context, handler interface{}, arg, r
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
-		resp, err := handler.(memoir.MemoirService).GenerateDailyMemoir(ctx, req)
+		resp, err := handler.(memoir.MemoirService).GenerateMemoir(ctx, req)
 		if err != nil {
 			return err
 		}
 		return st.SendMsg(resp)
-	case *GenerateDailyMemoirArgs:
-		success, err := handler.(memoir.MemoirService).GenerateDailyMemoir(ctx, s.Req)
+	case *GenerateMemoirArgs:
+		success, err := handler.(memoir.MemoirService).GenerateMemoir(ctx, s.Req)
 		if err != nil {
 			return err
 		}
-		realResult := result.(*GenerateDailyMemoirResult)
+		realResult := result.(*GenerateMemoirResult)
 		realResult.Success = success
 		return nil
 	default:
 		return errInvalidMessageType
 	}
 }
-func newGenerateDailyMemoirArgs() interface{} {
-	return &GenerateDailyMemoirArgs{}
+func newGenerateMemoirArgs() interface{} {
+	return &GenerateMemoirArgs{}
 }
 
-func newGenerateDailyMemoirResult() interface{} {
-	return &GenerateDailyMemoirResult{}
+func newGenerateMemoirResult() interface{} {
+	return &GenerateMemoirResult{}
 }
 
-type GenerateDailyMemoirArgs struct {
+type GenerateMemoirArgs struct {
 	Req *memoir.GenerateDailyMemoirRequest
 }
 
-func (p *GenerateDailyMemoirArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+func (p *GenerateMemoirArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetReq() {
 		p.Req = new(memoir.GenerateDailyMemoirRequest)
 	}
 	return p.Req.FastRead(buf, _type, number)
 }
 
-func (p *GenerateDailyMemoirArgs) FastWrite(buf []byte) (n int) {
+func (p *GenerateMemoirArgs) FastWrite(buf []byte) (n int) {
 	if !p.IsSetReq() {
 		return 0
 	}
 	return p.Req.FastWrite(buf)
 }
 
-func (p *GenerateDailyMemoirArgs) Size() (n int) {
+func (p *GenerateMemoirArgs) Size() (n int) {
 	if !p.IsSetReq() {
 		return 0
 	}
 	return p.Req.Size()
 }
 
-func (p *GenerateDailyMemoirArgs) Marshal(out []byte) ([]byte, error) {
+func (p *GenerateMemoirArgs) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetReq() {
 		return out, nil
 	}
 	return proto.Marshal(p.Req)
 }
 
-func (p *GenerateDailyMemoirArgs) Unmarshal(in []byte) error {
+func (p *GenerateMemoirArgs) Unmarshal(in []byte) error {
 	msg := new(memoir.GenerateDailyMemoirRequest)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
@@ -190,58 +176,58 @@ func (p *GenerateDailyMemoirArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var GenerateDailyMemoirArgs_Req_DEFAULT *memoir.GenerateDailyMemoirRequest
+var GenerateMemoirArgs_Req_DEFAULT *memoir.GenerateDailyMemoirRequest
 
-func (p *GenerateDailyMemoirArgs) GetReq() *memoir.GenerateDailyMemoirRequest {
+func (p *GenerateMemoirArgs) GetReq() *memoir.GenerateDailyMemoirRequest {
 	if !p.IsSetReq() {
-		return GenerateDailyMemoirArgs_Req_DEFAULT
+		return GenerateMemoirArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-func (p *GenerateDailyMemoirArgs) IsSetReq() bool {
+func (p *GenerateMemoirArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *GenerateDailyMemoirArgs) GetFirstArgument() interface{} {
+func (p *GenerateMemoirArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-type GenerateDailyMemoirResult struct {
+type GenerateMemoirResult struct {
 	Success *memoir.GenerateMemoirResponse
 }
 
-var GenerateDailyMemoirResult_Success_DEFAULT *memoir.GenerateMemoirResponse
+var GenerateMemoirResult_Success_DEFAULT *memoir.GenerateMemoirResponse
 
-func (p *GenerateDailyMemoirResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+func (p *GenerateMemoirResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetSuccess() {
 		p.Success = new(memoir.GenerateMemoirResponse)
 	}
 	return p.Success.FastRead(buf, _type, number)
 }
 
-func (p *GenerateDailyMemoirResult) FastWrite(buf []byte) (n int) {
+func (p *GenerateMemoirResult) FastWrite(buf []byte) (n int) {
 	if !p.IsSetSuccess() {
 		return 0
 	}
 	return p.Success.FastWrite(buf)
 }
 
-func (p *GenerateDailyMemoirResult) Size() (n int) {
+func (p *GenerateMemoirResult) Size() (n int) {
 	if !p.IsSetSuccess() {
 		return 0
 	}
 	return p.Success.Size()
 }
 
-func (p *GenerateDailyMemoirResult) Marshal(out []byte) ([]byte, error) {
+func (p *GenerateMemoirResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
 		return out, nil
 	}
 	return proto.Marshal(p.Success)
 }
 
-func (p *GenerateDailyMemoirResult) Unmarshal(in []byte) error {
+func (p *GenerateMemoirResult) Unmarshal(in []byte) error {
 	msg := new(memoir.GenerateMemoirResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
@@ -250,328 +236,22 @@ func (p *GenerateDailyMemoirResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *GenerateDailyMemoirResult) GetSuccess() *memoir.GenerateMemoirResponse {
+func (p *GenerateMemoirResult) GetSuccess() *memoir.GenerateMemoirResponse {
 	if !p.IsSetSuccess() {
-		return GenerateDailyMemoirResult_Success_DEFAULT
+		return GenerateMemoirResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-func (p *GenerateDailyMemoirResult) SetSuccess(x interface{}) {
+func (p *GenerateMemoirResult) SetSuccess(x interface{}) {
 	p.Success = x.(*memoir.GenerateMemoirResponse)
 }
 
-func (p *GenerateDailyMemoirResult) IsSetSuccess() bool {
+func (p *GenerateMemoirResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *GenerateDailyMemoirResult) GetResult() interface{} {
-	return p.Success
-}
-
-func generateWeeklyMemoirHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	switch s := arg.(type) {
-	case *streaming.Args:
-		st := s.Stream
-		req := new(memoir.GenerateWeeklyMemoirRequest)
-		if err := st.RecvMsg(req); err != nil {
-			return err
-		}
-		resp, err := handler.(memoir.MemoirService).GenerateWeeklyMemoir(ctx, req)
-		if err != nil {
-			return err
-		}
-		return st.SendMsg(resp)
-	case *GenerateWeeklyMemoirArgs:
-		success, err := handler.(memoir.MemoirService).GenerateWeeklyMemoir(ctx, s.Req)
-		if err != nil {
-			return err
-		}
-		realResult := result.(*GenerateWeeklyMemoirResult)
-		realResult.Success = success
-		return nil
-	default:
-		return errInvalidMessageType
-	}
-}
-func newGenerateWeeklyMemoirArgs() interface{} {
-	return &GenerateWeeklyMemoirArgs{}
-}
-
-func newGenerateWeeklyMemoirResult() interface{} {
-	return &GenerateWeeklyMemoirResult{}
-}
-
-type GenerateWeeklyMemoirArgs struct {
-	Req *memoir.GenerateWeeklyMemoirRequest
-}
-
-func (p *GenerateWeeklyMemoirArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
-	if !p.IsSetReq() {
-		p.Req = new(memoir.GenerateWeeklyMemoirRequest)
-	}
-	return p.Req.FastRead(buf, _type, number)
-}
-
-func (p *GenerateWeeklyMemoirArgs) FastWrite(buf []byte) (n int) {
-	if !p.IsSetReq() {
-		return 0
-	}
-	return p.Req.FastWrite(buf)
-}
-
-func (p *GenerateWeeklyMemoirArgs) Size() (n int) {
-	if !p.IsSetReq() {
-		return 0
-	}
-	return p.Req.Size()
-}
-
-func (p *GenerateWeeklyMemoirArgs) Marshal(out []byte) ([]byte, error) {
-	if !p.IsSetReq() {
-		return out, nil
-	}
-	return proto.Marshal(p.Req)
-}
-
-func (p *GenerateWeeklyMemoirArgs) Unmarshal(in []byte) error {
-	msg := new(memoir.GenerateWeeklyMemoirRequest)
-	if err := proto.Unmarshal(in, msg); err != nil {
-		return err
-	}
-	p.Req = msg
-	return nil
-}
-
-var GenerateWeeklyMemoirArgs_Req_DEFAULT *memoir.GenerateWeeklyMemoirRequest
-
-func (p *GenerateWeeklyMemoirArgs) GetReq() *memoir.GenerateWeeklyMemoirRequest {
-	if !p.IsSetReq() {
-		return GenerateWeeklyMemoirArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-func (p *GenerateWeeklyMemoirArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *GenerateWeeklyMemoirArgs) GetFirstArgument() interface{} {
-	return p.Req
-}
-
-type GenerateWeeklyMemoirResult struct {
-	Success *memoir.GenerateMemoirResponse
-}
-
-var GenerateWeeklyMemoirResult_Success_DEFAULT *memoir.GenerateMemoirResponse
-
-func (p *GenerateWeeklyMemoirResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
-	if !p.IsSetSuccess() {
-		p.Success = new(memoir.GenerateMemoirResponse)
-	}
-	return p.Success.FastRead(buf, _type, number)
-}
-
-func (p *GenerateWeeklyMemoirResult) FastWrite(buf []byte) (n int) {
-	if !p.IsSetSuccess() {
-		return 0
-	}
-	return p.Success.FastWrite(buf)
-}
-
-func (p *GenerateWeeklyMemoirResult) Size() (n int) {
-	if !p.IsSetSuccess() {
-		return 0
-	}
-	return p.Success.Size()
-}
-
-func (p *GenerateWeeklyMemoirResult) Marshal(out []byte) ([]byte, error) {
-	if !p.IsSetSuccess() {
-		return out, nil
-	}
-	return proto.Marshal(p.Success)
-}
-
-func (p *GenerateWeeklyMemoirResult) Unmarshal(in []byte) error {
-	msg := new(memoir.GenerateMemoirResponse)
-	if err := proto.Unmarshal(in, msg); err != nil {
-		return err
-	}
-	p.Success = msg
-	return nil
-}
-
-func (p *GenerateWeeklyMemoirResult) GetSuccess() *memoir.GenerateMemoirResponse {
-	if !p.IsSetSuccess() {
-		return GenerateWeeklyMemoirResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-func (p *GenerateWeeklyMemoirResult) SetSuccess(x interface{}) {
-	p.Success = x.(*memoir.GenerateMemoirResponse)
-}
-
-func (p *GenerateWeeklyMemoirResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *GenerateWeeklyMemoirResult) GetResult() interface{} {
-	return p.Success
-}
-
-func generateMonthlyMemoirHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	switch s := arg.(type) {
-	case *streaming.Args:
-		st := s.Stream
-		req := new(memoir.GenerateMonthlyMemoirRequest)
-		if err := st.RecvMsg(req); err != nil {
-			return err
-		}
-		resp, err := handler.(memoir.MemoirService).GenerateMonthlyMemoir(ctx, req)
-		if err != nil {
-			return err
-		}
-		return st.SendMsg(resp)
-	case *GenerateMonthlyMemoirArgs:
-		success, err := handler.(memoir.MemoirService).GenerateMonthlyMemoir(ctx, s.Req)
-		if err != nil {
-			return err
-		}
-		realResult := result.(*GenerateMonthlyMemoirResult)
-		realResult.Success = success
-		return nil
-	default:
-		return errInvalidMessageType
-	}
-}
-func newGenerateMonthlyMemoirArgs() interface{} {
-	return &GenerateMonthlyMemoirArgs{}
-}
-
-func newGenerateMonthlyMemoirResult() interface{} {
-	return &GenerateMonthlyMemoirResult{}
-}
-
-type GenerateMonthlyMemoirArgs struct {
-	Req *memoir.GenerateMonthlyMemoirRequest
-}
-
-func (p *GenerateMonthlyMemoirArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
-	if !p.IsSetReq() {
-		p.Req = new(memoir.GenerateMonthlyMemoirRequest)
-	}
-	return p.Req.FastRead(buf, _type, number)
-}
-
-func (p *GenerateMonthlyMemoirArgs) FastWrite(buf []byte) (n int) {
-	if !p.IsSetReq() {
-		return 0
-	}
-	return p.Req.FastWrite(buf)
-}
-
-func (p *GenerateMonthlyMemoirArgs) Size() (n int) {
-	if !p.IsSetReq() {
-		return 0
-	}
-	return p.Req.Size()
-}
-
-func (p *GenerateMonthlyMemoirArgs) Marshal(out []byte) ([]byte, error) {
-	if !p.IsSetReq() {
-		return out, nil
-	}
-	return proto.Marshal(p.Req)
-}
-
-func (p *GenerateMonthlyMemoirArgs) Unmarshal(in []byte) error {
-	msg := new(memoir.GenerateMonthlyMemoirRequest)
-	if err := proto.Unmarshal(in, msg); err != nil {
-		return err
-	}
-	p.Req = msg
-	return nil
-}
-
-var GenerateMonthlyMemoirArgs_Req_DEFAULT *memoir.GenerateMonthlyMemoirRequest
-
-func (p *GenerateMonthlyMemoirArgs) GetReq() *memoir.GenerateMonthlyMemoirRequest {
-	if !p.IsSetReq() {
-		return GenerateMonthlyMemoirArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-func (p *GenerateMonthlyMemoirArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *GenerateMonthlyMemoirArgs) GetFirstArgument() interface{} {
-	return p.Req
-}
-
-type GenerateMonthlyMemoirResult struct {
-	Success *memoir.GenerateMemoirResponse
-}
-
-var GenerateMonthlyMemoirResult_Success_DEFAULT *memoir.GenerateMemoirResponse
-
-func (p *GenerateMonthlyMemoirResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
-	if !p.IsSetSuccess() {
-		p.Success = new(memoir.GenerateMemoirResponse)
-	}
-	return p.Success.FastRead(buf, _type, number)
-}
-
-func (p *GenerateMonthlyMemoirResult) FastWrite(buf []byte) (n int) {
-	if !p.IsSetSuccess() {
-		return 0
-	}
-	return p.Success.FastWrite(buf)
-}
-
-func (p *GenerateMonthlyMemoirResult) Size() (n int) {
-	if !p.IsSetSuccess() {
-		return 0
-	}
-	return p.Success.Size()
-}
-
-func (p *GenerateMonthlyMemoirResult) Marshal(out []byte) ([]byte, error) {
-	if !p.IsSetSuccess() {
-		return out, nil
-	}
-	return proto.Marshal(p.Success)
-}
-
-func (p *GenerateMonthlyMemoirResult) Unmarshal(in []byte) error {
-	msg := new(memoir.GenerateMemoirResponse)
-	if err := proto.Unmarshal(in, msg); err != nil {
-		return err
-	}
-	p.Success = msg
-	return nil
-}
-
-func (p *GenerateMonthlyMemoirResult) GetSuccess() *memoir.GenerateMemoirResponse {
-	if !p.IsSetSuccess() {
-		return GenerateMonthlyMemoirResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-func (p *GenerateMonthlyMemoirResult) SetSuccess(x interface{}) {
-	p.Success = x.(*memoir.GenerateMemoirResponse)
-}
-
-func (p *GenerateMonthlyMemoirResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *GenerateMonthlyMemoirResult) GetResult() interface{} {
+func (p *GenerateMemoirResult) GetResult() interface{} {
 	return p.Success
 }
 
@@ -891,31 +571,11 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) GenerateDailyMemoir(ctx context.Context, Req *memoir.GenerateDailyMemoirRequest) (r *memoir.GenerateMemoirResponse, err error) {
-	var _args GenerateDailyMemoirArgs
+func (p *kClient) GenerateMemoir(ctx context.Context, Req *memoir.GenerateDailyMemoirRequest) (r *memoir.GenerateMemoirResponse, err error) {
+	var _args GenerateMemoirArgs
 	_args.Req = Req
-	var _result GenerateDailyMemoirResult
-	if err = p.c.Call(ctx, "GenerateDailyMemoir", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) GenerateWeeklyMemoir(ctx context.Context, Req *memoir.GenerateWeeklyMemoirRequest) (r *memoir.GenerateMemoirResponse, err error) {
-	var _args GenerateWeeklyMemoirArgs
-	_args.Req = Req
-	var _result GenerateWeeklyMemoirResult
-	if err = p.c.Call(ctx, "GenerateWeeklyMemoir", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) GenerateMonthlyMemoir(ctx context.Context, Req *memoir.GenerateMonthlyMemoirRequest) (r *memoir.GenerateMemoirResponse, err error) {
-	var _args GenerateMonthlyMemoirArgs
-	_args.Req = Req
-	var _result GenerateMonthlyMemoirResult
-	if err = p.c.Call(ctx, "GenerateMonthlyMemoir", &_args, &_result); err != nil {
+	var _result GenerateMemoirResult
+	if err = p.c.Call(ctx, "GenerateMemoir", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

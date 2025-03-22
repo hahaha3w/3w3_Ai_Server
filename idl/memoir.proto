@@ -3,12 +3,8 @@ package memoir;
 option go_package = "/memoir";
 
 service MemoirService {
-  // 生成每日回忆录
-  rpc GenerateDailyMemoir(GenerateDailyMemoirRequest) returns (GenerateMemoirResponse);
-  // 生成周回忆录
-  rpc GenerateWeeklyMemoir(GenerateWeeklyMemoirRequest) returns (GenerateMemoirResponse);
-  // 生成月回忆录
-  rpc GenerateMonthlyMemoir(GenerateMonthlyMemoirRequest) returns (GenerateMemoirResponse);
+  // 生成回忆录
+  rpc GenerateMemoir(GenerateDailyMemoirRequest) returns (GenerateMemoirResponse);
   // 获取已生成的回忆录列表
   rpc GetMemoirList(GetMemoirListRequest) returns (GetMemoirListResponse);
   // 获取回忆录详情

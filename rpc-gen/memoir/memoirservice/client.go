@@ -6,14 +6,12 @@ import (
 	"context"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
-	memoir "github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	GenerateDailyMemoir(ctx context.Context, Req *memoir.GenerateDailyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error)
-	GenerateWeeklyMemoir(ctx context.Context, Req *memoir.GenerateWeeklyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error)
-	GenerateMonthlyMemoir(ctx context.Context, Req *memoir.GenerateMonthlyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error)
+	GenerateMemoir(ctx context.Context, Req *memoir.GenerateDailyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error)
 	GetMemoirList(ctx context.Context, Req *memoir.GetMemoirListRequest, callOptions ...callopt.Option) (r *memoir.GetMemoirListResponse, err error)
 	GetMemoirDetail(ctx context.Context, Req *memoir.GetMemoirDetailRequest, callOptions ...callopt.Option) (r *memoir.GetMemoirDetailResponse, err error)
 }
@@ -47,19 +45,9 @@ type kMemoirServiceClient struct {
 	*kClient
 }
 
-func (p *kMemoirServiceClient) GenerateDailyMemoir(ctx context.Context, Req *memoir.GenerateDailyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error) {
+func (p *kMemoirServiceClient) GenerateMemoir(ctx context.Context, Req *memoir.GenerateDailyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GenerateDailyMemoir(ctx, Req)
-}
-
-func (p *kMemoirServiceClient) GenerateWeeklyMemoir(ctx context.Context, Req *memoir.GenerateWeeklyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GenerateWeeklyMemoir(ctx, Req)
-}
-
-func (p *kMemoirServiceClient) GenerateMonthlyMemoir(ctx context.Context, Req *memoir.GenerateMonthlyMemoirRequest, callOptions ...callopt.Option) (r *memoir.GenerateMemoirResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GenerateMonthlyMemoir(ctx, Req)
+	return p.kClient.GenerateMemoir(ctx, Req)
 }
 
 func (p *kMemoirServiceClient) GetMemoirList(ctx context.Context, Req *memoir.GetMemoirListRequest, callOptions ...callopt.Option) (r *memoir.GetMemoirListResponse, err error) {
