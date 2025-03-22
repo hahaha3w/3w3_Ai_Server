@@ -1,8 +1,8 @@
 package core
 
 import (
+	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
 	logger "github.com/hahaha3w/3w3_Ai_Server/common/logs"
-	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/log"
 )
 
 const (
