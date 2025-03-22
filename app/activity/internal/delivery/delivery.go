@@ -22,9 +22,22 @@ func New(repo domain.ActivityRepo, usecase domain.ActivityUsecase) *ActivityDeli
 }
 
 func (d *ActivityDelivery) CreateUserActivity(ctx context.Context, req *activity.CreateUserActivityReq) (res *activity.CreateUserActivityResp, err error) {
-	panic("implement me")
+	resp, err := d.usecase.CreateUserActivity(ctx, req.UserId, req.RelationId, req.Type, req.Description)
+	if err != nil {
+		return &activity.CreateUserActivityResp{
+			Success: false,
+			Message: err.Error(),
+		}, err
+	}
+
+	return resp, nil
 }
 
 func (d *ActivityDelivery) GetUserActivities(ctx context.Context, req *activity.GetUserActivityReq) (res *activity.GetUserActivityResp, err error) {
-	panic("implement me")
+	resp, err := d.usecase.GetUserActivity(ctx, req.UserId, req.Page, req.PageSize)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }
