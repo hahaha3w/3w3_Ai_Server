@@ -1,12 +1,15 @@
 package log
 
-import "github.com/hahaha3w/3w3_Ai_Server/common/logs"
+import logger "github.com/hahaha3w/3w3_Ai_Server/common/logs"
 
-var logger *log.LogrusLogger
+var log *logger.LogrusLogger
 
-func RegisterLogger(path string, prefix string) {
-	logger = log.NewLogrusLogger(path, prefix)
+func RegisterLogger(logger *logger.LogrusLogger) {
+	log = logger
 }
-func Log() *log.LogrusLogger {
-	return logger
+func Log() *logger.LogrusLogger {
+	if log == nil {
+		panic("implement not found for interface Logger, please register")
+	}
+	return log
 }

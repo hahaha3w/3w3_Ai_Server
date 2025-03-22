@@ -1,12 +1,15 @@
 package core
 
-import "github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
+import (
+	logger "github.com/hahaha3w/3w3_Ai_Server/common/logs"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
+)
 
 const (
 	logPath   = "logs"
-	logPrefix = "memoir"
+	logPrefix = "user"
 )
 
 func LoadLogger() {
-	log.RegisterLogger(logPath, logPrefix)
+	log.RegisterLogger(logger.NewLogrusLogger(logPath, logPrefix))
 }
