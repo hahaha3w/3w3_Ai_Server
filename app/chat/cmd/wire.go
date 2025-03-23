@@ -6,6 +6,7 @@ package main
 
 import (
 	"github.com/google/wire"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/cache"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/core"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/delivery"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/mq"
@@ -15,9 +16,10 @@ import (
 
 func wireApp() *delivery.ChatDelivery {
 	panic(wire.Build(
+		cache.ProviderSet,
+		repo.ProviderSet,
 		core.ProviderSet,
 		mq.ProviderSet,
-		repo.ProviderSet,
 		usecase.ProviderSet,
 		delivery.ProviderSet,
 	))
