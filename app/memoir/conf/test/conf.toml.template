@@ -1,0 +1,14 @@
+debug=true
+[mysql]
+dsn='root:%v@tcp(localhost:3306)/memoir?charset=utf8mb4&parseTime=true&loc=Local'
+[redis]
+addr='localhost:6379'
+password='123456'
+db=2
+[service]
+address='0.0.0.0:9010'
+name='user'
+[mtl]
+address='0.0.0.0:4317'
+[consul]
+address='0.0.0.0:8500'

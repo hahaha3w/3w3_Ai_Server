@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/hahaha3w/3w3_Ai_Server/user/internal/domain"
-	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/log"
+	"github.com/hahaha3w/3w3_Ai_Server/activity/internal/domain"
+	"github.com/hahaha3w/3w3_Ai_Server/activity/pkg/log"
 	"strconv"
 	"time"
 )
@@ -71,29 +71,6 @@ func GetUserCount(userId int32, cache *redis.Client) (*domain.UserCount, error) 
 	return userCount, nil
 }
 
-// InitUserCount 初始化用户统计数据
-func InitUserCount(userId int32, cache *redis.Client) error {
-	key := fmt.Sprintf("user:count:%d", userId)
-
-	// 初始化默认值
-	now := time.Now()
-	userCount := map[string]interface{}{
-		"chat_count":   0,
-		"memoir_count": 0,
-		"use_days":     1,
-		"last_updated": now.Format(time.RFC3339),
-	}
-
-	// 将数据存储到 Redis 哈希中
-	err := cache.HSet(context.Background(), key, userCount).Err()
-	if err != nil {
-		log.Log().Error(err)
-		return errors.New("failed to initialize user count in Redis")
-	}
-
-	return nil
-}
-
 // UpdateUserCount 更新用户统计数据
 func UpdateUserCount(userUpdateCount *domain.UpdateUserCount, cache *redis.Client) (userCount *domain.UserCount, err error) {
 	key := fmt.Sprintf("user:count:%d", userUpdateCount.UserId)
@@ -155,18 +132,4 @@ func UpdateUserCount(userUpdateCount *domain.UpdateUserCount, cache *redis.Clien
 	}
 
 	return userCount, nil
-}
-
-// DeleteUserCount 删除用户统计数据
-func DeleteUserCount(userId int32, cache *redis.Client) error {
-	key := fmt.Sprintf("user:count:%d", userId)
-
-	// 删除 Redis 中的哈希键
-	err := cache.Del(context.Background(), key).Err()
-	if err != nil {
-		log.Log().Error(err)
-		return errors.New("failed to delete user count from Redis")
-	}
-
-	return nil
 }

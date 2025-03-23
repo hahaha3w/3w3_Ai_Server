@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/hahaha3w/3w3_Ai_Server/user/internal/domain"
-	"github.com/hahaha3w/3w3_Ai_Server/user/pkg/log"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/domain"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
 	"strconv"
 	"time"
 )
@@ -155,18 +155,4 @@ func UpdateUserCount(userUpdateCount *domain.UpdateUserCount, cache *redis.Clien
 	}
 
 	return userCount, nil
-}
-
-// DeleteUserCount 删除用户统计数据
-func DeleteUserCount(userId int32, cache *redis.Client) error {
-	key := fmt.Sprintf("user:count:%d", userId)
-
-	// 删除 Redis 中的哈希键
-	err := cache.Del(context.Background(), key).Err()
-	if err != nil {
-		log.Log().Error(err)
-		return errors.New("failed to delete user count from Redis")
-	}
-
-	return nil
 }

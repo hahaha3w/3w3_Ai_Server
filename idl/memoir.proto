@@ -1,0 +1,76 @@
+syntax = "proto3";
+package memoir;
+option go_package = "/memoir";
+
+service MemoirService {
+  // 生成回忆录
+  rpc GenerateMemoir(GenerateMemoirRequest) returns (GenerateMemoirResponse);
+  // 获取已生成的回忆录列表
+  rpc GetMemoirList(GetMemoirListRequest) returns (GetMemoirListResponse);
+  // 获取回忆录详情
+  rpc GetMemoirDetail(GetMemoirDetailRequest) returns (GetMemoirDetailResponse);
+  // 删除回忆录
+  rpc DeleteMemoir(DeleteMemoirRequest) returns (DeleteMemoirResponse);
+}
+
+message Memoir {
+  int32 id = 1;
+  int32 user_id = 2;
+  string title = 3;
+  string content = 4;
+  string type = 5;
+  string style = 6;
+  string start_date = 7;
+  string end_date = 8;
+  string created_at = 9;
+}
+
+message GenerateMemoirRequest {
+  int32 user_id = 1;
+  string title = 2;
+  string content = 3;
+  string type = 4;
+  string style = 5;
+  string start_date = 6;
+  string end_date = 7;
+}
+
+message GenerateMemoirResponse {
+  bool success = 1;
+  Memoir memoir = 2;
+  string error_msg = 3;
+}
+
+message GetMemoirListRequest {
+  int32 user_id = 1;
+  string type = 2; // 可选过滤条件
+  string style = 3; // 可选过滤条件
+  string start_date = 4; // 可选，开始日期
+  string end_date = 5; // 可选，结束日期
+  int32 page = 6;
+  int32 page_size = 7;
+}
+
+message GetMemoirListResponse {
+  repeated Memoir memoirs = 1;
+  int32 total = 2;
+}
+
+message GetMemoirDetailRequest {
+  int32 memoir_id = 1;
+  int32 user_id = 2;
+}
+
+message GetMemoirDetailResponse {
+  Memoir memoir = 1;
+}
+
+message DeleteMemoirRequest {
+  int32 memoir_id = 1;
+  int32 user_id = 2;
+}
+
+message DeleteMemoirResponse {
+  bool success = 1;
+  string error_msg = 2;
+}

@@ -1,6 +1,6 @@
-module github.com/hahaha3w/3w3_Ai_Server/user
+module github.com/hahaha3w/3w3_Ai_Server/activity
 
-go 1.23.3
+go 1.23.6
 
 replace (
 	github.com/hahaha3w/3w3_Ai_Server/common => ../../common
@@ -9,15 +9,12 @@ replace (
 
 require (
 	github.com/cloudwego/kitex v0.12.3
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/google/wire v0.6.0
 	github.com/hahaha3w/3w3_Ai_Server/common v0.0.0-00010101000000-000000000000
 	github.com/hahaha3w/3w3_Ai_Server/rpc-gen v0.0.0-00010101000000-000000000000
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.20.0
-	golang.org/x/crypto v0.36.0
-	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
@@ -72,12 +69,11 @@ require (
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sync v0.12.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241223144023-3abc09e42ca8 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
-	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

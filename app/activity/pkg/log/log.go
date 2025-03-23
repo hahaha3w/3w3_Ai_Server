@@ -7,6 +7,7 @@ var log *logger.LogrusLogger
 func RegisterLogger(logger *logger.LogrusLogger) {
 	log = logger
 }
+
 func Log() *logger.LogrusLogger {
 	if log == nil {
 		panic("implement not found for interface Logger, please register")
