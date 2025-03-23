@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/cache"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/core"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/delivery"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/mq"
@@ -19,10 +20,12 @@ import (
 func wireApp() *delivery.ChatDelivery {
 	context := core.NewContext()
 	db := core.NewDB(context)
-	chatRepo := repo.NewChatRepo(db)
+	chatRepository := repo.NewChatRepository(db)
+	client := core.NewRedis(context)
 	conn := core.NewMQ()
-	chatMQ := mq.NewChatMQ(conn, chatRepo)
-	chatUsecase := usecase.NewChatUsecase(chatRepo, chatMQ)
+	chatMQ := mq.NewChatMQ(conn, chatRepository)
+	chatRepoWithCache := cache.NewChatRepoWithCache(chatRepository, client, chatMQ)
+	chatUsecase := usecase.NewChatUsecase(chatRepoWithCache, chatMQ)
 	chatDelivery := delivery.NewChatDelivery(chatUsecase, chatMQ)
 	return chatDelivery
 }
