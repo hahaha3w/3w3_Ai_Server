@@ -1,15 +1,19 @@
 package mq
 
 import (
+
 	"encoding/json"
-	"github.com/cloudwego/kitex/server"
+	"time"
+
+
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
-	"github.com/nats-io/nats.go"
+
 )
 
 const (
-	MessageRecordPublish = "message_record_publish"
+	MessageRecordPublish      = "message_record_publish"
+	ConversationRecordPublish = "conversation_record_publish"
 )
 
 func (c *ChatMQ) PublishMessage(msg *domain.Message) (err error) {
@@ -24,28 +28,19 @@ func (c *ChatMQ) PublishMessage(msg *domain.Message) (err error) {
 	}
 	return nil
 }
-
-func (c *ChatMQ) Subscribe() (err error) {
-
-	sub, err := c.mq.Subscribe(MessageRecordPublish, func(msg *nats.Msg) {
-		message := &domain.Message{}
-		err = json.Unmarshal(msg.Data, message)
-		log.Log().Info(message)
-		if err != nil {
-			log.Log().Error(err.Error())
-		}
-		_, err = c.repo.StoreChatRecord(message)
-		if err != nil {
-			log.Log().Error(err.Error())
-		}
-	})
+func (c *ChatMQ) PublishConversation(conversationID int, newUpdateTime time.Time) (err error) {
+	conv := &domain.Conversation{
+		ConversationID: conversationID,
+		UpdatedAt:      newUpdateTime,
+	}
+	jsonConv, err := json.Marshal(conv)
 	if err != nil {
 		log.Log().Error(err.Error())
 		return err
 	}
-	server.RegisterShutdownHook(func() {
-		sub.Unsubscribe()
-		c.mq.Close()
-	})
+	err = c.mq.Publish(ConversationRecordPublish, jsonConv)
+	if err != nil {
+		log.Log().Error(err.Error())
+	}
 	return nil
 }
