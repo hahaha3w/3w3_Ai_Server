@@ -304,12 +304,5 @@ func (u *ConcreteUserUsecase) DeleteUser(ctx context.Context, id int64) (err err
 		log.Log().Error(err)
 		return err
 	}
-
-	err = count.DeleteUserCount(int32(id), u.cache)
-	if err != nil {
-		log.Log().Error(err)
-		return err
-	}
-
 	return nil
 }

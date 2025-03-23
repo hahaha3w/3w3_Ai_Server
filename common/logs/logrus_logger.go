@@ -15,8 +15,10 @@ const (
 	gray   = 37
 )
 
+var _ Logger = &LogrusLogger{}
+
 type LogrusLogger struct {
-	*logrus.Logger
+	logger *logrus.Logger
 }
 type formatter struct {
 	prefix string
@@ -66,7 +68,7 @@ func (h *hook) Levels() []logrus.Level {
 	return logrus.AllLevels
 }
 func (h *hook) Fire(entry *logrus.Entry) (err error) {
-	timer := entry.Time.Format("2006-01-02_15-04")
+	timer := entry.Time.Format("2006-01-02_15")
 	line, _ := entry.String()
 	// 时间不等
 	defer func() { _ = h.file.Close() }()
@@ -98,4 +100,33 @@ func NewLogrusLogger(logPath string, logPrefix string) *LogrusLogger {
 	}
 	l.SetLevel(level)
 	return &LogrusLogger{l}
+}
+
+func (l *LogrusLogger) Debug(msg any, fields ...Field) {
+	l.logger.WithFields(l.toLogrusFields(fields)).Debugln(msg)
+}
+
+func (l *LogrusLogger) Info(msg any, fields ...Field) {
+	l.logger.WithFields(l.toLogrusFields(fields)).Infoln(msg)
+}
+func (l *LogrusLogger) Warn(msg any, fields ...Field) {
+	l.logger.WithFields(l.toLogrusFields(fields)).Warnln(msg)
+}
+func (l *LogrusLogger) Error(msg any, fields ...Field) {
+	l.logger.WithFields(l.toLogrusFields(fields)).Errorln(msg)
+}
+func (l *LogrusLogger) Fatal(msg any, fields ...Field) {
+	l.logger.WithFields(l.toLogrusFields(fields)).Fatalln(msg)
+}
+func (l *LogrusLogger) Panic(msg any, fields ...Field) {
+	l.logger.WithFields(l.toLogrusFields(fields)).Panicln(msg)
+}
+
+func (l *LogrusLogger) toLogrusFields(fields []Field) logrus.Fields {
+	var lf logrus.Fields
+	for _, field := range fields {
+		lf[field.Key] = field.Value
+	}
+	return lf
+
 }
