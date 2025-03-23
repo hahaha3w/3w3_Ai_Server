@@ -44,7 +44,7 @@ func NewConcreteMemoirUsecase(repo domain.MemoirRepo, cache *redis.Client) *Conc
 }
 
 // GenerateMemoir 生成回忆录
-func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, title, content, memoirType, startDate, endDate string) (*domain.Memoir, error) {
+func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, title, content, memoirType, style, startDate, endDate string) (*domain.Memoir, error) {
 	// 将字符串类型转化成 time.Time 类型
 	var startTime, endTime time.Time
 	var err error
@@ -70,6 +70,7 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 		Title:     title,
 		Content:   content,
 		Type:      memoirType,
+		Style:     style,
 		StartDate: startTime,
 		EndDate:   endTime,
 		CreatedAt: now,
@@ -123,16 +124,18 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 }
 
 // GetMemoirList 获取回忆录列表
-func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, int32, error) {
+func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, style, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, int32, error) {
 	// 规范化缓存键参数
 	params := struct {
 		Type      string
+		Style     string
 		StartDate string
 		EndDate   string
 		Page      int32
 		PageSize  int32
 	}{
 		Type:      memoirType,
+		Style:     style,
 		StartDate: normalizeDate(startDate),
 		EndDate:   normalizeDate(endDate),
 		Page:      page,
@@ -157,7 +160,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 	}
 
 	// 数据库查询
-	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, memoirType, startDate, endDate, page, pageSize)
+	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, memoirType, style, startDate, endDate, page, pageSize)
 	if err != nil {
 		return nil, 0, err
 	}

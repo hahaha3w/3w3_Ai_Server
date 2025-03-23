@@ -25,7 +25,7 @@ func New(repo domain.MemoirRepo, usecase domain.MemoirUsecase) *MemoirDelivery {
 // GenerateMemoir 生成回忆录
 func (d *MemoirDelivery) GenerateMemoir(ctx context.Context, req *memoir.GenerateMemoirRequest) (res *memoir.GenerateMemoirResponse, err error) {
 	// 调用 usecase 层的 GenerateMemoir 方法
-	generatedMemoir, err := d.usecase.GenerateMemoir(ctx, int(req.UserId), req.Title, req.Content, req.Type, req.StartDate, req.EndDate)
+	generatedMemoir, err := d.usecase.GenerateMemoir(ctx, int(req.UserId), req.Title, req.Content, req.Type, req.Style, req.StartDate, req.EndDate)
 	if err != nil {
 		return &memoir.GenerateMemoirResponse{
 			Success:  false,
@@ -45,7 +45,7 @@ func (d *MemoirDelivery) GenerateMemoir(ctx context.Context, req *memoir.Generat
 // GetMemoirList 获取回忆录列表
 func (d *MemoirDelivery) GetMemoirList(ctx context.Context, req *memoir.GetMemoirListRequest) (res *memoir.GetMemoirListResponse, err error) {
 	// 调用 usecase 层的 GetMemoirList 方法
-	memoirs, total, err := d.usecase.GetMemoirList(ctx, int(req.UserId), req.Type, req.StartDate, req.EndDate, req.Page, req.PageSize)
+	memoirs, total, err := d.usecase.GetMemoirList(ctx, int(req.UserId), req.Type, req.Style, req.StartDate, req.EndDate, req.Page, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
