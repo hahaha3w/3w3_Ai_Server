@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/core"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/infra/rpc"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir/memoirservice"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
@@ -17,7 +18,7 @@ func main() {
 	if err := core.LoadConfig(); err != nil {
 		panic(err)
 	}
-
+	rpc.InitRpc()
 	core.StartMtl()
 	opts := kitexInit()
 	memoirDelivery := wireApp()

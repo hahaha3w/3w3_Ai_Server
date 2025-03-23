@@ -1,5 +1,5 @@
 syntax = "proto3";
-package chat;
+package activity;
 option go_package = "/activity";
 
 service ActivityService {

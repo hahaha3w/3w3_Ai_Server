@@ -54,6 +54,11 @@ func (x *Memoir) FastRead(buf []byte, _type int8, number int32) (offset int, err
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 9:
+		offset, err = x.fastReadField9(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -93,16 +98,21 @@ func (x *Memoir) fastReadField5(buf []byte, _type int8) (offset int, err error) 
 }
 
 func (x *Memoir) fastReadField6(buf []byte, _type int8) (offset int, err error) {
-	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
+	x.Style, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *Memoir) fastReadField7(buf []byte, _type int8) (offset int, err error) {
-	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
+	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *Memoir) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *Memoir) fastReadField9(buf []byte, _type int8) (offset int, err error) {
 	x.CreatedAt, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
@@ -136,6 +146,11 @@ func (x *GenerateMemoirRequest) FastRead(buf []byte, _type int8, number int32) (
 		}
 	case 6:
 		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 7:
+		offset, err = x.fastReadField7(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -173,11 +188,16 @@ func (x *GenerateMemoirRequest) fastReadField4(buf []byte, _type int8) (offset i
 }
 
 func (x *GenerateMemoirRequest) fastReadField5(buf []byte, _type int8) (offset int, err error) {
-	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
+	x.Style, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *GenerateMemoirRequest) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *GenerateMemoirRequest) fastReadField7(buf []byte, _type int8) (offset int, err error) {
 	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
@@ -264,6 +284,11 @@ func (x *GetMemoirListRequest) FastRead(buf []byte, _type int8, number int32) (o
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 7:
+		offset, err = x.fastReadField7(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -288,21 +313,26 @@ func (x *GetMemoirListRequest) fastReadField2(buf []byte, _type int8) (offset in
 }
 
 func (x *GetMemoirListRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
+	x.Style, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *GetMemoirListRequest) fastReadField4(buf []byte, _type int8) (offset int, err error) {
-	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
+	x.StartDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *GetMemoirListRequest) fastReadField5(buf []byte, _type int8) (offset int, err error) {
-	x.Page, offset, err = fastpb.ReadInt32(buf, _type)
+	x.EndDate, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
 func (x *GetMemoirListRequest) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.Page, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetMemoirListRequest) fastReadField7(buf []byte, _type int8) (offset int, err error) {
 	x.PageSize, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
@@ -494,6 +524,7 @@ func (x *Memoir) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField6(buf[offset:])
 	offset += x.fastWriteField7(buf[offset:])
 	offset += x.fastWriteField8(buf[offset:])
+	offset += x.fastWriteField9(buf[offset:])
 	return offset
 }
 
@@ -538,26 +569,34 @@ func (x *Memoir) fastWriteField5(buf []byte) (offset int) {
 }
 
 func (x *Memoir) fastWriteField6(buf []byte) (offset int) {
-	if x.StartDate == "" {
+	if x.Style == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 6, x.GetStartDate())
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetStyle())
 	return offset
 }
 
 func (x *Memoir) fastWriteField7(buf []byte) (offset int) {
-	if x.EndDate == "" {
+	if x.StartDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 7, x.GetEndDate())
+	offset += fastpb.WriteString(buf[offset:], 7, x.GetStartDate())
 	return offset
 }
 
 func (x *Memoir) fastWriteField8(buf []byte) (offset int) {
+	if x.EndDate == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 8, x.GetEndDate())
+	return offset
+}
+
+func (x *Memoir) fastWriteField9(buf []byte) (offset int) {
 	if x.CreatedAt == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 8, x.GetCreatedAt())
+	offset += fastpb.WriteString(buf[offset:], 9, x.GetCreatedAt())
 	return offset
 }
 
@@ -571,6 +610,7 @@ func (x *GenerateMemoirRequest) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField4(buf[offset:])
 	offset += x.fastWriteField5(buf[offset:])
 	offset += x.fastWriteField6(buf[offset:])
+	offset += x.fastWriteField7(buf[offset:])
 	return offset
 }
 
@@ -607,18 +647,26 @@ func (x *GenerateMemoirRequest) fastWriteField4(buf []byte) (offset int) {
 }
 
 func (x *GenerateMemoirRequest) fastWriteField5(buf []byte) (offset int) {
-	if x.StartDate == "" {
+	if x.Style == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 5, x.GetStartDate())
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetStyle())
 	return offset
 }
 
 func (x *GenerateMemoirRequest) fastWriteField6(buf []byte) (offset int) {
+	if x.StartDate == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetStartDate())
+	return offset
+}
+
+func (x *GenerateMemoirRequest) fastWriteField7(buf []byte) (offset int) {
 	if x.EndDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 6, x.GetEndDate())
+	offset += fastpb.WriteString(buf[offset:], 7, x.GetEndDate())
 	return offset
 }
 
@@ -666,6 +714,7 @@ func (x *GetMemoirListRequest) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField4(buf[offset:])
 	offset += x.fastWriteField5(buf[offset:])
 	offset += x.fastWriteField6(buf[offset:])
+	offset += x.fastWriteField7(buf[offset:])
 	return offset
 }
 
@@ -686,34 +735,42 @@ func (x *GetMemoirListRequest) fastWriteField2(buf []byte) (offset int) {
 }
 
 func (x *GetMemoirListRequest) fastWriteField3(buf []byte) (offset int) {
-	if x.StartDate == "" {
+	if x.Style == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetStartDate())
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetStyle())
 	return offset
 }
 
 func (x *GetMemoirListRequest) fastWriteField4(buf []byte) (offset int) {
-	if x.EndDate == "" {
+	if x.StartDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 4, x.GetEndDate())
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetStartDate())
 	return offset
 }
 
 func (x *GetMemoirListRequest) fastWriteField5(buf []byte) (offset int) {
-	if x.Page == 0 {
+	if x.EndDate == "" {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 5, x.GetPage())
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetEndDate())
 	return offset
 }
 
 func (x *GetMemoirListRequest) fastWriteField6(buf []byte) (offset int) {
+	if x.Page == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 6, x.GetPage())
+	return offset
+}
+
+func (x *GetMemoirListRequest) fastWriteField7(buf []byte) (offset int) {
 	if x.PageSize == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 6, x.GetPageSize())
+	offset += fastpb.WriteInt32(buf[offset:], 7, x.GetPageSize())
 	return offset
 }
 
@@ -847,6 +904,7 @@ func (x *Memoir) Size() (n int) {
 	n += x.sizeField6()
 	n += x.sizeField7()
 	n += x.sizeField8()
+	n += x.sizeField9()
 	return n
 }
 
@@ -891,26 +949,34 @@ func (x *Memoir) sizeField5() (n int) {
 }
 
 func (x *Memoir) sizeField6() (n int) {
-	if x.StartDate == "" {
+	if x.Style == "" {
 		return n
 	}
-	n += fastpb.SizeString(6, x.GetStartDate())
+	n += fastpb.SizeString(6, x.GetStyle())
 	return n
 }
 
 func (x *Memoir) sizeField7() (n int) {
-	if x.EndDate == "" {
+	if x.StartDate == "" {
 		return n
 	}
-	n += fastpb.SizeString(7, x.GetEndDate())
+	n += fastpb.SizeString(7, x.GetStartDate())
 	return n
 }
 
 func (x *Memoir) sizeField8() (n int) {
+	if x.EndDate == "" {
+		return n
+	}
+	n += fastpb.SizeString(8, x.GetEndDate())
+	return n
+}
+
+func (x *Memoir) sizeField9() (n int) {
 	if x.CreatedAt == "" {
 		return n
 	}
-	n += fastpb.SizeString(8, x.GetCreatedAt())
+	n += fastpb.SizeString(9, x.GetCreatedAt())
 	return n
 }
 
@@ -924,6 +990,7 @@ func (x *GenerateMemoirRequest) Size() (n int) {
 	n += x.sizeField4()
 	n += x.sizeField5()
 	n += x.sizeField6()
+	n += x.sizeField7()
 	return n
 }
 
@@ -960,18 +1027,26 @@ func (x *GenerateMemoirRequest) sizeField4() (n int) {
 }
 
 func (x *GenerateMemoirRequest) sizeField5() (n int) {
-	if x.StartDate == "" {
+	if x.Style == "" {
 		return n
 	}
-	n += fastpb.SizeString(5, x.GetStartDate())
+	n += fastpb.SizeString(5, x.GetStyle())
 	return n
 }
 
 func (x *GenerateMemoirRequest) sizeField6() (n int) {
+	if x.StartDate == "" {
+		return n
+	}
+	n += fastpb.SizeString(6, x.GetStartDate())
+	return n
+}
+
+func (x *GenerateMemoirRequest) sizeField7() (n int) {
 	if x.EndDate == "" {
 		return n
 	}
-	n += fastpb.SizeString(6, x.GetEndDate())
+	n += fastpb.SizeString(7, x.GetEndDate())
 	return n
 }
 
@@ -1019,6 +1094,7 @@ func (x *GetMemoirListRequest) Size() (n int) {
 	n += x.sizeField4()
 	n += x.sizeField5()
 	n += x.sizeField6()
+	n += x.sizeField7()
 	return n
 }
 
@@ -1039,34 +1115,42 @@ func (x *GetMemoirListRequest) sizeField2() (n int) {
 }
 
 func (x *GetMemoirListRequest) sizeField3() (n int) {
-	if x.StartDate == "" {
+	if x.Style == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetStartDate())
+	n += fastpb.SizeString(3, x.GetStyle())
 	return n
 }
 
 func (x *GetMemoirListRequest) sizeField4() (n int) {
-	if x.EndDate == "" {
+	if x.StartDate == "" {
 		return n
 	}
-	n += fastpb.SizeString(4, x.GetEndDate())
+	n += fastpb.SizeString(4, x.GetStartDate())
 	return n
 }
 
 func (x *GetMemoirListRequest) sizeField5() (n int) {
-	if x.Page == 0 {
+	if x.EndDate == "" {
 		return n
 	}
-	n += fastpb.SizeInt32(5, x.GetPage())
+	n += fastpb.SizeString(5, x.GetEndDate())
 	return n
 }
 
 func (x *GetMemoirListRequest) sizeField6() (n int) {
+	if x.Page == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(6, x.GetPage())
+	return n
+}
+
+func (x *GetMemoirListRequest) sizeField7() (n int) {
 	if x.PageSize == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(6, x.GetPageSize())
+	n += fastpb.SizeInt32(7, x.GetPageSize())
 	return n
 }
 
@@ -1194,9 +1278,10 @@ var fieldIDToName_Memoir = map[int32]string{
 	3: "Title",
 	4: "Content",
 	5: "Type",
-	6: "StartDate",
-	7: "EndDate",
-	8: "CreatedAt",
+	6: "Style",
+	7: "StartDate",
+	8: "EndDate",
+	9: "CreatedAt",
 }
 
 var fieldIDToName_GenerateMemoirRequest = map[int32]string{
@@ -1204,8 +1289,9 @@ var fieldIDToName_GenerateMemoirRequest = map[int32]string{
 	2: "Title",
 	3: "Content",
 	4: "Type",
-	5: "StartDate",
-	6: "EndDate",
+	5: "Style",
+	6: "StartDate",
+	7: "EndDate",
 }
 
 var fieldIDToName_GenerateMemoirResponse = map[int32]string{
@@ -1217,10 +1303,11 @@ var fieldIDToName_GenerateMemoirResponse = map[int32]string{
 var fieldIDToName_GetMemoirListRequest = map[int32]string{
 	1: "UserId",
 	2: "Type",
-	3: "StartDate",
-	4: "EndDate",
-	5: "Page",
-	6: "PageSize",
+	3: "Style",
+	4: "StartDate",
+	5: "EndDate",
+	6: "Page",
+	7: "PageSize",
 }
 
 var fieldIDToName_GetMemoirListResponse = map[int32]string{

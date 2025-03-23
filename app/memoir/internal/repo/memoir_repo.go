@@ -23,13 +23,18 @@ func (r MysqlMemoirRepo) CreateMemoir(ctx context.Context, memoir *domain.Memoir
 	return r.db.WithContext(ctx).Model(&domain.Memoir{}).Create(memoir).Error
 }
 
-func (r MysqlMemoirRepo) GetMemoirsByUserID(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) (memoirs []*domain.Memoir, total int32, err error) {
+func (r MysqlMemoirRepo) GetMemoirsByUserID(ctx context.Context, userID int, memoirType, style, startDate, endDate string, page, pageSize int32) (memoirs []*domain.Memoir, total int32, err error) {
 	// 初始化查询
 	query := r.db.WithContext(ctx).Model(&domain.Memoir{}).Where("user_id = ?", userID)
 
 	// 添加回忆录类型过滤条件
 	if memoirType != "" {
 		query = query.Where("type = ?", memoirType)
+	}
+
+	// 添加回忆录风格过滤条件
+	if style != "" {
+		query = query.Where("style = ?", style)
 	}
 
 	// 添加日期范围过滤条件
