@@ -8,10 +8,10 @@ services:
       - "8222:8222"
     command: -DV
     restart: unless-stopped
-#  consul:
-#    image: "consul:1.15.4"
-#    ports:
-#      - "8500:8500"
+  consul:
+    image: "consul:1.15.4"
+    ports:
+      - "8500:8500"
   mysql:
     image: 'mysql:8'
     ports:
@@ -22,3 +22,4 @@ services:
     image: 'redis:latest'
     ports:
       - 6379:6379
+    command: redis-server --requirepass 12345678
