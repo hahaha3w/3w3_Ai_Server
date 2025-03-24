@@ -12,5 +12,4 @@ func (r *Group) SetActivityRouter() {
 	// 需要认证的路由
 	groupAuthed := group.Use(middleware.JWT())
 	groupAuthed.GET("/", activityApi.GetUserActivities)
-	groupAuthed.POST("/", activityApi.CreateUserActivity)
 }

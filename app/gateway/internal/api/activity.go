@@ -5,6 +5,7 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/gateway/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/gateway/internal/infra/rpc"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/activity"
+	"strconv"
 )
 
 type ActivityApi struct{}
@@ -13,11 +14,17 @@ type ActivityApi struct{}
 func (api *ActivityApi) GetUserActivities(ctx *gin.Context) {
 	var req activity.GetUserActivityReq
 
-	// 使用 ShouldBindQuery 绑定 Query 参数
-	if err := ctx.ShouldBindQuery(&req); err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
+	// 从查询参数中获取字符串
+	pageStr := ctx.DefaultQuery("page", "1")           // 默认值为 "1"
+	pageSizeStr := ctx.DefaultQuery("page_size", "15") // 默认值为 "15"
+
+	// 将字符串转换为 int32
+	page, _ := strconv.Atoi(pageStr)
+	pageSize, _ := strconv.Atoi(pageSizeStr)
+
+	// 赋值给 Protobuf 结构体
+	req.Page = int32(page)
+	req.PageSize = int32(pageSize)
 
 	// 设置 userId
 	userId, err := domain.GetUserIdFromContext(ctx)
@@ -29,35 +36,6 @@ func (api *ActivityApi) GetUserActivities(ctx *gin.Context) {
 
 	// 调用 RPC 客户端获取用户活动列表
 	resp, err := rpc.ActivityClient.GetUserActivities(ctx, &req)
-	if err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
-
-	// 返回成功响应
-	domain.Success(ctx, resp)
-}
-
-// CreateUserActivity 创建用户活动
-func (api *ActivityApi) CreateUserActivity(ctx *gin.Context) {
-	var req activity.CreateUserActivityReq
-
-	// 使用 ShouldBindJSON 绑定 JSON 请求体
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
-
-	// 设置 userId
-	userId, err := domain.GetUserIdFromContext(ctx)
-	if err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
-	req.UserId = int64(userId)
-
-	// 调用 RPC 客户端创建用户活动
-	resp, err := rpc.ActivityClient.CreateUserActivity(ctx, &req)
 	if err != nil {
 		domain.ErrorMsg(ctx, err.Error())
 		return
