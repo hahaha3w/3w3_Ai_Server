@@ -45,23 +45,28 @@ func NewConcreteMemoirUsecase(repo domain.MemoirRepo, cache *redis.Client) *Conc
 
 // GenerateMemoir 生成回忆录
 func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, title, content, memoirType, style, startDate, endDate string) (*domain.Memoir, error) {
-	// 将字符串类型转化成 time.Time 类型
 	var startTime, endTime time.Time
-	var err error
-	var now = time.Now()
+	now := time.Now()
+
+	const DateLayout = "2006-01-02"
+
+	locEast8, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		return nil, fmt.Errorf("failed to load East 8 location: %w", err)
+	}
 
 	if startDate != "" && endDate != "" {
-		startTime, err = time.Parse(DateLayout, startDate)
+		parsedStart, err := time.ParseInLocation(DateLayout, startDate, locEast8)
 		if err != nil {
 			return nil, errors.New("invalid startDate format, expected YYYY-MM-DD")
 		}
+		startTime = parsedStart
 
-		endTime, err = time.Parse(DateLayout, endDate)
+		parsedEnd, err := time.ParseInLocation(DateLayout, endDate, locEast8)
 		if err != nil {
 			return nil, errors.New("invalid endDate format, expected YYYY-MM-DD")
 		}
-
-		now.Format(DateLayout)
+		endTime = parsedEnd
 	}
 
 	// 创建回忆录对象

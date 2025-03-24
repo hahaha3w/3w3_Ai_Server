@@ -11,39 +11,38 @@ import (
 type MemoirApi struct {
 }
 
-// GenerateMemoir 生成回忆录
-func (api *MemoirApi) GenerateMemoir(ctx *gin.Context) {
-	var req memoir.GenerateMemoirRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
-
-	// 设置 userId
-	userId, err := domain.GetUserIdFromContext(ctx)
-	if err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
-	req.UserId = userId
-
-	resp, err := rpc.MemoirClient.GenerateMemoir(ctx, &req)
-	if err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
-
-	domain.Success(ctx, resp)
-}
-
 // GetMemoirList 获取已生成的回忆录列表
 func (api *MemoirApi) GetMemoirList(ctx *gin.Context) {
 	var req memoir.GetMemoirListRequest
 
-	// 使用 ShouldBindQuery 绑定 Query 参数
-	if err := ctx.ShouldBindQuery(&req); err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
+	// 从查询参数中获取字符串并设置默认值
+	pageStr := ctx.DefaultQuery("page", "1")           // 默认值为 "1"
+	pageSizeStr := ctx.DefaultQuery("page_size", "15") // 默认值为 "15"
+	typeStr := ctx.Query("type")                       // 可选参数
+	styleStr := ctx.Query("style")                     // 可选参数
+	startDateStr := ctx.Query("start_date")            // 可选参数
+	endDateStr := ctx.Query("end_date")                // 可选参数
+
+	// 将字符串转换为 int32
+	page, _ := strconv.Atoi(pageStr)
+	pageSize, _ := strconv.Atoi(pageSizeStr)
+
+	// 赋值给 Protobuf 结构体
+	req.Page = int32(page)
+	req.PageSize = int32(pageSize)
+
+	// 处理其他可选参数
+	if typeStr != "" {
+		req.Type = typeStr
+	}
+	if styleStr != "" {
+		req.Style = styleStr
+	}
+	if startDateStr != "" {
+		req.StartDate = startDateStr
+	}
+	if endDateStr != "" {
+		req.EndDate = endDateStr
 	}
 
 	// 设置 userId
@@ -103,10 +102,6 @@ func (api *MemoirApi) GetMemoirDetail(ctx *gin.Context) {
 // DeleteMemoir 删除回忆录
 func (api *MemoirApi) DeleteMemoir(ctx *gin.Context) {
 	var req memoir.DeleteMemoirRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		domain.ErrorMsg(ctx, err.Error())
-		return
-	}
 
 	// 从 URL 路径中获取 memoir_id
 	memoirIdStr := ctx.Param("memoir_id")
