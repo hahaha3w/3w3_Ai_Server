@@ -34,20 +34,3 @@ func GenerateJWT(userId int32) string {
 
 	return tokenString
 }
-
-func ParseJWT(tokenString string) (*MyCustomClaims, error) {
-	// 解析 Token
-	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return mySigningKey, nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	// 验证 Token
-	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
-		return claims, nil
-	}
-
-	return nil, err
-}
