@@ -9,6 +9,7 @@ replace (
 
 require (
 	github.com/cloudwego/kitex v0.12.3
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.10.0
 	github.com/hahaha3w/3w3_Ai_Server/common v0.0.0-00010101000000-000000000000
 	github.com/hahaha3w/3w3_Ai_Server/rpc-gen v0.0.0-00010101000000-000000000000

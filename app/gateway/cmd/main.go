@@ -10,6 +10,6 @@ func main() {
 	rpc.InitClient()
 	err := r.Run(":8180")
 	if err != nil {
+		panic(err)
 	}
-
 }

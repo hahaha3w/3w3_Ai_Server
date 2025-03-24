@@ -1,6 +1,8 @@
 package rpc
 
 import (
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/activity/activityservice"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir/memoirservice"
 	"log"
 
 	"github.com/spf13/viper"
@@ -14,11 +16,13 @@ import (
 )
 
 var (
-	UserClient   userservice.Client
-	once         sync.Once
-	err          error
-	registryAddr string
-	commonSuite  client.Option
+	UserClient     userservice.Client
+	MemoirClient   memoirservice.Client
+	ActivityClient activityservice.Client
+	once           sync.Once
+	err            error
+	registryAddr   string
+	commonSuite    client.Option
 )
 
 func InitClient() {
@@ -30,11 +34,27 @@ func InitClient() {
 			CurrentServiceName: serviceName,
 		})
 		initUserClient()
+		initMemoirClient()
+		initActivityClient()
 	})
 }
 
 func initUserClient() {
 	UserClient, err = userservice.NewClient("user", commonSuite)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+}
+
+func initMemoirClient() {
+	MemoirClient, err = memoirservice.NewClient("memoir", commonSuite)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+}
+
+func initActivityClient() {
+	ActivityClient, err = activityservice.NewClient("activity", commonSuite)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
