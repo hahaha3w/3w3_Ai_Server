@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 	"time"
 )
 
@@ -19,4 +20,14 @@ type Memoir struct {
 // TableName 指定表名
 func (Memoir) TableName() string {
 	return "memoirs"
+}
+
+// Message Reference by github.com/hahaha3w/3w3_Ai_Server/app/chat/internal/domain/model.go
+type Message struct {
+	MessageID      int             `gorm:"primaryKey;column:message_id" json:"message_id"`
+	UserID         int             `gorm:"type:varchar(64);not null;column:user_id" json:"user_id"`
+	ConversationID int             `gorm:"type:varchar(64);not null;column:conversation_id" json:"conversation_id"`
+	Content        string          `gorm:"type:text;not null;column:content" json:"content"`
+	SenderType     chat.SenderType `gorm:"type:varchar(20);not null;column:sender_type" json:"sender_type"`
+	SendTime       time.Time       `gorm:"column:send_time" json:"send_time"`
 }

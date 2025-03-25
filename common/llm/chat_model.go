@@ -12,9 +12,9 @@ import (
 func GetOpenAIChatModel() model.ChatModel {
 
 	c, err := openai.NewChatModel(context.Background(), &openai.ChatModelConfig{
-		APIKey:  viper.GetString("llm.token"),
-		BaseURL: "https://openrouter.ai/api/v1",
-		Model:   "anthropic/claude-3.7-sonnet",
+		APIKey:  viper.GetString("llm.apiKey"),
+		BaseURL: viper.GetString("llm.baseUrl"),
+		Model:   viper.GetString("llm.model"),
 	})
 	if err != nil {
 		log.Fatal(err)

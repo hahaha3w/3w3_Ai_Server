@@ -10,6 +10,7 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/infra/rpc"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/count"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/llm"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/activity"
 	"time"
@@ -44,7 +45,8 @@ func NewConcreteMemoirUsecase(repo domain.MemoirRepo, cache *redis.Client) *Conc
 }
 
 // GenerateMemoir 生成回忆录
-func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, title, content, memoirType, style, startDate, endDate string) (*domain.Memoir, error) {
+func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, style, memoirType, startDate, endDate string) (*domain.Memoir, error) {
+	// 将字符串类型转化成 time.Time 类型
 	var startTime, endTime time.Time
 	now := time.Now()
 
@@ -56,19 +58,36 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 	}
 
 	if startDate != "" && endDate != "" {
+		startTime, err = time.Parse(time.DateOnly, startDate)
 		parsedStart, err := time.ParseInLocation(DateLayout, startDate, locEast8)
 		if err != nil {
+			log.Log().Error(err)
 			return nil, errors.New("invalid startDate format, expected YYYY-MM-DD")
 		}
 		startTime = parsedStart
 
+		endTime, err = time.Parse(time.DateOnly, endDate)
 		parsedEnd, err := time.ParseInLocation(DateLayout, endDate, locEast8)
 		if err != nil {
+			log.Log().Error(err)
 			return nil, errors.New("invalid endDate format, expected YYYY-MM-DD")
 		}
 		endTime = parsedEnd
 	}
-
+	questions, err := c.repo.GetUserMessages(ctx, userID, startTime, endTime)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
+	if len(questions) == 0 {
+		log.Log().Error("no question found")
+		return nil, errors.New("no question found")
+	}
+	title, content, err := llm.GenerateMemoir(ctx, questions, style)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
 	// 创建回忆录对象
 	memoir := &domain.Memoir{
 		UserID:    userID,
@@ -129,8 +148,10 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 }
 
 // GetMemoirList 获取回忆录列表
-func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, style, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, int32, error) {
+func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, int32, error) {
 	// 规范化缓存键参数
+
+	//TODO 处理style
 	params := struct {
 		Type      string
 		Style     string
@@ -140,7 +161,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 		PageSize  int32
 	}{
 		Type:      memoirType,
-		Style:     style,
+		Style:     "style",
 		StartDate: normalizeDate(startDate),
 		EndDate:   normalizeDate(endDate),
 		Page:      page,
@@ -165,7 +186,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 	}
 
 	// 数据库查询
-	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, memoirType, style, startDate, endDate, page, pageSize)
+	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, "", memoirType, startDate, endDate, page, pageSize)
 	if err != nil {
 		return nil, 0, err
 	}
