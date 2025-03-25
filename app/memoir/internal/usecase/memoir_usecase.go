@@ -47,7 +47,6 @@ func NewConcreteMemoirUsecase(repo domain.MemoirRepo, cache *redis.Client) *Conc
 // GenerateMemoir 生成回忆录
 func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, style, memoirType, startDate, endDate string) (*domain.Memoir, error) {
 	// 将字符串类型转化成 time.Time 类型
-func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, title, content, memoirType, style, startDate, endDate string) (*domain.Memoir, error) {
 	var startTime, endTime time.Time
 	now := time.Now()
 
@@ -151,6 +150,8 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, t
 // GetMemoirList 获取回忆录列表
 func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, int32, error) {
 	// 规范化缓存键参数
+
+	//TODO 处理style
 	params := struct {
 		Type      string
 		Style     string
@@ -160,7 +161,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 		PageSize  int32
 	}{
 		Type:      memoirType,
-		Style:     style,
+		Style:     "style",
 		StartDate: normalizeDate(startDate),
 		EndDate:   normalizeDate(endDate),
 		Page:      page,
