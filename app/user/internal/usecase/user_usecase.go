@@ -298,8 +298,6 @@ func (u *ConcreteUserUsecase) UpdateUserInfo(ctx context.Context, req *user.Upda
 }
 
 func (u *ConcreteUserUsecase) DeleteUser(ctx context.Context, id int64) (err error) {
-	// TODO 校验是否是自己删除自己，可以在网关做，根据token获取用户id再判断是否删除
-
 	if err := u.repo.DeleteUser(ctx, id); err != nil {
 		log.Log().Error(err)
 		return err

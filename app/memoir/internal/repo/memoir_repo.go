@@ -39,7 +39,7 @@ func (r MysqlMemoirRepo) GetMemoirsByUserID(ctx context.Context, userID int, mem
 
 	// 添加日期范围过滤条件
 	if startDate != "" && endDate != "" {
-		query = query.Where("created_at BETWEEN ? AND ?", startDate, endDate)
+		query = query.Where("start_date >= ? AND end_date <= ?", startDate, endDate)
 	}
 
 	// 计算总数

@@ -7,7 +7,7 @@ password='123456'
 db=2
 [service]
 address='0.0.0.0:9011'
-name='user'
+name='activity'
 [mtl]
 address='0.0.0.0:4317'
 [consul]
