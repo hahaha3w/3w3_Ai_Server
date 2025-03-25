@@ -9,6 +9,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/count"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/llm"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
 	"time"
 )
@@ -42,26 +43,41 @@ func NewConcreteMemoirUsecase(repo domain.MemoirRepo, cache *redis.Client) *Conc
 }
 
 // GenerateMemoir 生成回忆录
-func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, title, content, memoirType, startDate, endDate string) (*domain.Memoir, error) {
+func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, style, memoirType, startDate, endDate string) (*domain.Memoir, error) {
 	// 将字符串类型转化成 time.Time 类型
 	var startTime, endTime time.Time
 	var err error
 	var now = time.Now()
 
 	if startDate != "" && endDate != "" {
-		startTime, err = time.Parse(DateLayout, startDate)
+		startTime, err = time.Parse(time.DateOnly, startDate)
 		if err != nil {
+			log.Log().Error(err)
 			return nil, errors.New("invalid startDate format, expected YYYY-MM-DD")
 		}
 
-		endTime, err = time.Parse(DateLayout, endDate)
+		endTime, err = time.Parse(time.DateOnly, endDate)
 		if err != nil {
+			log.Log().Error(err)
 			return nil, errors.New("invalid endDate format, expected YYYY-MM-DD")
 		}
 
 		now.Format(DateLayout)
 	}
-
+	questions, err := c.repo.GetUserMessages(ctx, userID, startTime, endTime)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
+	if len(questions) == 0 {
+		log.Log().Error("no question found")
+		return nil, errors.New("no question found")
+	}
+	title, content, err := llm.GenerateMemoir(ctx, questions, style)
+	if err != nil {
+		log.Log().Error(err)
+		return nil, err
+	}
 	// 创建回忆录对象
 	memoir := &domain.Memoir{
 		UserID:    userID,
@@ -147,7 +163,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 	}
 
 	// 数据库查询
-	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, memoirType, startDate, endDate, page, pageSize)
+	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, "", memoirType, startDate, endDate, page, pageSize)
 	if err != nil {
 		return nil, 0, err
 	}

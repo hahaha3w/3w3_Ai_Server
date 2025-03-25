@@ -6,7 +6,7 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 )
 
-var _ chat.Echo = &ChatDelivery{}
+var _ chat.ChatService = &ChatDelivery{}
 var ProviderSet = wire.NewSet(NewChatDelivery)
 
 type ChatDelivery struct {

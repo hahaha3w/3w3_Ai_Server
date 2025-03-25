@@ -19,9 +19,10 @@ message Memoir {
   string title = 3;
   string content = 4;
   string type = 5;
-  string start_date = 6;
-  string end_date = 7;
-  string created_at = 8;
+  string style = 6;
+  string start_date = 7;
+  string end_date = 8;
+  string created_at = 9;
 }
 
 message GenerateMemoirRequest {
@@ -29,8 +30,9 @@ message GenerateMemoirRequest {
   string title = 2;
   string content = 3;
   string type = 4;
-  string start_date = 5;
-  string end_date = 6;
+  string style = 5;
+  string start_date = 6;
+  string end_date = 7;
 }
 
 message GenerateMemoirResponse {
@@ -42,10 +44,11 @@ message GenerateMemoirResponse {
 message GetMemoirListRequest {
   int32 user_id = 1;
   string type = 2; // 可选过滤条件
-  string start_date = 3; // 可选，开始日期
-  string end_date = 4; // 可选，结束日期
-  int32 page = 5;
-  int32 page_size = 6;
+  string style = 3; // 可选过滤条件
+  string start_date = 4; // 可选，开始日期
+  string end_date = 5; // 可选，结束日期
+  int32 page = 6;
+  int32 page_size = 7;
 }
 
 message GetMemoirListResponse {

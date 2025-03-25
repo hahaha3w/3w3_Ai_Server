@@ -5,6 +5,7 @@ import (
 	"github.com/google/wire"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/convert"
+	"github.com/hahaha3w/3w3_Ai_Server/memoir/pkg/log"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir"
 )
 
@@ -25,8 +26,9 @@ func New(repo domain.MemoirRepo, usecase domain.MemoirUsecase) *MemoirDelivery {
 // GenerateMemoir 生成回忆录
 func (d *MemoirDelivery) GenerateMemoir(ctx context.Context, req *memoir.GenerateMemoirRequest) (res *memoir.GenerateMemoirResponse, err error) {
 	// 调用 usecase 层的 GenerateMemoir 方法
-	generatedMemoir, err := d.usecase.GenerateMemoir(ctx, int(req.UserId), req.Title, req.Content, req.Type, req.StartDate, req.EndDate)
+	generatedMemoir, err := d.usecase.GenerateMemoir(ctx, int(req.UserId), req.Style, req.Type, req.StartDate, req.EndDate)
 	if err != nil {
+		log.Log().Error(err)
 		return &memoir.GenerateMemoirResponse{
 			Success:  false,
 			Memoir:   nil,
