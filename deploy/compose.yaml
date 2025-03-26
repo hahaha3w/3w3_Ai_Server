@@ -7,6 +7,9 @@ services:
       - "4222:4222"
       - "8222:8222"
     command: -DV
+    restart: unless-stopped
+  consul:
+    image: "consul:1.15.4"
     ports:
       - "8500:8500"
   mysql:
@@ -15,11 +18,11 @@ services:
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
     image: 'redis:latest'
     ports:
       - 6379:6379
-    restart: unless-stopped
-  consul:
-    image: "consul:1.15.4"
+
     command: redis-server --requirepass 12345678
