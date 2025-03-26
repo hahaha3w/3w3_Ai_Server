@@ -5,16 +5,12 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/activity/internal/core"
 	"github.com/hahaha3w/3w3_Ai_Server/common/serversuite"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/activity/activityservice"
-	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"net"
 )
 
 func main() {
 	core.LoadLogger()
-	if err := godotenv.Load(); err != nil {
-		panic(err)
-	}
 	if err := core.LoadConfig(); err != nil {
 		panic(err)
 	}

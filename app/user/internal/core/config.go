@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/google/wire"
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
+	"log"
 	"os"
 )
 
@@ -56,6 +58,10 @@ func LoadConfig(opts ...Option) (err error) {
 	var mode string
 	for _, opt := range opts {
 		opt.apply(&o)
+	}
+	err = godotenv.Load()
+	if err != nil {
+		log.Println("no .env file found,use default")
 	}
 	viper.AutomaticEnv()
 	if mode = viper.GetString("MODE"); mode == "" {
