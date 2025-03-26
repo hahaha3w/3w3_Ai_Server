@@ -77,15 +77,6 @@ message ListConversationsResponse {
   int32 total = 2;
 }
 
-// 获取单个会话请求
-message GetConversationRequest {
-  int32 conversation_id = 1;
-  string user_id = 2; // 用于权限验证
-}
-
-message GetConversationResponse {
-  Conversation conversation = 1;
-}
 
 // 发送消息请求
 message SendMessageRequest {
@@ -114,7 +105,7 @@ message ListMessagesResponse {
 // 删除会话请求
 message DeleteConversationRequest {
   int32 conversation_id = 1;
-  string user_id = 2; // 用于权限验证
+  int32 user_id = 2; // 用于权限验证
 }
 
 message DeleteConversationResponse {
