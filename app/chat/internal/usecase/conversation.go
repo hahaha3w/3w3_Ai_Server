@@ -31,6 +31,6 @@ func (u *ChatUsecase) ListConversations(ctx context.Context, userID int, pageSiz
 	return u.repo.ListConversations(ctx, userID, pageSize, pageNumber)
 }
 
-func (u *ChatUsecase) DeleteConversation(ctx context.Context, conversationID int, userID string) error {
+func (u *ChatUsecase) DeleteConversation(ctx context.Context, conversationID int, userID int) error {
 	return u.repo.DeleteConversation(ctx, conversationID, userID)
 }

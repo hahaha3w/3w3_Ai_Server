@@ -33,7 +33,7 @@ func (c *ChatRepoWithCache) ListConversations(ctx context.Context, userID int, p
 }
 
 // DeleteConversation 从用户的会话列表中删除指定的会话
-func (c *ChatRepoWithCache) DeleteConversation(ctx context.Context, conversationID int, userID string) error {
+func (c *ChatRepoWithCache) DeleteConversation(ctx context.Context, conversationID int, userID int) error {
 	// 生成用户会话列表的key
 
 	err := c.repo.DeleteConversation(ctx, conversationID, userID)

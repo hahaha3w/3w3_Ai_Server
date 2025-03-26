@@ -36,7 +36,7 @@ func (r *ChatRepository) UpdateConversationTime(ctx context.Context, conversatio
 	return conversation, nil
 
 }
-func (r *ChatRepository) DeleteConversation(ctx context.Context, conversationID int, userID string) (err error) {
+func (r *ChatRepository) DeleteConversation(ctx context.Context, conversationID int, userID int) (err error) {
 
 	err = r.db.Where("conversation_id = ? AND user_id = ?", conversationID, userID).Delete(&domain.Conversation{}).Error
 

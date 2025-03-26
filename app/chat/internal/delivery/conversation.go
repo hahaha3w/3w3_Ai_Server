@@ -47,7 +47,7 @@ func (d *ChatDelivery) ListConversations(ctx context.Context, req *chat.ListConv
 }
 
 func (d *ChatDelivery) DeleteConversation(ctx context.Context, req *chat.DeleteConversationRequest) (res *chat.DeleteConversationResponse, err error) {
-	err = d.usecase.DeleteConversation(ctx, int(req.ConversationId), req.UserId)
+	err = d.usecase.DeleteConversation(ctx, int(req.ConversationId), int(req.UserId))
 	if err != nil {
 		return &chat.DeleteConversationResponse{
 			Success: false,
