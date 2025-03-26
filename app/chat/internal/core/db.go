@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -21,10 +20,8 @@ const (
 )
 
 var (
-	db          *gorm.DB
-	onceDb      sync.Once
-	redisClient *redis.Client
-	onceRedis   sync.Once
+	db     *gorm.DB
+	onceDb sync.Once
 )
 
 // NewDB 初始化数据库连接
