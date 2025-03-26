@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/activity/activityservice"
+	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat/chatservice"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/memoir/memoirservice"
 	"log"
 
@@ -19,6 +20,7 @@ var (
 	UserClient     userservice.Client
 	MemoirClient   memoirservice.Client
 	ActivityClient activityservice.Client
+	ChatClient     chatservice.Client
 	once           sync.Once
 	err            error
 	registryAddr   string
@@ -55,6 +57,12 @@ func initMemoirClient() {
 
 func initActivityClient() {
 	ActivityClient, err = activityservice.NewClient("activity", commonSuite)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+}
+func initChatClient() {
+	ChatClient, err = chatservice.NewClient("chat", commonSuite)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

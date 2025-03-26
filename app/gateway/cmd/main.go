@@ -8,7 +8,7 @@ import (
 func main() {
 	r := router.InitRouter()
 	rpc.InitClient()
-	err := r.Run(":8180")
+	err := r.Run(":8182")
 	if err != nil {
 		panic(err)
 	}
