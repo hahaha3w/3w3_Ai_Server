@@ -15,6 +15,7 @@ require (
 	github.com/hahaha3w/3w3_Ai_Server/rpc-gen v0.0.0-00010101000000-000000000000
 	github.com/nats-io/nats.go v1.39.1
 	github.com/spf13/viper v1.20.0
+	golang.org/x/net v0.33.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
@@ -90,7 +91,6 @@ require (
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
-	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
