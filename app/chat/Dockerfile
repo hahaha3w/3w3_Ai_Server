@@ -1,4 +1,4 @@
 FROM alpine
 WORKDIR /app
-COPY . .
+COPY ./runner .
 CMD ["./runner"]
