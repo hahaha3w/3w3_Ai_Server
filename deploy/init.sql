@@ -1,3 +1,8 @@
+USE mysql;
+create database user;
+create database chat;
+create database activity;
+create database memoir;
 CREATE TABLE user.user (
                            user_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '用户唯一标识',
                            username VARCHAR(50) NOT NULL COMMENT '用户名',
@@ -9,18 +14,6 @@ CREATE TABLE user.user (
                            theme VARCHAR(20) DEFAULT 'light' COMMENT '主题偏好'
 ) COMMENT '用户基本信息表';
 
--- AI伙伴表
-CREATE TABLE ai_partner (
-                            ai_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'AI唯一标识',
-                            user_id INT NOT NULL COMMENT '关联用户ID',
-                            name VARCHAR(50) NOT NULL COMMENT 'AI伙伴名称',
-                            avatar_url VARCHAR(255) COMMENT '头像URL',
-                            traits VARCHAR(255) NOT NULL COMMENT '性格特征数组',
-                            response_style VARCHAR(50) NOT NULL COMMENT '回应风格',
-                            created_at DATETIME NOT NULL COMMENT '创建时间',
-                            last_modified DATETIME NOT NULL COMMENT '最后修改时间'
-) COMMENT 'AI伙伴配置表';
-CREATE INDEX idx_ai_partner_user_id ON ai_partner(user_id);
 
 -- 对话容器表 (存储会话元数据)
 CREATE TABLE chat.conversation (
@@ -31,7 +24,7 @@ CREATE TABLE chat.conversation (
                                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '会话创建时间',
                                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '会话创建时间'
 ) COMMENT '对话容器表';
-CREATE INDEX idx_conversations_user_id_create_time ON chat.conversation(user_id, create_time DESC);
+CREATE INDEX idx_conversations_user_id_create_time ON chat.conversation(user_id, created_at DESC);
 
 -- 消息内容表 (存储具体聊天记录)
 CREATE TABLE chat.message (
