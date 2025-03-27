@@ -1,0 +1,41 @@
+services:
+  ai-biography-activity:
+    image: xyq777/ai-biography-activity:latest
+    volumes:
+      - ./activity.toml:/app/conf/test/conf.toml
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-chat:
+    image: xyq777/ai-biography-chat:latest
+    volumes:
+      - ./chat.toml:/app/conf/test/conf.toml
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-memoir:
+    image: xyq777/ai-biography-memoir:latest
+    volumes:
+      - ./memoir.toml:/app/conf/test/conf.toml
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-user:
+    image: xyq777/ai-biography-user:latest
+    volumes:
+      - ./user.toml:/app/conf/test/conf.toml
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-gateway:
+    image: xyq777/ai-biography-gateway:latest
+    volumes:
+      - ./gateway.toml:/app/conf/test/conf.toml
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_PASSWORD=root
