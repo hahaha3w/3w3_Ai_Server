@@ -52,14 +52,15 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, s
 
 	const DateLayout = "2006-01-02"
 
-	locEast8, err := time.LoadLocation("Asia/Shanghai")
-	if err != nil {
-		return nil, fmt.Errorf("failed to load East 8 location: %w", err)
-	}
+	//locEast8, err := time.LoadLocation("Asia/Shanghai")
+	//if err != nil {
+	//	return nil, fmt.Errorf("failed to load East 8 location: %w", err)
+	//}
+	var err error
 
 	if startDate != "" && endDate != "" {
 		startTime, err = time.Parse(time.DateOnly, startDate)
-		parsedStart, err := time.ParseInLocation(DateLayout, startDate, locEast8)
+		parsedStart, err := time.Parse(DateLayout, startDate)
 		if err != nil {
 			log.Log().Error(err)
 			return nil, errors.New("invalid startDate format, expected YYYY-MM-DD")
@@ -67,7 +68,7 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, s
 		startTime = parsedStart
 
 		endTime, err = time.Parse(time.DateOnly, endDate)
-		parsedEnd, err := time.ParseInLocation(DateLayout, endDate, locEast8)
+		parsedEnd, err := time.Parse(DateLayout, endDate)
 		if err != nil {
 			log.Log().Error(err)
 			return nil, errors.New("invalid endDate format, expected YYYY-MM-DD")

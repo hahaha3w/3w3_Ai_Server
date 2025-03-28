@@ -2,7 +2,6 @@ package llm
 
 import (
 	"context"
-	"fmt"
 	"github.com/cloudwego/eino/components/prompt"
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/schema"
@@ -14,11 +13,19 @@ const (
 	ModelNodeAnalysis = "model_analysis" // 分析模型节点
 	ModelNodeMemoir   = "model_memoir"   // 传记模型节点
 
-	PromptNodeAnalysis = "prompt_analysis" // 系统提示模板
-	PromptNodeMemoir   = "prompt_memoir"   // 传记提示模板
+	PromptNodeAnalysis    = "prompt_analysis" // 系统提示模板
+	PromptNodeMemoir      = "prompt_memoir"   // 传记提示模板
+	PromptNodeJsonConvert = "prompt_json_convert"
 
-	LambdaConverter = "lambda_converter" // 格式转换器
+	ConverterLambda1 = "converter_lambda1" // 格式转换器
+	ConverterLambda2 = "converter_lambda2"
+	ReactLambda      = "react_lambda"
 )
+
+type Content struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}
 
 func createAnalysisTemplate() prompt.ChatTemplate {
 	return prompt.FromMessages(schema.FString,
@@ -32,6 +39,7 @@ func createMemoirTemplate() prompt.ChatTemplate {
 		schema.UserMessage("问题：{questions}"),
 	)
 }
+
 func createConverterLambda() *compose.Lambda {
 	lambda := compose.InvokableLambda(func(ctx context.Context, input *schema.Message) (key map[string]any, err error) {
 		key = map[string]any{}
@@ -40,25 +48,29 @@ func createConverterLambda() *compose.Lambda {
 	})
 	return lambda
 }
-func GenerateMemoir(ctx context.Context, questions string, style string) (title string, content string, err error) {
 
-	workflow := compose.NewGraph[map[string]any, *schema.Message]()
+func GenerateMemoir(ctx context.Context, questions string, style string) (title string, body string, err error) {
+
+	workflow := compose.NewGraph[map[string]any, *Content]()
 	_ = workflow.AddChatModelNode(ModelNodeAnalysis, llm.GetOpenAIChatModel())
 	_ = workflow.AddChatModelNode(ModelNodeMemoir, llm.GetOpenAIChatModel())
 	_ = workflow.AddChatTemplateNode(PromptNodeAnalysis, createAnalysisTemplate())
 	_ = workflow.AddChatTemplateNode(PromptNodeMemoir, createMemoirTemplate())
-	_ = workflow.AddLambdaNode(LambdaConverter, createConverterLambda())
+	_ = workflow.AddLambdaNode(ConverterLambda1, createConverterLambda())
+	_ = workflow.AddLambdaNode(ConverterLambda2, createConverterLambda())
+	_ = workflow.AddLambdaNode(ReactLambda, GetReactAgentLambdaNode(ctx))
 	//edge 1
 	_ = workflow.AddEdge(compose.START, PromptNodeAnalysis)
 	_ = workflow.AddEdge(PromptNodeAnalysis, ModelNodeAnalysis)
-	_ = workflow.AddEdge(ModelNodeAnalysis, LambdaConverter)
-	_ = workflow.AddEdge(LambdaConverter, PromptNodeMemoir)
+	_ = workflow.AddEdge(ModelNodeAnalysis, ConverterLambda1)
+	_ = workflow.AddEdge(ConverterLambda1, PromptNodeMemoir)
 	//edge 2
 	_ = workflow.AddEdge(compose.START, PromptNodeMemoir)
 
 	//edgeFinal
 	_ = workflow.AddEdge(PromptNodeMemoir, ModelNodeMemoir)
-	_ = workflow.AddEdge(ModelNodeMemoir, compose.END)
+	_ = workflow.AddEdge(ModelNodeMemoir, ReactLambda)
+	_ = workflow.AddEdge(ReactLambda, compose.END)
 
 	r, err := workflow.Compile(ctx, compose.WithNodeTriggerMode(compose.AllPredecessor))
 	if err != nil {
@@ -72,6 +84,6 @@ func GenerateMemoir(ctx context.Context, questions string, style string) (title 
 		log.Log().Error(err)
 		return
 	}
-	fmt.Println("invoke result: ", ret)
-	return "test", ret.Content, nil
+
+	return ret.Title, ret.Body, nil
 }
