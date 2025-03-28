@@ -15,7 +15,7 @@ func main() {
 	}
 	r := router.InitRouter()
 	rpc.InitClient()
-	err = r.Run(viper.GetString("server.address"))
+	err = r.Run(viper.GetString("service.address"))
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

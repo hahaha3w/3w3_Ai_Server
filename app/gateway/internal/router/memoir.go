@@ -10,6 +10,7 @@ func (r *Group) SetMemoirRouter() {
 	var memoirApi api.MemoirApi
 
 	groupAuthed := group.Use(middleware.JWT())
+	groupAuthed.POST("", memoirApi.GenerateMemoir)
 	groupAuthed.GET("/list", memoirApi.GetMemoirList)
 	groupAuthed.GET("/:memoir_id", memoirApi.GetMemoirDetail)
 	group.DELETE("/:memoir_id", memoirApi.DeleteMemoir)

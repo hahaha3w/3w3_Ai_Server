@@ -19,6 +19,8 @@ func InitRouter() *gin.Engine {
 	routerGroup.SetMemoirRouter()
 	// 活动服务
 	routerGroup.SetActivityRouter()
+	//聊天服务
+	routerGroup.SetChatRouter()
 
 	return router
 }

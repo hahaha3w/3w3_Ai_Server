@@ -38,6 +38,7 @@ func InitClient() {
 		initUserClient()
 		initMemoirClient()
 		initActivityClient()
+		initChatClient()
 	})
 }
 
