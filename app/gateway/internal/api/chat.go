@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -144,17 +145,34 @@ func SendMessage(c *gin.Context) {
 func ListMessages(c *gin.Context) {
 	userID, err := domain.GetUserIdFromContext(c)
 	if err != nil {
+		fmt.Println(err)
 		domain.ErrorMsg(c, err.Error())
 		return
 	}
-
-	var req chat.ListMessagesRequest
-	if err := c.ShouldBindQuery(&req); err != nil {
-		domain.Error(c, 400, err.Error())
+	pageSize := c.DefaultQuery("page_size", "10")
+	pageNumber := c.DefaultQuery("page_number", "1")
+	convID, err := strconv.Atoi(c.Query("conversation_id"))
+	fmt.Println(convID, pageSize, pageNumber)
+	if err != nil {
+		domain.Error(c, 400, "invalid conv_id")
 		return
 	}
-
-	req.UserId = userID
+	pageS, err := strconv.Atoi(pageSize)
+	if err != nil {
+		domain.Error(c, 400, "invalid page_size")
+		return
+	}
+	pageNum, err := strconv.Atoi(pageNumber)
+	if err != nil {
+		domain.Error(c, 400, "invalid page_number")
+		return
+	}
+	req := chat.ListMessagesRequest{
+		UserId:         userID,
+		PageSize:       int32(pageS),
+		PageNumber:     int32(pageNum),
+		ConversationId: int32(convID),
+	}
 	resp, err := rpc.ChatClient.ListMessages(context.Background(), &req)
 	if err != nil {
 		domain.ErrorMsg(c, err.Error())
