@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/hahaha3w/3w3_Ai_Server/gateway/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/gateway/internal/infra/rpc"
@@ -131,4 +132,32 @@ func (api *MemoirApi) DeleteMemoir(ctx *gin.Context) {
 	}
 
 	domain.Success(ctx, resp)
+}
+func (api *MemoirApi) GenerateMemoir(ctx *gin.Context) {
+	var req memoir.GenerateMemoirRequest
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		fmt.Println(err)
+		domain.ErrorMsg(ctx, err.Error())
+		return
+	}
+	userId, err := domain.GetUserIdFromContext(ctx)
+	if err != nil {
+		fmt.Println(err)
+		domain.ErrorMsg(ctx, err.Error())
+		return
+	}
+	req.UserId = userId
+	memoirCase, err := rpc.MemoirClient.GenerateMemoir(ctx, &req)
+	if err != nil {
+		fmt.Println(err)
+		domain.ErrorMsg(ctx, err.Error())
+		return
+	}
+	if memoirCase == nil || memoirCase.Success == false {
+		domain.ErrorMsg(ctx, "memoir generation failed")
+		return
+	}
+	domain.Success(ctx, memoirCase)
+
 }
