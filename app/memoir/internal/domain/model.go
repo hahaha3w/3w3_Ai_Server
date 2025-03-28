@@ -19,7 +19,7 @@ type Memoir struct {
 
 // TableName 指定表名
 func (Memoir) TableName() string {
-	return "memoirs"
+	return "memoir"
 }
 
 // Message Reference by github.com/hahaha3w/3w3_Ai_Server/app/chat/internal/domain/model.go
