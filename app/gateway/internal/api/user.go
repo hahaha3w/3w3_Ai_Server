@@ -15,12 +15,14 @@ type UserApi struct {
 func (api *UserApi) SendCode(ctx *gin.Context) {
 	var req user.SendCodeReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err)
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
 
 	resp, err := rpc.UserClient.SendCode(ctx, &req)
 	if err != nil {
+		fmt.Println(err)
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}

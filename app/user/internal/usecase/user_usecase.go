@@ -63,7 +63,10 @@ func (u *ConcreteUserUsecase) SendCode(ctx context.Context, sendTo string) (err 
 
 	// 使用发送验证码
 	go func() {
-		_ = email.SendVerificationCode(sendTo, code)
+		err = email.SendVerificationCode(sendTo, code)
+		if err != nil {
+			log.Log().Error(err)
+		}
 	}()
 
 	return nil
@@ -71,7 +74,6 @@ func (u *ConcreteUserUsecase) SendCode(ctx context.Context, sendTo string) (err 
 
 func (u *ConcreteUserUsecase) RegisterUser(ctx context.Context, email, code, password string) (resp *user.RegisterResp, err error) {
 	var (
-		userExist *domain.User
 		userModel *domain.User
 	)
 
@@ -83,10 +85,14 @@ func (u *ConcreteUserUsecase) RegisterUser(ctx context.Context, email, code, pas
 	}
 
 	// 检查用户邮箱是否已存在
-	userExist, err = u.repo.FindUserByEmail(ctx, email)
-	if userExist.UserID != 0 {
-		log.Log().Info(errUserAlreadyExist)
-		return nil, errors.New("user already exist")
+	_, err = u.repo.FindUserByEmail(ctx, email)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Log().Error(errUserAlreadyExist)
+			return nil, errors.New("user already exist")
+		}
+		log.Log().Error(err)
+		return nil, err
 	}
 
 	// 校验验证码
