@@ -2,19 +2,22 @@ package delivery
 
 import (
 	"context"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
-	"log"
 )
 
 func (d *ChatDelivery) InitSubscribe() {
 	err := d.mq.Subscribe()
 	if err != nil {
-		log.Println(err)
+		log.Log().Error(err)
 	}
 }
 
 func (d *ChatDelivery) SendMessage(req *chat.SendMessageRequest, stream chat.ChatService_SendMessageServer) (err error) {
-	d.usecase.SendMessage(context.Background(), req, stream)
+	err = d.usecase.SendMessage(context.Background(), req, stream)
+	if err != nil {
+		log.Log().Error(err)
+	}
 	return nil
 }
 
@@ -22,6 +25,7 @@ func (d *ChatDelivery) ListMessages(ctx context.Context, req *chat.ListMessagesR
 	// 调用usecase层获取消息列表
 	messages, err := d.usecase.ListMessages(ctx, req)
 	if err != nil {
+		log.Log().Error(err)
 		return nil, err
 	}
 

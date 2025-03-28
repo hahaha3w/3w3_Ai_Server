@@ -1,14 +1,11 @@
 package mq
 
 import (
-
 	"encoding/json"
 	"time"
 
-
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
-
 )
 
 const (
@@ -17,6 +14,7 @@ const (
 )
 
 func (c *ChatMQ) PublishMessage(msg *domain.Message) (err error) {
+	log.Log().Debugln("publish message")
 	jsonMsg, err := json.Marshal(*msg)
 	if err != nil {
 		log.Log().Error(err.Error())
@@ -29,6 +27,7 @@ func (c *ChatMQ) PublishMessage(msg *domain.Message) (err error) {
 	return nil
 }
 func (c *ChatMQ) PublishConversation(conversationID int, newUpdateTime time.Time) (err error) {
+	log.Log().Debugln("publish conversation")
 	conv := &domain.Conversation{
 		ConversationID: conversationID,
 		UpdatedAt:      newUpdateTime,

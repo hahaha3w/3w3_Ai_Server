@@ -17,6 +17,7 @@ func main() {
 
 	opts := kitexInit()
 	chatDelivery := wireApp()
+	chatDelivery.InitSubscribe()
 	svr := chatservice.NewServer(chatDelivery, opts...)
 	if err := svr.Run(); err != nil {
 		panic(err)
