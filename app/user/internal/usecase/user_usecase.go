@@ -22,6 +22,11 @@ var (
 	errUserAlreadyExist = errors.New("user already exist")
 	errPasswordNotMatch = errors.New("password does not match")
 )
+
+const (
+	TimeToExpire = 60 * time.Second
+)
+
 var _ domain.UserUsecase = &ConcreteUserUsecase{}
 
 type ConcreteUserUsecase struct {
@@ -55,7 +60,7 @@ func (u *ConcreteUserUsecase) SendCode(ctx context.Context, sendTo string) (err 
 
 	// 将验证码存入 redis，10 min 后过期
 	log.Log().Info("用户 " + sendTo + " 验证码为 " + code)
-	err = u.cache.Set(ctx, "email_code:"+sendTo, code, 10*60*time.Second).Err()
+	err = u.cache.Set(ctx, "email_code:"+sendTo, code, TimeToExpire).Err()
 	if err != nil {
 		log.Log().Error(err)
 		return errors.New("internal error: " + err.Error())
