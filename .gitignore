@@ -26,3 +26,5 @@ go.work.sum
 /.idea
 *.toml
 *.log
+/deploy/k8s-manifests
+/deploy/service-manifests
