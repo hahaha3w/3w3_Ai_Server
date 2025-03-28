@@ -16,7 +16,7 @@ func main() {
 		panic(err)
 	}
 
-	core.StartMtl()
+	//core.StartMtl()
 	opts := kitexInit()
 	userDelivery := wireApp()
 	srv := userservice.NewServer(userDelivery, opts...)
