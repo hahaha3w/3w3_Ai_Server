@@ -15,5 +15,5 @@ type Activity struct {
 
 // TableName 指定表名
 func (Activity) TableName() string {
-	return "activities"
+	return "activity"
 }
