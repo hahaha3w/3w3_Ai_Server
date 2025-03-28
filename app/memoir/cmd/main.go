@@ -16,7 +16,7 @@ func main() {
 	if err := core.LoadConfig(); err != nil {
 		panic(err)
 	}
-	rpc.InitRpc()
+	rpc.InitClient()
 	core.StartMtl()
 	opts := kitexInit()
 	memoirDelivery := wireApp()

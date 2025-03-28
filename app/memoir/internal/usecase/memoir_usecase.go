@@ -137,12 +137,16 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, s
 	}
 
 	// 调用 rpc
-	_, err = rpc.ActivityClient().CreateUserActivity(ctx, &activity.CreateUserActivityReq{
+	_, err = rpc.ActivityClient.CreateUserActivity(ctx, &activity.CreateUserActivityReq{
 		UserId:      int64(userID),
 		RelationId:  int64(memoir.MemoirID),
 		Type:        "memoir",
 		Description: "AI为你创建了\"" + memoir.Title + "\"日记",
 	})
+	if err != nil {
+		log.Log().Error("Failed to create activity: %v", err)
+		return nil, err
+	}
 
 	return memoir, nil
 }
