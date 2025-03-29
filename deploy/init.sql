@@ -49,3 +49,13 @@ CREATE TABLE chat.memoir (
                                created_at TIMESTAMP comment '创建日期'
 ) COMMENT '回忆录存储表';
 CREATE INDEX idx_memoirs_user_id_start_date ON chat.memoir(user_id, created_at DESC);
+-- 用户活动表
+CREATE TABLE activity.activity (
+                                   activity_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '活动唯一标识',
+                                   user_id INT NOT NULL COMMENT '关联用户ID',
+                                   related_id INT COMMENT '关联资源ID',
+                                   type VARCHAR(20) NOT NULL DEFAULT '' COMMENT '活动类型，chat, memoir, ai',
+                                   description VARCHAR(100) NOT NULL COMMENT '活动描述',
+                                   created_at DATETIME NOT NULL COMMENT '发生时间'
+) COMMENT '用户活动日志表';
+CREATE INDEX idx_activities_user_id_timestamp ON activity.activity(user_id, created_at DESC);

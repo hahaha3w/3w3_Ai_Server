@@ -1,0 +1,67 @@
+services:
+  nats:
+    image: nats
+    container_name: nats-server
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: -DV
+    restart: always
+  consul:
+    image: "consul:1.15.4"
+    ports:
+      - "8500:8500"
+  mysql:
+    image: 'mysql:8'
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: 'redis:latest'
+    ports:
+      - 6379:6379
+
+    command: redis-server --requirepass 12345678
+  ai-biography-activity:
+    image: xyq777/ai-biography-activity:latest
+    volumes:
+      - ./activity.toml:/app/conf/test/conf.toml
+    ports:
+      - "8070:8070"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-chat:
+    image: xyq777/ai-biography-chat:latest
+    volumes:
+      - ./chat.toml:/app/conf/test/conf.toml
+    ports:
+      - "8071:8071"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-memoir:
+    image: xyq777/ai-biography-memoir:latest
+    volumes:
+      - ./memoir.toml:/app/conf/test/conf.toml
+    ports:
+      - "8072:8072"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-user:
+    image: xyq777/ai-biography-user:latest
+    volumes:
+      - ./user.toml:/app/conf/test/conf.toml
+    ports:
+      - "8073:8073"
+    environment:
+      - MYSQL_PASSWORD=root
+  ai-biography-gateway:
+    image: xyq777/ai-biography-gateway:latest
+    volumes:
+      - ./gateway.toml:/app/conf/test/conf.toml
+    ports:
+      - "8888:8888"
+    environment:
+      - MYSQL_PASSWORD=root
