@@ -28,3 +28,4 @@ go.work.sum
 *.log
 /deploy/k8s-manifests
 /deploy/service-manifests
+**/.DS_Store
