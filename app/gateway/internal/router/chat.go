@@ -16,8 +16,8 @@ func (g *Group) SetChatRouter() {
 		// 删除会话
 		chatGroup.DELETE("/conversation", api.DeleteConversation)
 		// 发送消息
-		chatGroup.POST("/message", api.SendMessage)
+		chatGroup.GET("/message", api.SendMessage)
 		// 获取消息列表
-		chatGroup.GET("/message", api.ListMessages)
+		chatGroup.GET("/message/list", api.ListMessages)
 	}
 }

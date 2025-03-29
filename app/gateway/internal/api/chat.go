@@ -113,14 +113,32 @@ func SendMessage(c *gin.Context) {
 		return
 	}
 
-	var req chat.SendMessageRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		domain.Error(c, 400, err.Error())
+	req := &chat.SendMessageRequest{}
+	//  ConversationId int32  `protobuf:"varint,1,opt,name=conversation_id,json=conversationId,proto3" json:"conversation_id,omitempty"`
+	//    UserId         int32  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	//    Content        string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	//}
+	//
+	//发送消息请求
+	conversationID := c.Query("conversation_id")
+	if conversationID == "" {
+		domain.Error(c, 400, "conversation_id is required")
 		return
 	}
-
+	convID, err := strconv.Atoi(conversationID)
+	if err != nil {
+		domain.Error(c, 400, "invalid conversation_id")
+		return
+	}
+	content := c.Query("content")
+	if content == "" {
+		domain.Error(c, 400, "content is required")
+		return
+	}
+	req.Content = content
+	req.ConversationId = int32(convID)
 	req.UserId = userID
-	stream, err := rpc.ChatClient.SendMessage(context.Background(), &req)
+	stream, err := rpc.ChatClient.SendMessage(context.Background(), req)
 	if err != nil {
 		domain.ErrorMsg(c, err.Error())
 		return
