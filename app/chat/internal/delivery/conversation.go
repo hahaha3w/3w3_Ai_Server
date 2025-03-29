@@ -18,7 +18,8 @@ func (d *ChatDelivery) CreateConversation(ctx context.Context, req *chat.CreateC
 			UserId:         int32(conversation.UserID),
 			SessionTitle:   conversation.SessionTitle,
 			Mode:           conversation.Mode,
-			CreateTime:     conversation.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			CreatedAt:      conversation.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt:      conversation.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 		},
 	}, nil
 }
@@ -36,7 +37,8 @@ func (d *ChatDelivery) ListConversations(ctx context.Context, req *chat.ListConv
 			UserId:         int32(conv.UserID),
 			SessionTitle:   conv.SessionTitle,
 			Mode:           conv.Mode,
-			CreateTime:     conv.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			CreatedAt:      conv.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt:      conv.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 		})
 	}
 

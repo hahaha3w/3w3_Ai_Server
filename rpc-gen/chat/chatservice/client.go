@@ -6,11 +6,11 @@ import (
 	"context"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
-	"github.com/cloudwego/kitex/client/callopt/streamcall"
-	"github.com/cloudwego/kitex/client/streamclient"
 	"github.com/cloudwego/kitex/pkg/streaming"
 	"github.com/cloudwego/kitex/transport"
-	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
+	chat "github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
+	"github.com/cloudwego/kitex/client/streamclient"
+	"github.com/cloudwego/kitex/client/callopt/streamcall"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

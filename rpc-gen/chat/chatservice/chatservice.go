@@ -9,7 +9,7 @@ import (
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	"github.com/cloudwego/kitex/pkg/streaming"
-	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
+	chat "github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 	proto "google.golang.org/protobuf/proto"
 )
 

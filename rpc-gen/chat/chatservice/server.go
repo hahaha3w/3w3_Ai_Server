@@ -3,7 +3,7 @@ package chatservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
+	chat "github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 )
 
 // NewServer creates a server.Server with the given handler and options.

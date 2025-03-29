@@ -39,6 +39,11 @@ func (x *Conversation) FastRead(buf []byte, _type int8, number int32) (offset in
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -73,7 +78,12 @@ func (x *Conversation) fastReadField4(buf []byte, _type int8) (offset int, err e
 }
 
 func (x *Conversation) fastReadField5(buf []byte, _type int8) (offset int, err error) {
-	x.CreateTime, offset, err = fastpb.ReadString(buf, _type)
+	x.UpdatedAt, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *Conversation) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.CreatedAt, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -551,6 +561,7 @@ func (x *Conversation) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
 	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
 	return offset
 }
 
@@ -587,10 +598,18 @@ func (x *Conversation) fastWriteField4(buf []byte) (offset int) {
 }
 
 func (x *Conversation) fastWriteField5(buf []byte) (offset int) {
-	if x.CreateTime == "" {
+	if x.UpdatedAt == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 5, x.GetCreateTime())
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetUpdatedAt())
+	return offset
+}
+
+func (x *Conversation) fastWriteField6(buf []byte) (offset int) {
+	if x.CreatedAt == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetCreatedAt())
 	return offset
 }
 
@@ -936,6 +955,7 @@ func (x *Conversation) Size() (n int) {
 	n += x.sizeField3()
 	n += x.sizeField4()
 	n += x.sizeField5()
+	n += x.sizeField6()
 	return n
 }
 
@@ -972,10 +992,18 @@ func (x *Conversation) sizeField4() (n int) {
 }
 
 func (x *Conversation) sizeField5() (n int) {
-	if x.CreateTime == "" {
+	if x.UpdatedAt == "" {
 		return n
 	}
-	n += fastpb.SizeString(5, x.GetCreateTime())
+	n += fastpb.SizeString(5, x.GetUpdatedAt())
+	return n
+}
+
+func (x *Conversation) sizeField6() (n int) {
+	if x.CreatedAt == "" {
+		return n
+	}
+	n += fastpb.SizeString(6, x.GetCreatedAt())
 	return n
 }
 
@@ -1317,7 +1345,8 @@ var fieldIDToName_Conversation = map[int32]string{
 	2: "UserId",
 	3: "SessionTitle",
 	4: "Mode",
-	5: "CreateTime",
+	5: "UpdatedAt",
+	6: "CreatedAt",
 }
 
 var fieldIDToName_Message = map[int32]string{

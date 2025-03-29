@@ -12,7 +12,7 @@ type Conversation struct {
 	SessionTitle   string    `gorm:"type:varchar(255);default:'';column:session_title" json:"session_title"`
 	Mode           string    `gorm:"type:varchar(20);default:'';column:mode" json:"mode"`
 	UpdatedAt      time.Time `gorm:"column:updated_at" json:"updated_at"`
-	CreatedAt      time.Time `gorm:"column:create_at" json:"created_at"`
+	CreatedAt      time.Time `gorm:"column:created_at" json:"created_at"`
 }
 
 // Message 消息内容表
