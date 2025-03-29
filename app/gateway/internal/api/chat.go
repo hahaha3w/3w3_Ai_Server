@@ -151,6 +151,9 @@ func SendMessage(c *gin.Context) {
 
 	c.Stream(func(w io.Writer) bool {
 		resp, err := stream.Recv()
+		if err == io.EOF {
+			return true
+		}
 		if err != nil {
 			return false
 		}
