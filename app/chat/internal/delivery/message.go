@@ -6,13 +6,6 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 )
 
-func (d *ChatDelivery) InitSubscribe() {
-	err := d.mq.Subscribe(d.usecase.CreateConversation)
-	if err != nil {
-		log.Log().Error(err)
-	}
-}
-
 func (d *ChatDelivery) SendMessage(req *chat.SendMessageRequest, stream chat.ChatService_SendMessageServer) (err error) {
 	err = d.usecase.SendMessage(context.Background(), req, stream)
 	if err != nil {

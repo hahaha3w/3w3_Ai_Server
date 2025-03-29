@@ -22,12 +22,8 @@ func NewChatUsecase(repo domain.Repository, mq domain.MessageQueue) *ChatUsecase
 }
 func (u *ChatUsecase) ListMessages(ctx context.Context, req *chat.ListMessagesRequest) ([]*domain.Message, error) {
 
-	// 计算分页范围
-	start := (req.PageNumber - 1) * req.PageSize
-	end := start + req.PageSize - 1
-
 	// 从Redis缓存中获取消息列表
-	result, err := u.repo.ListMessages(ctx, int(req.ConversationId), int(start), int(end))
+	result, err := u.repo.ListMessages(ctx, int(req.ConversationId), int(req.PageNumber), int(req.PageSize))
 	if err != nil {
 		log.Log().Error(err)
 		return nil, fmt.Errorf("failed to get messages from cache: %v", err)

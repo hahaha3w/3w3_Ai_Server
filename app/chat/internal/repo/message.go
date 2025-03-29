@@ -33,7 +33,7 @@ func (r *ChatRepository) ListMessage(ctx context.Context, conversationID, start,
 	if err := r.db.Where("conversation_id = ?", conversationID).
 		Order("send_time DESC").
 		Offset(start).
-		Limit(end).
+		Limit(end - start + 1).
 		Find(&messages).Error; err != nil {
 		return nil, err
 	}
