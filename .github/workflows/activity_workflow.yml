@@ -33,7 +33,11 @@ jobs:
       - name: Build
         env:
           CGO_ENABLED: 0
-        run: sh ./scripts/build.sh
+        run: |
+          cd ./scripts
+          sh ./build.sh
+          cd ..
+
 
       - name: Build the Docker image
         run: |
