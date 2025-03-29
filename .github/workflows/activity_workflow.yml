@@ -2,7 +2,7 @@ name: activity_workflow.yml
 on:
   push:
     tags:
-      - activity**
+      - activity_v**
   workflow_dispatch:
 
 
