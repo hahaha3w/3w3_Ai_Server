@@ -7,7 +7,7 @@ import (
 )
 
 func (d *ChatDelivery) InitSubscribe() {
-	err := d.mq.Subscribe()
+	err := d.mq.Subscribe(d.usecase.CreateConversation)
 	if err != nil {
 		log.Log().Error(err)
 	}

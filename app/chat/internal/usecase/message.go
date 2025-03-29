@@ -47,11 +47,7 @@ func (u *ChatUsecase) SendMessage(ctx context.Context, req *chat.SendMessageRequ
 		log.Log().Error(err)
 		return err
 	}
-	err = u.mq.PublishMessage(userMessage)
-	if err != nil {
-		log.Log().Error(err)
-		return err
-	}
+
 	cm := llm.GetOpenAIChatModel()
 	m := llm.CreateMessagesFromTemplate(req.GetContent())
 	sr, err := cm.Stream(context.Background(), m)
@@ -83,6 +79,7 @@ func (u *ChatUsecase) SendMessage(ctx context.Context, req *chat.SendMessageRequ
 		}
 		i++
 	}
+
 	messageModel := domain.Message{
 		Content:        wholeContent,
 		SenderType:     chat.SenderType_SENDER_AI,
@@ -94,10 +91,6 @@ func (u *ChatUsecase) SendMessage(ctx context.Context, req *chat.SendMessageRequ
 		log.Log().Error(err)
 		return err
 
-	}
-	err = u.mq.PublishMessage(&messageModel)
-	if err != nil {
-		return err
 	}
 	return nil
 }

@@ -20,10 +20,10 @@ import (
 func wireApp() *delivery.ChatDelivery {
 	context := core.NewContext()
 	db := core.NewDB(context)
-	chatRepository := repo.NewChatRepository(db)
-	client := core.NewRedis(context)
 	conn := core.NewMQ()
-	chatMQ := mq.NewChatMQ(conn, chatRepository)
+	chatMQ := mq.NewChatMQ(conn)
+	chatRepository := repo.NewChatRepository(db, chatMQ)
+	client := core.NewRedis(context)
 	chatRepoWithCache := cache.NewChatRepoWithCache(chatRepository, client, chatMQ)
 	chatUsecase := usecase.NewChatUsecase(chatRepoWithCache, chatMQ)
 	chatDelivery := delivery.NewChatDelivery(chatUsecase, chatMQ)

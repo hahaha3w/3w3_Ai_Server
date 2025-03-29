@@ -2,6 +2,7 @@ package repo
 
 import (
 	"github.com/google/wire"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
 	"gorm.io/gorm"
 )
 
@@ -9,8 +10,12 @@ var ProviderSet = wire.NewSet(NewChatRepository)
 
 type ChatRepository struct {
 	db *gorm.DB
+	mq domain.MessageQueue
 }
 
-func NewChatRepository(db *gorm.DB) *ChatRepository {
-	return &ChatRepository{db: db}
+func NewChatRepository(db *gorm.DB, mq domain.MessageQueue) *ChatRepository {
+	return &ChatRepository{
+		db: db,
+		mq: mq,
+	}
 }

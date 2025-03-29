@@ -10,24 +10,7 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-func (c *ChatMQ) Subscribe() (err error) {
-	msgSub, err := c.mq.Subscribe(MessageRecordPublish, func(msg *nats.Msg) {
-		log.Log().Info("consume scribe message")
-		message := &domain.Message{}
-		err = json.Unmarshal(msg.Data, message)
-		log.Log().Info(message)
-		if err != nil {
-			log.Log().Error(err.Error())
-		}
-		_, err = c.repo.StoreChatRecord(context.Background(), message)
-		if err != nil {
-			log.Log().Error(err.Error())
-		}
-	})
-	if err != nil {
-		log.Log().Error(err.Error())
-		return err
-	}
+func (c *ChatMQ) Subscribe(RepoCallback func(ctx context.Context, conv *domain.Conversation) (*domain.Conversation, error)) (err error) {
 
 	convSub, err := c.mq.Subscribe(ConversationRecordPublish, func(msg *nats.Msg) {
 		log.Log().Info("consume scribe conversation")
@@ -37,7 +20,7 @@ func (c *ChatMQ) Subscribe() (err error) {
 		if err != nil {
 			log.Log().Error(err.Error())
 		}
-		_, err = c.repo.UpdateConversationTime(context.Background(), conv)
+		_, err = RepoCallback(context.Background(), conv)
 		if err != nil {
 			log.Log().Error(err.Error())
 		}
@@ -48,7 +31,6 @@ func (c *ChatMQ) Subscribe() (err error) {
 	}
 
 	server.RegisterShutdownHook(func() {
-		msgSub.Unsubscribe()
 		convSub.Unsubscribe()
 		c.mq.Close()
 	})

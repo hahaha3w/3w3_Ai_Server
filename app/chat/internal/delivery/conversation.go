@@ -2,12 +2,27 @@ package delivery
 
 import (
 	"context"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
+	"time"
 
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 )
 
+func (d *ChatDelivery) InitSubscribe() {
+	err := d.mq.Subscribe(d.usecase.UpdateConversation)
+	if err != nil {
+		log.Log().Error(err)
+	}
+}
 func (d *ChatDelivery) CreateConversation(ctx context.Context, req *chat.CreateConversationRequest) (res *chat.CreateConversationResponse, err error) {
-	conversation, err := d.usecase.CreateConversation(ctx, int(req.UserId), req.SessionTitle, req.Mode)
+	conversation := &domain.Conversation{
+		UserID:       int(req.UserId),
+		SessionTitle: req.SessionTitle,
+		Mode:         req.Mode,
+		CreatedAt:    time.Now(),
+	}
+	conversation, err = d.usecase.CreateConversation(ctx, conversation)
 	if err != nil {
 		return nil, err
 	}
