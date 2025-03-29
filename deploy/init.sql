@@ -37,7 +37,7 @@ CREATE TABLE chat.message (
 ) COMMENT '消息内容表';
 CREATE INDEX idx_messages_conversation_id_send_time ON chat.message(conversation_id, send_time DESC);
 
-CREATE TABLE memoir.memoir (
+CREATE TABLE chat.memoir (
                                memoir_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '回忆录唯一标识',
                                user_id INT NOT NULL COMMENT '关联用户ID',
                                title VARCHAR(255) NOT NULL COMMENT '回忆录标题',
@@ -48,4 +48,4 @@ CREATE TABLE memoir.memoir (
                                content TEXT NOT NULL COMMENT '回忆录内容文本',
                                created_at TIMESTAMP comment '创建日期'
 ) COMMENT '回忆录存储表';
-CREATE INDEX idx_memoirs_user_id_start_date ON memoir.memoir(user_id, created_at DESC);
+CREATE INDEX idx_memoirs_user_id_start_date ON chat.memoir(user_id, created_at DESC);
