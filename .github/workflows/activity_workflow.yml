@@ -14,6 +14,12 @@ jobs:
       run:
         working-directory: ./app/activity
     steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -45,11 +51,7 @@ jobs:
           --tag ${{ steps.image.outputs.VERSION }} \
           --tag ${{ steps.image.outputs.LATEST }}
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
 
       - name: Push
         run: |
