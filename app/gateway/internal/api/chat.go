@@ -199,6 +199,14 @@ func ListMessages(c *gin.Context) {
 		domain.ErrorMsg(c, err.Error())
 		return
 	}
+	if resp.Total == 0 {
+		resp := &chat.ListMessagesResponse{
+			Messages: []*chat.Message{},
+			Total:    0,
+		}
 
+		domain.Success(c, resp)
+		return
+	}
 	domain.Success(c, resp)
 }

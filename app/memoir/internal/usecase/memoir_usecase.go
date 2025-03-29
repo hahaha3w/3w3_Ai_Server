@@ -166,7 +166,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 		PageSize  int32
 	}{
 		Type:      memoirType,
-		Style:     "style",
+		Style:     "",
 		StartDate: normalizeDate(startDate),
 		EndDate:   normalizeDate(endDate),
 		Page:      page,
