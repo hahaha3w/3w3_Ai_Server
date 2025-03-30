@@ -32,8 +32,14 @@ func CreateConversation(c *gin.Context) {
 		domain.ErrorMsg(c, err.Error())
 		return
 	}
-
-	domain.Success(c, resp)
+	vo := domain.ConversationResp{
+		ConversationId: resp.Conversation.ConversationId,
+		UserId:         resp.Conversation.UserId,
+		SessionTitle:   resp.Conversation.SessionTitle,
+		Mode:           resp.Conversation.Mode,
+		CreateTime:     resp.Conversation.CreatedAt,
+	}
+	domain.Success(c, vo)
 }
 
 // ListConversations 获取会话列表
@@ -68,8 +74,24 @@ func ListConversations(c *gin.Context) {
 		domain.ErrorMsg(c, err.Error())
 		return
 	}
+	conversations := make([]*domain.ConversationResp, 0)
+	for _, v := range resp.Conversations {
+		conversation := &domain.ConversationResp{
+			ConversationId: v.ConversationId,
+			UserId:         v.UserId,
+			SessionTitle:   v.SessionTitle,
+			Mode:           v.Mode,
+			CreateTime:     v.CreatedAt,
+		}
+		conversations = append(conversations, conversation)
+	}
 
-	domain.Success(c, resp)
+	vo := domain.ListConversationsResp{
+		Conversations: conversations,
+		Total:         resp.Total,
+	}
+
+	domain.Success(c, vo)
 }
 
 // DeleteConversation 删除会话
@@ -80,7 +102,7 @@ func DeleteConversation(c *gin.Context) {
 		return
 	}
 
-	conversationID := c.Query("id")
+	conversationID := c.Query("conversation_id")
 	if conversationID == "" {
 		domain.Error(c, 400, "conversation_id is required")
 		return
@@ -101,8 +123,11 @@ func DeleteConversation(c *gin.Context) {
 		domain.ErrorMsg(c, err.Error())
 		return
 	}
+	vo := domain.DeleteMessageResp{
+		Success: resp.Success,
+	}
 
-	domain.Success(c, resp)
+	domain.Success(c, vo)
 }
 
 // SendMessage 发送消息
@@ -199,14 +224,21 @@ func ListMessages(c *gin.Context) {
 		domain.ErrorMsg(c, err.Error())
 		return
 	}
-	if resp.Total == 0 {
-		resp := &chat.ListMessagesResponse{
-			Messages: []*chat.Message{},
-			Total:    0,
+	messages := make([]*domain.MessageResp, 0)
+	for _, m := range resp.Messages {
+		message := &domain.MessageResp{
+			MessageId:      m.MessageId,
+			ConversationId: m.ConversationId,
+			UserId:         m.UserId,
+			Content:        m.Content,
+			SenderType:     m.SenderType,
+			SendTime:       m.SendTime,
 		}
-
-		domain.Success(c, resp)
-		return
+		messages = append(messages, message)
 	}
-	domain.Success(c, resp)
+	vo := domain.ListMessagesResp{
+		Messages: messages,
+		Total:    resp.Total,
+	}
+	domain.Success(c, vo)
 }

@@ -60,9 +60,27 @@ func (api *MemoirApi) GetMemoirList(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	memoirs:=make([]domain.Memoir,0)
+	for _,m:=range resp.Memoirs{
+		
+		memoirs=append(memoirs,domain.Memoir{
+			Id: m.Id,
+			UserId: m.UserId,
+			Title: m.Title,
+			Content: m.Content,
+			Type: m.Type,
+			Style: m.Style,
+			EndDate: m.EndDate,
+			CreatedAt: m.CreatedAt,
+		})
+	}
+	vo:=domain.ListMemoirResp{
+		Memoirs: memoirs,
+		Total: resp.Total,
+	}
 
 	// 返回成功响应
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
 
 // GetMemoirDetail 获取回忆录详情
@@ -95,9 +113,20 @@ func (api *MemoirApi) GetMemoirDetail(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	vo:=domain.Memoir{
+		Id: resp.Memoir.Id,
+		UserId: resp.Memoir.UserId,
+		Title: resp.Memoir.Title,
+		Content: resp.Memoir.Content,
+		Type: resp.Memoir.Type,
+		Style: resp.Memoir.Style,
+		EndDate: resp.Memoir.EndDate,
+		CreatedAt: resp.Memoir.CreatedAt,
+
+	}
 
 	// 返回成功响应
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
 
 // DeleteMemoir 删除回忆录
@@ -158,6 +187,19 @@ func (api *MemoirApi) GenerateMemoir(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, "memoir generation failed")
 		return
 	}
-	domain.Success(ctx, memoirCase)
+	vo:=domain.GenerateMemoirResp{
+		Success:  memoirCase.Success,
+		Memoir: domain.Memoir{
+			Id: memoirCase.Memoir.Id,
+			UserId: memoirCase.Memoir.UserId,
+			Title: memoirCase.Memoir.Title,
+			Content: memoirCase.Memoir.Content,
+			Type: memoirCase.Memoir.Type,
+			Style: memoirCase.Memoir.Style,
+			EndDate: memoirCase.Memoir.EndDate,
+			CreatedAt: memoirCase.Memoir.CreatedAt,
+		},
+	}
+	domain.Success(ctx, vo)
 
 }

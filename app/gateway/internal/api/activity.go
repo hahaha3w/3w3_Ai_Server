@@ -40,7 +40,23 @@ func (api *ActivityApi) GetUserActivities(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
-
+	activities := make([]*domain.ActivityResp, 0)
+	for _, a := range resp.Activities {
+		activities = append(activities, &domain.ActivityResp{
+			ActivityID:  a.ActivityId,
+			UserID:      a.UserId,
+			RelationID:  a.RelationId,
+			Type:        a.Type,
+			Description: a.Description,
+			CreatedAt:   a.CreatedAt,
+		})
+	}
+	vo := domain.ActivityListResp{
+		UseDay:      resp.UseDay,
+		ChatCount:   resp.ChatCount,
+		MemoirCount: resp.MemoirCount,
+		Activities:  activities,
+	}
 	// 返回成功响应
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }

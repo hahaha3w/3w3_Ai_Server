@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var EmptyData = struct{}{}
+
 type Resp struct {
 	Msg  string `json:"msg"`
 	Code int    `json:"code"`
@@ -29,7 +31,7 @@ func Error(c *gin.Context, code int, msg string) {
 	resp := Resp{
 		Msg:  msg,
 		Code: code,
-		Data: nil,
+		Data: EmptyData,
 	}
 	c.JSON(http.StatusInternalServerError, resp)
 	c.Abort()
@@ -40,7 +42,7 @@ func ErrorMsg(c *gin.Context, msg string) {
 	resp := Resp{
 		Msg:  msg,
 		Code: 500,
-		Data: nil,
+		Data: EmptyData,
 	}
 	c.JSON(http.StatusInternalServerError, resp)
 	c.Abort()

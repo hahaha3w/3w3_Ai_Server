@@ -42,8 +42,20 @@ func (api *UserApi) Login(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	vo := domain.UserLoginResp{
+		UserId:      resp.UserId,
+		Username:    resp.Username,
+		Email:       resp.Email,
+		Avatar:      resp.Avatar,
+		Bio:         resp.Bio,
+		Theme:       resp.Theme,
+		ChatCount:   resp.ChatCount,
+		MemoirCount: resp.MemoirCount,
+		UseDay:      resp.UseDay,
+		Token:       resp.Token,
+	}
 
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
 
 // Register 用户注册
@@ -58,8 +70,18 @@ func (api *UserApi) Register(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	vo := domain.UserRegisterResp{
+		UserId:   resp.UserId,
+		Username: resp.Username,
+		Email:    resp.Email,
+		Avatar:   resp.Avatar,
+		Bio:      resp.Bio,
+		Theme:    resp.Theme,
+		UseDay:   resp.UseDay,
+		Token:    resp.Token,
+	}
 
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
 
 // ChangePassword 修改密码
@@ -83,8 +105,12 @@ func (api *UserApi) ChangePassword(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	vo := domain.UserChangePasswordResp{
+		Success: resp.Success,
+		Message: resp.Message,
+	}
 
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
 
 // UpdateUserInfo 更新用户信息
@@ -108,8 +134,11 @@ func (api *UserApi) UpdateUserInfo(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
-
-	domain.Success(ctx, resp)
+	vo := domain.UserUpdateResp{
+		Success: resp.Success,
+		Message: resp.Message,
+	}
+	domain.Success(ctx, vo)
 }
 
 // GetUserInfo 获取用户信息
@@ -131,8 +160,19 @@ func (api *UserApi) GetUserInfo(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	vo := domain.UserGetInfoResp{
+		UserId:      resp.UserId,
+		Username:    resp.Username,
+		Email:       resp.Email,
+		Avatar:      resp.Avatar,
+		Bio:         resp.Bio,
+		Theme:       resp.Theme,
+		ChatCount:   resp.ChatCount,
+		MemoirCount: resp.MemoirCount,
+		UseDay:      resp.UseDay,
+	}
 
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
 
 // DeleteUser 删除用户
@@ -152,6 +192,10 @@ func (api *UserApi) DeleteUser(ctx *gin.Context) {
 		domain.ErrorMsg(ctx, err.Error())
 		return
 	}
+	vo := domain.UserLogoutResp{
+		Success: resp.Success,
+		Message: resp.Message,
+	}
 
-	domain.Success(ctx, resp)
+	domain.Success(ctx, vo)
 }
