@@ -23,14 +23,14 @@ func DomainActivityToRPCGenActivity(domainActivity *domain.Activity) *activity.A
 	}
 }
 
-func DomainActivitiesToRPCGenActivities(domainActivities *[]domain.Activity) []*activity.Activity {
+func DomainActivitiesToRPCGenActivities(domainActivities []*domain.Activity) []*activity.Activity {
 	if domainActivities == nil {
 		return nil
 	}
 
 	var rpcGenActivities []*activity.Activity
-	for _, domainActivity := range *domainActivities {
-		rpcGenActivities = append(rpcGenActivities, DomainActivityToRPCGenActivity(&domainActivity))
+	for _, domainActivity := range domainActivities {
+		rpcGenActivities = append(rpcGenActivities, DomainActivityToRPCGenActivity(domainActivity))
 	}
 
 	return rpcGenActivities

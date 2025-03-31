@@ -111,7 +111,19 @@ func UpdateUserCount(userUpdateCount *domain.UpdateUserCount, cache *redis.Clien
 	if incrBy.Err() != nil {
 		return nil, errors.New("failed to update memoir count in Redis")
 	}
-	userCount.MemoirCount = incrBy.Val()
+	// 检查增加后的值是否小于0
+	if incrBy.Val() < 0 {
+		// 如果小于0，将其设置为0
+		setCmd := cache.HSet(context.Background(), key, "memoir_count", 0)
+		if setCmd.Err() != nil {
+			return nil, errors.New("failed to reset memoir count to 0 in Redis")
+		}
+		// 返回0作为当前值
+		userCount.MemoirCount = 0
+	} else {
+		// 正常情况下返回增加后的值
+		userCount.MemoirCount = incrBy.Val()
+	}
 
 	// 判断是否超过一天并更新最新时间
 	lastUpdated, err := cache.HGet(context.Background(), key, "last_updated").Result()
