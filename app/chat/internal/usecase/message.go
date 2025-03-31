@@ -23,7 +23,7 @@ func NewChatUsecase(repo domain.Repository, mq domain.MessageQueue) *ChatUsecase
 func (u *ChatUsecase) ListMessages(ctx context.Context, req *chat.ListMessagesRequest) ([]*domain.Message, error) {
 
 	// 从Redis缓存中获取消息列表
-	result, err := u.repo.ListMessages(ctx, int(req.ConversationId), int(req.PageNumber), int(req.PageSize))
+	result, err := u.repo.ListMessages(ctx, int(req.ConversationId), int(req.UserId), int(req.PageNumber), int(req.PageSize))
 	if err != nil {
 		log.Log().Error(err)
 		return nil, fmt.Errorf("failed to get messages from cache: %v", err)
@@ -33,6 +33,7 @@ func (u *ChatUsecase) ListMessages(ctx context.Context, req *chat.ListMessagesRe
 }
 func (u *ChatUsecase) SendMessage(ctx context.Context, req *chat.SendMessageRequest, stream chat.ChatService_SendMessageServer) (err error) {
 	userMessage := &domain.Message{
+		UserID:         int(req.UserId),
 		ConversationID: int(req.GetConversationId()),
 		Content:        req.GetContent(),
 		SenderType:     chat.SenderType_SENDER_USER,
@@ -75,6 +76,7 @@ func (u *ChatUsecase) SendMessage(ctx context.Context, req *chat.SendMessageRequ
 	}
 
 	messageModel := domain.Message{
+		UserID:         int(req.UserId),
 		Content:        wholeContent,
 		SenderType:     chat.SenderType_SENDER_AI,
 		SendTime:       time.Now(),

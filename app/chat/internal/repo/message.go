@@ -27,10 +27,10 @@ func (r *ChatRepository) StoreMessageRecord(ctx context.Context, m *domain.Messa
 	}
 	return m.MessageID, nil
 }
-func (r *ChatRepository) ListMessages(ctx context.Context, conversationID, start, end int) ([]*domain.Message, error) {
+func (r *ChatRepository) ListMessages(ctx context.Context, conversationID, userID, start, end int) ([]*domain.Message, error) {
 	var messages []*domain.Message
 
-	if err := r.db.Where("conversation_id = ?", conversationID).
+	if err := r.db.Where("conversation_id = ? AND user_id = ?", conversationID, userID).
 		Order("send_time DESC").
 		Offset(start).
 		Limit(end - start + 1).
