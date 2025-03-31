@@ -10,7 +10,7 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
 
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
-	"github.com/hahaha3w/3w3_Ai_Server/common/llm"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/llm"
 	"github.com/hahaha3w/3w3_Ai_Server/rpc-gen/chat"
 )
 
@@ -44,9 +44,7 @@ func (u *ChatUsecase) SendMessage(ctx context.Context, req *chat.SendMessageRequ
 		return err
 	}
 
-	cm := llm.GetOpenAIChatModel()
-	m := llm.CreateMessagesFromTemplate(req.GetContent())
-	sr, err := cm.Stream(context.Background(), m)
+	sr, err := llm.Chat(ctx, req.GetContent(), req.Mode)
 	if err != nil {
 		log.Log().Error(err)
 		return

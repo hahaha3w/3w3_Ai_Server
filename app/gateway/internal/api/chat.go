@@ -37,7 +37,8 @@ func CreateConversation(c *gin.Context) {
 		UserId:         resp.Conversation.UserId,
 		SessionTitle:   resp.Conversation.SessionTitle,
 		Mode:           resp.Conversation.Mode,
-		CreateTime:     resp.Conversation.CreatedAt,
+		CreatedAt:      resp.Conversation.CreatedAt,
+		UpdatedAt:      resp.Conversation.UpdatedAt,
 	}
 	domain.Success(c, vo)
 }
@@ -81,7 +82,8 @@ func ListConversations(c *gin.Context) {
 			UserId:         v.UserId,
 			SessionTitle:   v.SessionTitle,
 			Mode:           v.Mode,
-			CreateTime:     v.CreatedAt,
+			CreatedAt:      v.CreatedAt,
+			UpdatedAt:      v.UpdatedAt,
 		}
 		conversations = append(conversations, conversation)
 	}
@@ -160,9 +162,15 @@ func SendMessage(c *gin.Context) {
 		domain.Error(c, 400, "content is required")
 		return
 	}
+	mood := c.Query("mode")
+	if mood == "" {
+		domain.Error(c, 400, "mode is required")
+		return
+	}
 	req.Content = content
 	req.ConversationId = int32(convID)
 	req.UserId = userID
+	req.Mode = mood
 	stream, err := rpc.ChatClient.SendMessage(context.Background(), req)
 	if err != nil {
 		domain.ErrorMsg(c, err.Error())
