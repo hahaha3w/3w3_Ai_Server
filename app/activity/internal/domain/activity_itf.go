@@ -7,7 +7,7 @@ import (
 
 type ActivityRepo interface {
 	CreateUserActivity(ctx context.Context, activity *Activity) (err error)
-	GetUserActivity(ctx context.Context, userId int64, page, pageSize int32) (activity *[]Activity, count int32, err error)
+	GetUserActivity(ctx context.Context, userId int64, page, pageSize int32) (activity []*Activity, count int32, err error)
 }
 
 type ActivityUsecase interface {

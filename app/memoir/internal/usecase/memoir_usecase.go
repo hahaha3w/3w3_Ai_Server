@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"crypto/md5"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -153,71 +152,78 @@ func (c ConcreteMemoirUsecase) GenerateMemoir(ctx context.Context, userID int, s
 }
 
 // GetMemoirList 获取回忆录列表
-func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, int32, error) {
-	// 规范化缓存键参数
-
-	//TODO 处理style
-	params := struct {
-		Type      string
-		Style     string
-		StartDate string
-		EndDate   string
-		Page      int32
-		PageSize  int32
-	}{
-		Type:      memoirType,
-		Style:     "",
-		StartDate: normalizeDate(startDate),
-		EndDate:   normalizeDate(endDate),
-		Page:      page,
-		PageSize:  pageSize,
-	}
-
-	cacheKey := fmt.Sprintf("%s:%v",
-		fmt.Sprintf(CacheKeyMemoirListPrefix, userID),
-		md5.Sum([]byte(fmt.Sprintf("%+v", params))), // 使用结构体哈希作为唯一标识
-	)
-
-	// 尝试获取完整缓存
-	var cached CachedList
-	cachedData, err := c.cache.Get(ctx, cacheKey).Bytes()
-	if err == nil {
-		if err := json.Unmarshal(cachedData, &cached); err == nil {
-			if len(cached.Data) > 0 || cached.Total > 0 {
-				return cached.Data, cached.Total, nil
-			}
-			return []*domain.Memoir{}, 0, nil
-		}
-	}
+func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*domain.Memoir, bool, error) {
+	//// 规范化缓存键参数
+	//
+	////TODO 处理style
+	//params := struct {
+	//	Type      string
+	//	Style     string
+	//	StartDate string
+	//	EndDate   string
+	//	Page      int32
+	//	PageSize  int32
+	//}{
+	//	Type:      memoirType,
+	//	Style:     "",
+	//	StartDate: normalizeDate(startDate),
+	//	EndDate:   normalizeDate(endDate),
+	//	Page:      page,
+	//	PageSize:  pageSize,
+	//}
+	//
+	//cacheKey := fmt.Sprintf("%s:%v",
+	//	fmt.Sprintf(CacheKeyMemoirListPrefix, userID),
+	//	md5.Sum([]byte(fmt.Sprintf("%+v", params))), // 使用结构体哈希作为唯一标识
+	//)
+	//
+	//// 尝试获取完整缓存
+	//var cached CachedList
+	//cachedData, err := c.cache.Get(ctx, cacheKey).Bytes()
+	//if err == nil {
+	//	if err := json.Unmarshal(cachedData, &cached); err == nil {
+	//		if len(cached.Data) > 0 || cached.Total > 0 {
+	//			return cached.Data, cached.Total, nil
+	//		}
+	//		return []*domain.Memoir{}, 0, nil
+	//	}
+	//}
 
 	// 数据库查询
-	memoirs, total, err := c.repo.GetMemoirsByUserID(ctx, userID, "", memoirType, startDate, endDate, page, pageSize)
+	memoirs, _, err := c.repo.GetMemoirsByUserID(ctx, userID, "", memoirType, startDate, endDate, page, pageSize)
 	if err != nil {
-		return nil, 0, err
+		return nil, false, err
+	}
+	var hasMore bool
+	if len(memoirs) > int(pageSize) {
+		hasMore = true
 	}
 
-	// 构建缓存对象
-	cacheObj := CachedList{
-		Data:  memoirs,
-		Total: total,
-	}
+	//// 构建缓存对象
+	//cacheObj := CachedList{
+	//	Data:  memoirs,
+	//	Total: total,
+	//}
 
-	expiration := CacheExpiration
-	if len(memoirs) == 0 && total == 0 {
-		expiration = EmptyDataExpiration
-	}
+	//expiration := CacheExpiration
+	//if len(memoirs) == 0 && total == 0 {
+	//	expiration = EmptyDataExpiration
+	//}
+	//
+	//// 统一存储缓存
+	//cacheData, err := json.Marshal(cacheObj)
+	//if err != nil {
+	//	log.Log().Error("Failed to marshal cache data: %v", err)
+	//} else {
+	//	if err := c.cache.Set(ctx, cacheKey, cacheData, expiration).Err(); err != nil {
+	//		log.Log().Error("Failed to cache memoir list: %v", err)
+	//	}
+	//}
 
-	// 统一存储缓存
-	cacheData, err := json.Marshal(cacheObj)
-	if err != nil {
-		log.Log().Error("Failed to marshal cache data: %v", err)
-	} else {
-		if err := c.cache.Set(ctx, cacheKey, cacheData, expiration).Err(); err != nil {
-			log.Log().Error("Failed to cache memoir list: %v", err)
-		}
+	if len(memoirs) == 0 {
+		return memoirs, false, nil
 	}
-
-	return memoirs, total, nil
+	return memoirs[:len(memoirs)-1], hasMore, nil
 }
 
 // GetMemoirDetail 获取回忆录详情

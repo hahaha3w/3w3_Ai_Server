@@ -88,7 +88,7 @@ func (r MysqlMemoirRepo) GetMemoirsByUserID(ctx context.Context, userID int, mem
 
 	// 分页查询
 	offset := (page - 1) * pageSize
-	if err = query.Offset(int(offset)).Limit(int(pageSize)).Find(&memoirs).Error; err != nil {
+	if err = query.Offset(int(offset)).Limit(int(pageSize + 1)).Find(&memoirs).Order("created_at DESC").Error; err != nil {
 		return nil, 0, err
 	}
 

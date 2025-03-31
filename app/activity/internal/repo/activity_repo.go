@@ -23,7 +23,7 @@ func (r MysqlActivityRepo) CreateUserActivity(ctx context.Context, activity *dom
 	return r.db.WithContext(ctx).Model(&domain.Activity{}).Create(activity).Error
 }
 
-func (r MysqlActivityRepo) GetUserActivity(ctx context.Context, userId int64, page, pageSize int32) (activities *[]domain.Activity, count int32, err error) {
+func (r MysqlActivityRepo) GetUserActivity(ctx context.Context, userId int64, page, pageSize int32) (activities []*domain.Activity, count int32, err error) {
 	// 初始化查询
 	query := r.db.WithContext(ctx).Model(&domain.Activity{}).Where("user_id = ?", userId)
 
@@ -41,7 +41,7 @@ func (r MysqlActivityRepo) GetUserActivity(ctx context.Context, userId int64, pa
 
 	// 分页查询
 	offset := (page - 1) * pageSize
-	if err = query.Offset(int(offset)).Limit(int(pageSize)).Find(&activities).Error; err != nil {
+	if err = query.Offset(int(offset)).Limit(int(pageSize + 1)).Find(&activities).Order("created_at DESC").Error; err != nil {
 		return nil, 0, err
 	}
 

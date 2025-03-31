@@ -18,4 +18,5 @@ type Memoir struct {
 type ListMemoirResp struct {
 	Memoirs []Memoir `json:"memoirs"`
 	Total   int32    `json:"total"`
+	HasMore bool     `json:"has_more"`
 }

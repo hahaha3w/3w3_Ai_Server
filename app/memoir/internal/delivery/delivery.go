@@ -47,7 +47,7 @@ func (d *MemoirDelivery) GenerateMemoir(ctx context.Context, req *memoir.Generat
 // GetMemoirList 获取回忆录列表
 func (d *MemoirDelivery) GetMemoirList(ctx context.Context, req *memoir.GetMemoirListRequest) (res *memoir.GetMemoirListResponse, err error) {
 	// 调用 usecase 层的 GetMemoirList 方法
-	memoirs, total, err := d.usecase.GetMemoirList(ctx, int(req.UserId), req.Type, req.StartDate, req.EndDate, req.Page, req.PageSize)
+	memoirs, hasMore, err := d.usecase.GetMemoirList(ctx, int(req.UserId), req.Type, req.StartDate, req.EndDate, req.Page, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,8 @@ func (d *MemoirDelivery) GetMemoirList(ctx context.Context, req *memoir.GetMemoi
 	// 封装响应
 	return &memoir.GetMemoirListResponse{
 		Memoirs: convert.DomainMemoirsToRPCGenMemoirs(memoirs),
-		Total:   total,
+		Total:   int32(len(memoirs)),
+		HasMore: hasMore,
 	}, nil
 }
 

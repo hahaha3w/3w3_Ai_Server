@@ -5,7 +5,8 @@ type ConversationResp struct {
 	UserId         int32  `json:"user_id"`
 	SessionTitle   string `json:"session_title"`
 	Mode           string `json:"mode"`
-	CreateTime     string `json:"create_time"`
+	CreatedAt      string `json:"created_at"`
+	UpdatedAt      string `json:"updated_at"`
 }
 type ListConversationsResp struct {
 	Conversations []*ConversationResp `json:"conversations"`

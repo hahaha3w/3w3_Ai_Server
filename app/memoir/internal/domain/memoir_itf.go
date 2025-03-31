@@ -15,7 +15,7 @@ type MemoirRepo interface {
 
 type MemoirUsecase interface {
 	GenerateMemoir(ctx context.Context, userID int, style, memoirType, startDate, endDate string) (*Memoir, error)
-	GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*Memoir, int32, error)
+	GetMemoirList(ctx context.Context, userID int, memoirType, startDate, endDate string, page, pageSize int32) ([]*Memoir, bool, error)
 	GetMemoirDetail(ctx context.Context, memoirID, userID int) (*Memoir, error)
 	DeleteMemoir(ctx context.Context, memoirID, userID int) error
 }

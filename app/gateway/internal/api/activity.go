@@ -52,6 +52,8 @@ func (api *ActivityApi) GetUserActivities(ctx *gin.Context) {
 		})
 	}
 	vo := domain.ActivityListResp{
+		HasMore:     resp.HasMore,
+		Total:       resp.Total,
 		UseDay:      resp.UseDay,
 		ChatCount:   resp.ChatCount,
 		MemoirCount: resp.MemoirCount,
