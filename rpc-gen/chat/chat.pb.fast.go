@@ -339,6 +339,11 @@ func (x *SendMessageRequest) FastRead(buf []byte, _type int8, number int32) (off
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -364,6 +369,11 @@ func (x *SendMessageRequest) fastReadField2(buf []byte, _type int8) (offset int,
 
 func (x *SendMessageRequest) fastReadField3(buf []byte, _type int8) (offset int, err error) {
 	x.Content, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *SendMessageRequest) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Mode, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -792,6 +802,7 @@ func (x *SendMessageRequest) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
 	return offset
 }
 
@@ -816,6 +827,14 @@ func (x *SendMessageRequest) fastWriteField3(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 3, x.GetContent())
+	return offset
+}
+
+func (x *SendMessageRequest) fastWriteField4(buf []byte) (offset int) {
+	if x.Mode == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetMode())
 	return offset
 }
 
@@ -1186,6 +1205,7 @@ func (x *SendMessageRequest) Size() (n int) {
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
 	return n
 }
 
@@ -1210,6 +1230,14 @@ func (x *SendMessageRequest) sizeField3() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(3, x.GetContent())
+	return n
+}
+
+func (x *SendMessageRequest) sizeField4() (n int) {
+	if x.Mode == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetMode())
 	return n
 }
 
@@ -1383,6 +1411,7 @@ var fieldIDToName_SendMessageRequest = map[int32]string{
 	1: "ConversationId",
 	2: "UserId",
 	3: "Content",
+	4: "Mode",
 }
 
 var fieldIDToName_SendMessageResponse = map[int32]string{

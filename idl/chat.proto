@@ -9,7 +9,7 @@ service ChatService {
   rpc CreateConversation(CreateConversationRequest) returns (CreateConversationResponse) {}
 
   // 获取用户的会话列表
-  rpc ListConversations(ListConversationsRequest) returns (ListConversationsResponse) {}
+    rpc ListConversations(ListConversationsRequest) returns (ListConversationsResponse) {}
 
   // 发送消息
   rpc SendMessage(SendMessageRequest) returns (stream SendMessageResponse) {}
@@ -85,6 +85,7 @@ message SendMessageRequest {
   int32 conversation_id = 1;
   int32 user_id = 2; // 用于权限验证
   string content = 3;
+  string mode =4;
 }
 
 message SendMessageResponse {
