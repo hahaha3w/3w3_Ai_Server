@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
+	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/count"
 	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
 	"strconv"
 	"time"
@@ -21,6 +22,16 @@ func (c *ChatRepoWithCache) StoreMessageRecord(ctx context.Context, m *domain.Me
 	if err != nil {
 		log.Log().Error(err)
 		return -1, err
+	}
+	userCount := &domain.UpdateUserCount{
+		UserId:          int32(m.UserID),
+		ChatCountIncr:   1,
+		MemoirCountIncr: 0,
+		UseDaysIncr:     0,
+	}
+	_, err = count.UpdateUserCount(userCount, c.redis)
+	if err != nil {
+		log.Log().Error(err)
 	}
 	return m.MessageID, nil
 }
