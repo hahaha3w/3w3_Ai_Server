@@ -7,6 +7,11 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/chat/pkg/log"
 )
 
+func (c *ChatRepoWithCache) UpdateConversationTime(ctx context.Context, conversation *domain.Conversation) (*domain.Conversation, error) {
+	return c.repo.UpdateConversationTime(ctx, conversation)
+
+}
+
 // CreateConversation 将新的会话添加到用户的会话列表中
 func (c *ChatRepoWithCache) CreateConversation(ctx context.Context, conversation *domain.Conversation) error {
 	// 生成用户会话列表的key

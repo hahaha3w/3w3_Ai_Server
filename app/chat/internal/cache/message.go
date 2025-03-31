@@ -17,7 +17,7 @@ const (
 )
 
 func (c *ChatRepoWithCache) StoreMessageRecord(ctx context.Context, m *domain.Message) (userID int, err error) {
-	_, err = c.repo.StoreChatRecord(ctx, m)
+	_, err = c.repo.StoreMessageRecord(ctx, m)
 	if err != nil {
 		log.Log().Error(err)
 		return -1, err
@@ -52,7 +52,7 @@ func (c *ChatRepoWithCache) ListMessages(ctx context.Context, conversationID int
 			"需要的消息数量", end-start+1)
 
 		// 从数据库获取消息
-		messages, err := c.repo.ListMessage(ctx, conversationID, start, end)
+		messages, err := c.repo.ListMessages(ctx, conversationID, start, end)
 		if err != nil {
 			log.Log().Error("从数据库获取消息失败", "error", err)
 			return nil, fmt.Errorf("从数据库获取消息失败: %w", err)
@@ -83,7 +83,7 @@ func (c *ChatRepoWithCache) ListMessages(ctx context.Context, conversationID int
 	if err != nil {
 		// Redis错误，回退到数据库
 		log.Log().Error("Redis批量获取消息失败，回退到数据库", "error", err)
-		return c.repo.ListMessage(ctx, conversationID, start, end)
+		return c.repo.ListMessages(ctx, conversationID, start, end)
 	}
 
 	// 4. 处理缓存结果
@@ -111,7 +111,7 @@ func (c *ChatRepoWithCache) ListMessages(ctx context.Context, conversationID int
 	if err != nil {
 		log.Log().Info("处理缓存数据过程中出错，回退到数据库", "error", err)
 
-		messages, err := c.repo.ListMessage(ctx, conversationID, start, end)
+		messages, err := c.repo.ListMessages(ctx, conversationID, start, end)
 		if err != nil {
 			log.Log().Error("从数据库获取消息失败", "error", err)
 			return nil, fmt.Errorf("从数据库获取消息失败: %w", err)

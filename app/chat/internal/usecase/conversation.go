@@ -6,7 +6,7 @@ import (
 )
 
 func (u *ChatUsecase) UpdateConversation(ctx context.Context, conversation *domain.Conversation) (*domain.Conversation, error) {
-	_, err := u.UpdateConversation(ctx, conversation)
+	_, err := u.repo.UpdateConversationTime(ctx, conversation)
 	if err != nil {
 		return nil, err
 	}

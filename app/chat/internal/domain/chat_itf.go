@@ -16,6 +16,7 @@ type Usecase interface {
 	DeleteConversation(ctx context.Context, conversationID int, userID int) error
 }
 type Repository interface {
+	UpdateConversationTime(ctx context.Context, conversation *Conversation) (*Conversation, error)
 	StoreMessageRecord(ctx context.Context, m *Message) (userID int, err error)
 	ListMessages(ctx context.Context, conversationID int, start int, end int) ([]*Message, error)
 	CreateConversation(ctx context.Context, conversation *Conversation) error

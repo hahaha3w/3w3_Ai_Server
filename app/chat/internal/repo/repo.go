@@ -7,6 +7,7 @@ import (
 )
 
 var ProviderSet = wire.NewSet(NewChatRepository)
+var _ domain.Repository = &ChatRepository{}
 
 type ChatRepository struct {
 	db *gorm.DB

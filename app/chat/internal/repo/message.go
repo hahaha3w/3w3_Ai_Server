@@ -8,7 +8,7 @@ import (
 	"github.com/hahaha3w/3w3_Ai_Server/chat/internal/domain"
 )
 
-func (r *ChatRepository) StoreChatRecord(ctx context.Context, m *domain.Message) (MessageID int, err error) {
+func (r *ChatRepository) StoreMessageRecord(ctx context.Context, m *domain.Message) (MessageID int, err error) {
 	err = r.db.Transaction(func(tx *gorm.DB) error {
 		if err := r.db.Create(m).Error; err != nil {
 			log.Log().Error(err.Error())
@@ -27,7 +27,7 @@ func (r *ChatRepository) StoreChatRecord(ctx context.Context, m *domain.Message)
 	}
 	return m.MessageID, nil
 }
-func (r *ChatRepository) ListMessage(ctx context.Context, conversationID, start, end int) ([]*domain.Message, error) {
+func (r *ChatRepository) ListMessages(ctx context.Context, conversationID, start, end int) ([]*domain.Message, error) {
 	var messages []*domain.Message
 
 	if err := r.db.Where("conversation_id = ?", conversationID).
