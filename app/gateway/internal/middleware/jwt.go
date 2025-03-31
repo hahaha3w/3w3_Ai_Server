@@ -36,7 +36,7 @@ func JWT() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authHeader := ctx.GetHeader("Authorization")
 		if authHeader == "" {
-			domain.ErrorMsg(ctx, "Token 为空")
+			domain.Error(ctx, 403, "Token 为空")
 			return
 		}
 
@@ -47,14 +47,14 @@ func JWT() gin.HandlerFunc {
 			tokenString := authHeader[len(bearerPrefix):]
 			claims, err := ParseJWT(tokenString)
 			if err != nil {
-				domain.ErrorMsg(ctx, "Token 验证错误")
+				domain.Error(ctx, 403, "Token 验证错误")
 				return
 			}
 
 			ctx.Set("userId", claims.UserId)
 			ctx.Next()
 		} else {
-			domain.ErrorMsg(ctx, "Token 格式错误")
+			domain.Error(ctx, 403, "Token 格式错误")
 			return
 		}
 	}
