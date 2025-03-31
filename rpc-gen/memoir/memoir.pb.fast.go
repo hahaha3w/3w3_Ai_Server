@@ -349,6 +349,11 @@ func (x *GetMemoirListResponse) FastRead(buf []byte, _type int8, number int32) (
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -374,6 +379,11 @@ func (x *GetMemoirListResponse) fastReadField1(buf []byte, _type int8) (offset i
 
 func (x *GetMemoirListResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
 	x.Total, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetMemoirListResponse) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.HasMore, offset, err = fastpb.ReadBool(buf, _type)
 	return offset, err
 }
 
@@ -780,6 +790,7 @@ func (x *GetMemoirListResponse) FastWrite(buf []byte) (offset int) {
 	}
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
 	return offset
 }
 
@@ -798,6 +809,14 @@ func (x *GetMemoirListResponse) fastWriteField2(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetTotal())
+	return offset
+}
+
+func (x *GetMemoirListResponse) fastWriteField3(buf []byte) (offset int) {
+	if !x.HasMore {
+		return offset
+	}
+	offset += fastpb.WriteBool(buf[offset:], 3, x.GetHasMore())
 	return offset
 }
 
@@ -1160,6 +1179,7 @@ func (x *GetMemoirListResponse) Size() (n int) {
 	}
 	n += x.sizeField1()
 	n += x.sizeField2()
+	n += x.sizeField3()
 	return n
 }
 
@@ -1178,6 +1198,14 @@ func (x *GetMemoirListResponse) sizeField2() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt32(2, x.GetTotal())
+	return n
+}
+
+func (x *GetMemoirListResponse) sizeField3() (n int) {
+	if !x.HasMore {
+		return n
+	}
+	n += fastpb.SizeBool(3, x.GetHasMore())
 	return n
 }
 
@@ -1313,6 +1341,7 @@ var fieldIDToName_GetMemoirListRequest = map[int32]string{
 var fieldIDToName_GetMemoirListResponse = map[int32]string{
 	1: "Memoirs",
 	2: "Total",
+	3: "HasMore",
 }
 
 var fieldIDToName_GetMemoirDetailRequest = map[int32]string{

@@ -27,6 +27,8 @@ message GetUserActivityResp {
   int32 chat_count = 2;
   int32 memoir_count = 3;
   int32 use_day = 4;
+  int32 total =5;
+  bool  has_more=6;
 }
 
 message CreateUserActivityReq {

@@ -154,6 +154,16 @@ func (x *GetUserActivityResp) FastRead(buf []byte, _type int8, number int32) (of
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -189,6 +199,16 @@ func (x *GetUserActivityResp) fastReadField3(buf []byte, _type int8) (offset int
 
 func (x *GetUserActivityResp) fastReadField4(buf []byte, _type int8) (offset int, err error) {
 	x.UseDay, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserActivityResp) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Total, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *GetUserActivityResp) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.HasMore, offset, err = fastpb.ReadBool(buf, _type)
 	return offset, err
 }
 
@@ -400,6 +420,8 @@ func (x *GetUserActivityResp) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
 	return offset
 }
 
@@ -434,6 +456,22 @@ func (x *GetUserActivityResp) fastWriteField4(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt32(buf[offset:], 4, x.GetUseDay())
+	return offset
+}
+
+func (x *GetUserActivityResp) fastWriteField5(buf []byte) (offset int) {
+	if x.Total == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 5, x.GetTotal())
+	return offset
+}
+
+func (x *GetUserActivityResp) fastWriteField6(buf []byte) (offset int) {
+	if !x.HasMore {
+		return offset
+	}
+	offset += fastpb.WriteBool(buf[offset:], 6, x.GetHasMore())
 	return offset
 }
 
@@ -617,6 +655,8 @@ func (x *GetUserActivityResp) Size() (n int) {
 	n += x.sizeField2()
 	n += x.sizeField3()
 	n += x.sizeField4()
+	n += x.sizeField5()
+	n += x.sizeField6()
 	return n
 }
 
@@ -651,6 +691,22 @@ func (x *GetUserActivityResp) sizeField4() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt32(4, x.GetUseDay())
+	return n
+}
+
+func (x *GetUserActivityResp) sizeField5() (n int) {
+	if x.Total == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(5, x.GetTotal())
+	return n
+}
+
+func (x *GetUserActivityResp) sizeField6() (n int) {
+	if !x.HasMore {
+		return n
+	}
+	n += fastpb.SizeBool(6, x.GetHasMore())
 	return n
 }
 
@@ -751,6 +807,8 @@ var fieldIDToName_GetUserActivityResp = map[int32]string{
 	2: "ChatCount",
 	3: "MemoirCount",
 	4: "UseDay",
+	5: "Total",
+	6: "HasMore",
 }
 
 var fieldIDToName_CreateUserActivityReq = map[int32]string{

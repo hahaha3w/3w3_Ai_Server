@@ -54,6 +54,7 @@ message GetMemoirListRequest {
 message GetMemoirListResponse {
   repeated Memoir memoirs = 1;
   int32 total = 2;
+  bool has_more =3;
 }
 
 message GetMemoirDetailRequest {
