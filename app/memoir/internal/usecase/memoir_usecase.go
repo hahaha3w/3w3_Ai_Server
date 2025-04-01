@@ -197,6 +197,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 	var hasMore bool
 	if len(memoirs) > int(pageSize) {
 		hasMore = true
+		memoirs = memoirs[:pageSize]
 	}
 
 	//// 构建缓存对象
@@ -223,7 +224,7 @@ func (c ConcreteMemoirUsecase) GetMemoirList(ctx context.Context, userID int, me
 	if len(memoirs) == 0 {
 		return memoirs, false, nil
 	}
-	return memoirs[:len(memoirs)-1], hasMore, nil
+	return memoirs, hasMore, nil
 }
 
 // GetMemoirDetail 获取回忆录详情
