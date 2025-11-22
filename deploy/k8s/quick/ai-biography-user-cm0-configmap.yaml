@@ -1,0 +1,31 @@
+apiVersion: v1
+data:
+  user.toml: |
+    debug=true
+    [mysql]
+    dsn='root:%v@tcp(mysql:3306)/user?charset=utf8mb4&parseTime=true&loc=Local'
+    [redis]
+    addr='redis:6379'
+    password='F7_8*H2Hv4KQcg-G_ho6DCDW@schgk-NLXKGM-ThWD*wq6'
+    db=2
+    [service]
+    address='0.0.0.0:8080'
+    name='user'
+    [mtl]
+    address='mtl:4317'
+    [consul]
+    address='consul:8500'
+    [email]
+    user="2380581784@qq.com"
+    host="smtp.qq.com"
+    port=465
+    password="npbuikgxgvyreaha"
+    project_name="hahaha3w Team"
+kind: ConfigMap
+metadata:
+  namespace: ai-biography
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: ai-biography-user
+  name: ai-biography-user-cm0

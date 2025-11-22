@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ai-biography
+  annotations:
+    kompose.cmd: kompose convert -f quickstart-compose.yaml -o quick/
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: nats
+  name: nats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nats
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f quickstart-compose.yaml -o quick/
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: nats
+    spec:
+      containers:
+        - args:
+            - -DV
+          image: nats
+          name: nats-server
+          ports:
+            - containerPort: 4222
+              protocol: TCP
+            - containerPort: 8222
+              protocol: TCP
+      restartPolicy: Always

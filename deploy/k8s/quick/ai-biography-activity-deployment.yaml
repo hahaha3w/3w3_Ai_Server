@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ai-biography
+  annotations:
+    kompose.cmd: kompose convert -f quickstart-compose.yaml -o quick/
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: ai-biography-activity
+  name: ai-biography-activity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ai-biography-activity
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f quickstart-compose.yaml -o quick/
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: ai-biography-activity
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_PASSWORD
+              value: ioTnq2Tqq8PnQoGU@UnGUzF7_8*H2Hv4KQcg-G_ho6DCDW@schgk-NLXKGM-ThWD*wq6Pt_Un-FumsTfoBzH.Bha7ztta!-yAqYi
+          image: xyq777/ai-biography-activity:latest
+          name: ai-biography-activity
+          ports:
+            - containerPort: 8070
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/conf/test/conf.toml
+              name: ai-biography-activity-cm0
+              subPath: conf.toml
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: activity.toml
+                path: conf.toml
+            name: ai-biography-activity-cm0
+          name: ai-biography-activity-cm0

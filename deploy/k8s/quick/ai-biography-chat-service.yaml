@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ai-biography
+  annotations:
+    kompose.cmd: kompose convert -f quickstart-compose.yaml -o quick/
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: ai-biography-chat
+  name: ai-biography-chat
+spec:
+  ports:
+    - name: "8071"
+      port: 8071
+      targetPort: 8071
+  selector:
+    io.kompose.service: ai-biography-chat

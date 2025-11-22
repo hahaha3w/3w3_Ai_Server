@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  memoir.toml: |
+    debug=true
+    [mysql]
+    dsn='root:%v@tcp(mysql:3306)/chat?charset=utf8mb4&parseTime=true&loc=Local'
+    [redis]
+    addr='redis:6379'
+    password='F7_8*H2Hv4KQcg-G_ho6DCDW@schgk-NLXKGM-ThWD*wq6'
+    db=2
+    [service]
+    address='0.0.0.0:8080'
+    name='memoir'
+    [mtl]
+    address='mtl:4317'
+    [consul]
+    address='consul:8500'
+    [llm]
+    apiKey='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'
+    baseUrl='https://openrouter.ai/api/v1'
+    model='anthropic/claude-3.7-sonnet'
+kind: ConfigMap
+metadata:
+  namespace: ai-biography
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: ai-biography-memoir
+  name: ai-biography-memoir-cm0
